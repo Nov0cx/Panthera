@@ -1,0 +1,8 @@
+cc_binary(
+    name = "Sandbox",
+    srcs = ["src/Sandbox.cpp"],
+    deps = [
+        "//Panthera-Core:Panthera-Core"
+    ],
+
+)

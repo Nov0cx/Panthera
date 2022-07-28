@@ -1,4 +1,6 @@
 #ifndef PANTHERA_PANTHERA_HPP
 #define PANTHERA_PANTHERA_HPP
 
+int TestInit();
+
 #endif //PANTHERA_PANTHERA_HPP
