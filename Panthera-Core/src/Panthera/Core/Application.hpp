@@ -4,7 +4,6 @@
 namespace Panthera {
     class Application {
     public:
-        static void SetInstance(Application* instance);
         static Application* GetInstance();
         Application();
         ~Application();
@@ -12,6 +11,7 @@ namespace Panthera {
         void Run();
 
     private:
+        static void SetInstance(void *instance);
         static Application* s_Instance;
     };
 }

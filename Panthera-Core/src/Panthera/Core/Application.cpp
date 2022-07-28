@@ -2,9 +2,11 @@
 
 namespace Panthera {
 
-    void Application::SetInstance(Application *instance)
+    Application* Application::s_Instance;
+
+    void Application::SetInstance(void *instance)
     {
-        Application::s_Instance = instance;
+        Application::s_Instance = reinterpret_cast<Application*>(instance);
     }
 
     Application* Application::GetInstance()
@@ -14,7 +16,7 @@ namespace Panthera {
 
     Application::Application()
     {
-
+        SetInstance(this);
     }
 
     Application::~Application()
