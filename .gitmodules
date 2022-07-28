@@ -1,6 +1,3 @@
 [submodule "Panthera-Core/Libs/GLFW"]
 	path = Panthera-Core/Libs/GLFW
 	url = https://github.com/glfw/glfw.git
-[submodule ".\\Panthera-Core\\Libs/GLM"]
-	path = .\\Panthera-Core\\Libs/GLM
-	url = https://github.com/g-truc/glm.git
