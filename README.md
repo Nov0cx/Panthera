@@ -14,9 +14,9 @@ Build core:
 ```bash
 bazel build //Panthera-Core/...
 ```
-Run Sanbox:
+Run Leopardus(Editor):
 ```bash
-bazel run //Sandbox:Sandbox
+bazel run //Leopardus:Leopardus
 ```
 
 # Bazel
