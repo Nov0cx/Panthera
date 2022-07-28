@@ -1,0 +1,10 @@
+cc_library(
+    name = "Panthera-Core",
+    srcs = [
+        "src/Panthera/Panthera.cpp",
+    ],
+    hdrs = [
+        "src/Panthera/Panthera.hpp",
+    ],
+    visibility = ["//visibility:public"],
+)
