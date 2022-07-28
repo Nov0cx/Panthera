@@ -3,3 +3,22 @@
  > <br/>I'm planning to use [Carbon-Lang](https://github.com/carbon-language/carbon-lang) in the future.
  > <br/><br/>
  > I want to implement [Rust](https://www.rust-lang.org/) and [Go](https://go.dev/) as scripting languages.
+ 
+
+# Build
+Build all:
+```bash
+bazel build //...
+```
+Build core:
+```bash
+bazel build //Panthera-Core/...
+```
+Run Sanbox:
+```bash
+bazel run //Sandbox:Sandbox
+```
+
+# Bazel
+https://bazel.build/install/bazelisk
+
