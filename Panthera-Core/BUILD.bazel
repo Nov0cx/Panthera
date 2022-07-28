@@ -1,14 +1,21 @@
 cc_library(
     name = "Panthera-Core",
     srcs = glob([
-        "src/Panthera/Panthera.cpp",
+        "src/Panthera/*.cpp",
+        "src/Panthera/**/*.cpp",
+        "src/Platform/*.cpp",
+        "src/Platform/**/*.cpp",
     ]),
     hdrs = glob([
-        "src/Panthera/Panthera.hpp",
+        "src/Panthera/*.hpp",
+        "src/Panthera/**/*.hpp",
+        "src/Platform/*.hpp",
+        "src/Platform/**/*.hpp",
     ]),
     deps = [
       "//Panthera-Core/Libs/Glad:glad",
       "//Panthera-Core/Libs/GLFW:glfw",
+      "//Panthera-Core/Libs/GLM:glm",
     ],
     visibility = ["//visibility:public"],
     strip_include_prefix = "src"
