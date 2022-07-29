@@ -16,6 +16,7 @@ cc_library(
       "@com_github_Nov0cx_glad//:glad",
       "@com_github_Nov0cx_glfw//:glfw",
       "@com_github_Nov0cx_glm//:glm",
+      "@com_github_Nov0cx_spdlog//:spdlog",
     ],
     visibility = ["//visibility:public"],
     strip_include_prefix = "src"

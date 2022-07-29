@@ -20,3 +20,17 @@ http_archive(
     strip_prefix = "glad-master",
     urls = ["https://github.com/Nov0cx/glad/archive/master.zip"],
 )
+
+http_archive(
+    name = "com_github_Nov0cx_fmt",
+    sha256 = "3882d99514ceae01c9c09e8e99fb1a7921a6e1e8d12c6cc1606471c2326a5a91",
+    strip_prefix = "fmt-master",
+    urls = ["https://github.com/Nov0cx/fmt/archive/master.zip"],
+)
+
+http_archive(
+    name = "com_github_Nov0cx_spdlog",
+    #sha256 = "e5598a6bf024bbdf993f4382a347d8bef23d46967e1534724aa646e7d0d83a22",
+    strip_prefix = "spdlog-1.x",
+    urls = ["https://github.com/Nov0cx/spdlog/archive/v1.x.zip"],
+)
