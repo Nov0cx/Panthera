@@ -1,5 +1,7 @@
 #include "Application.hpp"
 
+#include "Log.hpp"
+
 namespace Panthera
 {
 
@@ -31,7 +33,7 @@ namespace Panthera
 
     void Application::Init()
     {
-
+        Log::Init();
     }
 
     void Application::Run()

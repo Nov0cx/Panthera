@@ -9,8 +9,9 @@ public:
 
 int main(int argc, char** argv)
 {
-    TestInit();
     Leopardus app;
+    LOG_INFO("Hello, world!")
+    TestInit();
     app.Run();
     return 0;
 }
