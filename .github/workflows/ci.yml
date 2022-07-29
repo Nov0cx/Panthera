@@ -7,18 +7,14 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - uses: actions/checkout@v3
+      - uses: bazelbuild/setup-bazelisk@v2
+
       - name: Bazel Cache
         uses: actions/cache@v2
-        env:
-          cache-name: bazel-cache
         with:
-          path: |
-            ~/.cache/bazelisk
-            ~/.cache/bazel
-            key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.ref }}
-          restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-development
-      - uses: actions/checkout@v2
+          path: "~/.cache/bazel"
+          key: bazel
 
       - name: Build Code
         run: bazel build ...
