@@ -4,6 +4,7 @@
 #include <cinttypes>
 #include "Pointer.hpp"
 #include <vector>
+#include "Event.hpp"
 
 namespace Panthera
 {
@@ -17,7 +18,7 @@ namespace Panthera
 
         virtual void OnUpdate(/*Timestep*/) = 0;
 
-        //virtual void OnEvent(Event& event) = 0;
+        virtual void OnEvent(Event& event) = 0;
         //virtual void OnImGuiRender() = 0;
         virtual void OnEnd() = 0;
 
@@ -53,7 +54,7 @@ namespace Panthera
 
         void OnUpdate(/*Timestep ts*/) const;
 
-        void OnEvent(/*Event &event*/) const;
+        void OnEvent(Event &event) const;
 
         void OnImGuiUpdate() const;
 

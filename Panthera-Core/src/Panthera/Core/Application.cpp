@@ -48,5 +48,10 @@ namespace Panthera
         }
     }
 
+    void Application::CallEvent(Event &event)
+    {
+        m_LayerStack.OnEvent(event);
+    }
+
 
 }

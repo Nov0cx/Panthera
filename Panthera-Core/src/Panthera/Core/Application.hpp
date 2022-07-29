@@ -16,6 +16,8 @@ namespace Panthera
 
         void Run();
 
+        void CallEvent(Event &event);
+
     private:
         static void SetInstance(void *instance);
         static Application *s_Instance;

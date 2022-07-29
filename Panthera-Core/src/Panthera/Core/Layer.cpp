@@ -1,5 +1,7 @@
 #include "Layer.hpp"
 
+#include "Log.hpp"
+
 namespace Panthera
 {
 
@@ -22,13 +24,13 @@ namespace Panthera
         }
     }
 
-    void LayerStack::OnEvent(/*Event &event*/) const
+    void LayerStack::OnEvent(Event &event) const
     {
         for (auto& layer : m_Layers)
         {
             if (layer->IsActive())
             {
-                //layer->OnEvent(event);
+                layer->OnEvent(event);
             }
         }
     }
@@ -58,12 +60,22 @@ namespace Panthera
 
     uint16_t LayerStack::PushLayout(Ref <Layer> layout)
     {
-        return NULL;
+        m_Layers.push_back(layout);
+
+        layout->m_ID = m_NextLayerID++;
+
+        return layout->GetID();
     }
 
     Ref <Layer> LayerStack::GetLayer(uint16_t id)
     {
-        return NULL;
+        for (const auto& layer : m_Layers)
+        {
+            if (layer->GetID() == id) return layer;
+        }
+
+        LOG_ERROR("Cannot find Layer with id {}.", id)
+        return nullptr;
     }
 
 }
