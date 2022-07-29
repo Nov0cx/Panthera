@@ -1,3 +1,5 @@
+![ci](https://github.com/Nov0cx/Panthera/actions/workflows/ci.yml/badge.svg)
+
 # Panthera
  > This is an open source C++ Game Engine under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
  > <br/>I'm planning to use [Carbon-Lang](https://github.com/carbon-language/carbon-lang) in the future.
