@@ -18,3 +18,19 @@ jobs:
 
       - name: Build Code
         run: bazel build ...
+
+  build-ubuntu:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bazelbuild/setup-bazelisk@v2
+
+      - name: Bazel Cache
+        uses: actions/cache@v2
+        with:
+          path: "~/.cache/bazel"
+          key: bazel
+
+      - name: Build Code
+        run: bazel build //...
