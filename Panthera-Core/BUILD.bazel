@@ -14,9 +14,10 @@ cc_library(
     ]),
     deps = [
       "//Panthera-Core/Libs/Glad:glad",
-      "//Panthera-Core/Libs/GLFW:glfw",
+      #"//Panthera-Core/Libs/GLFW:glfw",
       "//Panthera-Core/Libs/GLM:glm",
-      #"@com_github_google_glog//:glog",
+      "@com_github_Nov0cx_glfw//:glfw",
+        #"@com_github_google_glog//:glog",
     ],
     visibility = ["//visibility:public"],
     strip_include_prefix = "src"
