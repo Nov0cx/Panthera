@@ -11,7 +11,6 @@ int main(int argc, char** argv)
 {
     TestInit();
     Leopardus app;
-
     app.Run();
     return 0;
 }
