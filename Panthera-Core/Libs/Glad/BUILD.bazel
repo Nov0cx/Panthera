@@ -1,7 +1,0 @@
-cc_library(
-    name = "glad",
-    srcs = ["src/glad.c"],
-    hdrs = ["include/glad/glad.h", "include/KHR/khrplatform.h"],
-    visibility = ["//visibility:public"],
-    includes = ["./include"],
-)

@@ -13,7 +13,6 @@ cc_library(
         "src/Platform/**/*.hpp",
     ]),
     deps = [
-      #"//Panthera-Core/Libs/Glad:glad",
       "@com_github_Nov0cx_glad//:glad",
       "@com_github_Nov0cx_glfw//:glfw",
       "@com_github_Nov0cx_glm//:glm",
