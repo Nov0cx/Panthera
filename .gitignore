@@ -215,3 +215,5 @@ _deps
 ### Bazel IntelliJ Plugin
 .clwb
 
+*.log
+
