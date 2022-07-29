@@ -1,4 +1,5 @@
-![ci](https://github.com/Nov0cx/Panthera/actions/workflows/ci.yml/badge.svg)
+![windows](https://github.com/Nov0cx/Panthera/actions/workflows/windows.yml/badge.svg)
+![ubuntu](https://github.com/Nov0cx/Panthera/actions/workflows/ubuntu.yml/badge.svg)
 
 # Panthera
  > This is an open source C++ Game Engine under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
