@@ -23,7 +23,7 @@ namespace Panthera
 
     Application::~Application()
     {
-        for (auto& layer : m_LayerStack.m_Layers)
+        for (auto& layer : m_LayerStack.GetStack())
         {
             layer->SetActive(false);
         }
@@ -38,7 +38,7 @@ namespace Panthera
     {
         while (m_Running)
         {
-            m_LayerStack.OnUpdate()
+            m_LayerStack.OnUpdate();
 
             /*
             m_LayerStack.OnImGuiUpdate()
