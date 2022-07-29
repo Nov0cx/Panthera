@@ -22,6 +22,8 @@ Run Leopardus(Editor):
 bazel run //Leopardus:Leopardus
 ```
 
-# Bazel
-https://bazel.build/install/bazelisk
+# Dependencies:
+We only depend on [Bazel](https://bazel.build/install/bazelisk).
+You are not obligated to install git.
+Bazel does the complete package management for you.
 
