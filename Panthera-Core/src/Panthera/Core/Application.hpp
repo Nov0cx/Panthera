@@ -1,18 +1,29 @@
 #ifndef PANTHERA_APPLICATION_HPP
 #define PANTHERA_APPLICATION_HPP
 
-namespace Panthera {
-    class Application {
+#include "Layer.hpp"
+
+namespace Panthera
+{
+    class Application
+    {
     public:
-        static Application* GetInstance();
+        static Application *GetInstance();
+
         Application();
+
         ~Application();
 
         void Run();
 
     private:
         static void SetInstance(void *instance);
-        static Application* s_Instance;
+        static Application *s_Instance;
+    private:
+        void Init();
+    private:
+        LayerStack m_LayerStack;
+        bool m_Running = true;
     };
 }
 
