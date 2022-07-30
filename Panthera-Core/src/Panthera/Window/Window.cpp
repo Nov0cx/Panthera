@@ -35,5 +35,8 @@ namespace Panthera
         ASSERT(false, "Not Supported RendererAPI")
     }
 
+    WindowProps::WindowProps(const char *title, const uint32_t &width, const uint32_t &height, bool vSync) : Title(
+            title), Width(width), Height(height), VSync(vSync)
+    {}
 }
 

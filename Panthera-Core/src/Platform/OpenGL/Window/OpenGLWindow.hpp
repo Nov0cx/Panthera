@@ -13,7 +13,7 @@ namespace Panthera
     {
     public:
         OpenGLWindow(const WindowProps& props);
-        virtual ~OpenGLWindow();
+        ~OpenGLWindow();
 
         virtual void OnUpdate() override;
         virtual void OnEvent(Event& event) override;
@@ -24,6 +24,8 @@ namespace Panthera
 
         virtual void SetVSync(bool state) override;
         virtual bool IsVSync() const override;
+
+        virtual bool ShouldBeClosed() const override;
 
     private:
         void Init(const char* title, uint32_t width, uint32_t height);

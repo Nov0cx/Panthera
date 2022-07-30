@@ -5,12 +5,14 @@ cc_library(
         "src/Panthera/**/*.cpp",
         "src/Platform/*.cpp",
         "src/Platform/**/*.cpp",
+        "src/Platform/**/**/*.cpp"
     ]),
     hdrs = glob([
         "src/Panthera/*.hpp",
         "src/Panthera/**/*.hpp",
         "src/Platform/*.hpp",
         "src/Platform/**/*.hpp",
+        "src/Platform/**/**/*.hpp",
     ]),
     deps = [
       "@com_github_Nov0cx_glad//:glad",
@@ -21,27 +23,3 @@ cc_library(
     visibility = ["//visibility:public"],
     strip_include_prefix = "src"
 )
-
-#config_setting(
-#    name = "clang_compiler",
-#    flag_values = {
-#        "@bazel_tools//tools/cpp:compiler": "clang",
-#    },
-#    visibility = [":__subpackages__"],
-#)
-#
-#config_setting(
-#    name = "msvc_compiler",
-#    flag_values = {
-#        "@bazel_tools//tools/cpp:compiler": "msvc-cl",
-#    },
-#    visibility = [":__subpackages__"],
-#)
-#
-#config_setting(
-#    name = "clang-cl_compiler",
-#    flag_values = {
-#        "@bazel_tools//tools/cpp:compiler": "clang-cl",
-#    },
-#    visibility = [":__subpackages__"],
-#)

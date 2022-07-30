@@ -10,9 +10,12 @@ namespace Panthera
 {
     struct WindowProps
     {
+        WindowProps(const char *title, const uint32_t &width = 800, const uint32_t &height = 600, bool vSync = false);
+
         const char* Title;
-        uint32_t Width = 800, Height = 600;
-        bool VSync = false;
+        uint32_t Width, Height;
+        bool VSync;
+
     };
 
     class Window
@@ -20,7 +23,6 @@ namespace Panthera
     public:
         static Ref<Window> Create(const WindowProps& props);
 
-        virtual ~Window() = 0;
         virtual void OnUpdate() = 0;
         virtual void OnEvent(Event& event) = 0;
         virtual std::any GetNativeWindow() const = 0;
@@ -31,6 +33,7 @@ namespace Panthera
         virtual void SetVSync(bool state) = 0;
         virtual bool IsVSync() const = 0;
 
+        virtual bool ShouldBeClosed() const = 0;
     protected:
         uint16_t p_WindowCount = 0;
     };

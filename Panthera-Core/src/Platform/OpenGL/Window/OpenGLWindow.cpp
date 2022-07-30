@@ -95,4 +95,9 @@ namespace Panthera
         glfwSwapBuffers(m_Window);
         glfwPollEvents();
     }
+
+    bool OpenGLWindow::ShouldBeClosed() const
+    {
+        return glfwWindowShouldClose(m_Window);
+    }
 }

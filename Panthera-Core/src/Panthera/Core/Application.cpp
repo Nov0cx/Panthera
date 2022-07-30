@@ -17,10 +17,10 @@ namespace Panthera
         return Application::s_Instance;
     }
 
-    Application::Application()
+    Application::Application(const AppProps &props)
     {
         SetInstance(this);
-        Init();
+        Init(props);
     }
 
     Application::~Application()
@@ -31,20 +31,30 @@ namespace Panthera
         }
     }
 
-    void Application::Init()
+    void Application::Init(const AppProps &props)
     {
         Log::Init();
+        WindowProps windowProps(
+            props.Name,
+            props.Width,
+            props.Height,
+            props.VSync
+        );
+        m_Window = Window::Create(windowProps);
     }
 
     void Application::Run()
     {
         while (m_Running)
         {
+            m_Running = !m_Window->ShouldBeClosed();
+
             m_LayerStack.OnUpdate();
 
             /*
             m_LayerStack.OnImGuiUpdate()
              */
+            m_Window->OnUpdate();
         }
     }
 
@@ -54,4 +64,9 @@ namespace Panthera
     }
 
 
+    AppProps::AppProps(const char *name, unsigned int width, unsigned int height, bool vSync) : Name(name),
+                                                                                                Width(width),
+                                                                                                Height(height),
+                                                                                                VSync(vSync)
+    {}
 }
