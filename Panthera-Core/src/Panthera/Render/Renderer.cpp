@@ -2,17 +2,15 @@
 
 namespace Panthera {
 
-    static RendererAPI::API s_API = RendererAPI::API::OpenGL;
+    static RendererAPI s_API = RendererAPI::OpenGL;
 
-    RendererAPI::API RendererAPI::GetAPI()
+    RendererAPI Renderer::GetAPI()
     {
         return s_API;
     }
 
-    RendererAPI::API RendererAPI::SetAPI(RendererAPI::API api)
+    void Renderer::SetAPI(RendererAPI api)
     {
         s_API = api;
     }
-
-
 }

@@ -9,17 +9,37 @@
  
 
 # Build
+
+###Not MSVC
+
 Build all:
 ```bash
-bazel build //...
+bazel build --config=not_msvc_config //...
 ```
 Build core:
 ```bash
-bazel build //Panthera-Core/...
+bazel build --config=not_msvc_config //Panthera-Core/...
 ```
 Run Leopardus(Editor):
 ```bash
-bazel run //Leopardus:Leopardus
+bazel run --config=not_msvc_config //Leopardus:Leopardus
+```
+
+####Optional:
+Use --cxxopt="-std=c++20" instead of --config=not_msvc_config
+
+###MSVC
+Build all:
+```bash
+bazel build --config=msvc_config //...
+```
+Build core:
+```bash
+bazel build --config=msvc_config //Panthera-Core/...
+```
+Run Leopardus(Editor):
+```bash
+bazel run --config=msvc_config //Leopardus:Leopardus
 ```
 
 # Dependencies:
