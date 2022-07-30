@@ -34,8 +34,8 @@ namespace Panthera
         m_Window = glfwCreateWindow(width, height, title, nullptr, nullptr);
         ASSERT(m_Window, "Failed to create GLFW window!")
 
-        // Move into context creation class
-        glfwMakeContextCurrent(m_Window);
+        m_Context = RenderContext::Create(m_Window);
+        m_Context->MakeContext();
 
         if (need_init)
         {
@@ -92,7 +92,7 @@ namespace Panthera
 
     void OpenGLWindow::OnUpdate()
     {
-        glfwSwapBuffers(m_Window);
+        m_Context->SwapBuffers();
         glfwPollEvents();
     }
 

@@ -4,6 +4,8 @@
 #include "Panthera/Window/Window.hpp"
 #include "Panthera/Render/Renderer.hpp"
 
+#include "Panthera/Window/RenderContext.hpp"
+
 // fwd
 typedef struct GLFWwindow GLFWwindow;
 
@@ -33,6 +35,8 @@ namespace Panthera
         GLFWwindow* m_Window;
         bool m_VSync;
         uint32_t m_Width, m_Height;
+
+        Ref<RenderContext> m_Context;
     };
 }
 
