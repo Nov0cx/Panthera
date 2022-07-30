@@ -10,7 +10,7 @@
 
 # Build
 
-###Not MSVC
+### Not MSVC
 
 Build all:
 ```bash
@@ -25,10 +25,10 @@ Run Leopardus(Editor):
 bazel run --config=not_msvc_config //Leopardus:Leopardus
 ```
 
-####Optional:
+#### Optional:
 Use --cxxopt="-std=c++20" instead of --config=not_msvc_config
 
-###MSVC
+### MSVC
 Build all:
 ```bash
 bazel build --config=msvc_config //...
