@@ -1,0 +1,9 @@
+#ifndef PANTHERA_RENDERAPI_HPP
+#define PANTHERA_RENDERAPI_HPP
+
+namespace Panthera
+{
+
+}
+
+#endif //PANTHERA_RENDERAPI_HPP
