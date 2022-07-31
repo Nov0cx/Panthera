@@ -1,0 +1,4 @@
+sh_binary(
+    name = "Vulkan",
+    srcs = select({"@bazel_tools//src/conditions:windows": ["Run.sh"], "@bazel_tools//src/conditions:linux_x86_64": ["Run.sh"]}),
+)

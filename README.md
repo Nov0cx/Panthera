@@ -7,6 +7,17 @@
  > <br/><br/>
  > I want to implement [Rust](https://www.rust-lang.org/) and [Go](https://go.dev/) as scripting languages.
  
+# Setup
+In the setup phase, bazel will run a shell script (works on Windows) 
+and install [Vulkan](https://www.vulkan.org/) if it isn't already installed. 
+It will create a Lib folder which is excluded form git.
+The script will open the Vulkan Installer there you have to download core and all debug options.
+<br/>
+<br/>
+Run:
+```bash
+bazel run //vulkan/...
+```
 
 # Build
 
@@ -44,6 +55,5 @@ bazel run --config=msvc_config //Leopardus:Leopardus
 
 # Dependencies:
 We only depend on [Bazel](https://bazel.build/install/bazelisk).
-You are not obligated to install git.
-Bazel does the complete package management for you.
+Bazel does the complete package management for us.
 

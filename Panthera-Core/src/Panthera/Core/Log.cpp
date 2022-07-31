@@ -3,10 +3,9 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
-
 namespace Panthera
 {
-    Ref<spdlog::logger> Log::s_Logger;
+    Ref <spdlog::logger> Log::s_Logger;
 
     void Log::Init()
     {

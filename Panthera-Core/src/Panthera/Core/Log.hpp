@@ -10,7 +10,8 @@
 
 #pragma warning(pop)
 
-#include "Pointer.hpp"
+
+#include "Panthera/Core/Pointer.hpp"
 
 namespace Panthera
 {
@@ -19,11 +20,11 @@ namespace Panthera
     public:
         static void Init();
 
-        static Ref<spdlog::logger> &GetLogger()
+        static Ref <spdlog::logger> &GetLogger()
         { return s_Logger; }
 
     private:
-        static Ref<spdlog::logger> s_Logger;
+        static Ref <spdlog::logger> s_Logger;
     };
 }
 
@@ -39,6 +40,5 @@ namespace Panthera
             ::Panthera::Log::GetLogger()->critical("Assert failed at line {} in file {}. \n{}", __LINE__, __FILE__, __VA_ARGS__); \
             exit(-1);                        \
         }
-
 
 #endif
