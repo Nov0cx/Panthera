@@ -2,6 +2,40 @@
 
 #include "Log.hpp"
 
+/*
+ *
+ * #include "tools/cpp/runfiles/runfiles.h"
+using bazel::tools::cpp::runfiles::Runfiles;
+ * std::string error;
+    std::unique_ptr<Runfiles> runfiles(Runfiles::Create(argv[0], &error));
+
+    // Important:
+    //   If this is a test, use Runfiles::CreateForTest(&error).
+    //   Otherwise, if you don't have the value for argv[0] for whatever
+    //   reason, then use Runfiles::Create(&error).
+
+    if (runfiles == nullptr) {
+        std::cerr << "Failed to create runfiles: " << error << std::endl;
+    }
+
+    std::string path = runfiles->Rlocation("Panthera/Test/Example.tx");
+
+    std::ifstream in(path);
+
+    if (!in.is_open())
+    {
+        std::cout << "Example.tx not found" << std::endl;
+        return -1;
+    }
+
+    while (in.good())
+    {
+        std::string line;
+        std::getline(in, line);
+        std::cout << line << std::endl;
+    }
+ */
+
 namespace Panthera
 {
 
