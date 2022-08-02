@@ -1,11 +1,11 @@
 #include "Application.hpp"
 
 #include "Log.hpp"
+#include <string>
 
 /*
  *
- * #include "tools/cpp/runfiles/runfiles.h"
-using bazel::tools::cpp::runfiles::Runfiles;
+ *
  * std::string error;
     std::unique_ptr<Runfiles> runfiles(Runfiles::Create(argv[0], &error));
 
@@ -67,6 +67,8 @@ namespace Panthera
 
     void Application::Init(const AppProps &props)
     {
+        m_Args = props.Args;
+
         Log::Init();
         WindowProps windowProps(
             props.Name,
@@ -75,6 +77,10 @@ namespace Panthera
             props.VSync
         );
         m_Window = Window::Create(windowProps);
+
+        std::string error;
+        m_Runfiles = Runfiles::Create(props.Args[0], &error);
+        ASSERT(m_Runfiles != nullptr, "Failed to create runfiles: {}", error);
     }
 
     void Application::Run()
@@ -97,10 +103,16 @@ namespace Panthera
         m_LayerStack.OnEvent(event);
     }
 
+    std::string Application::GetAssetPath(const char *filepath)
+    {
+        return m_Runfiles->Rlocation(filepath);
+    }
 
-    AppProps::AppProps(const char *name, unsigned int width, unsigned int height, bool vSync) : Name(name),
+
+    AppProps::AppProps(ProgramArgs args, const char *name, unsigned int width, unsigned int height, bool vSync) : Args(args), Name(name),
                                                                                                 Width(width),
                                                                                                 Height(height),
                                                                                                 VSync(vSync)
     {}
+
 }
