@@ -29,17 +29,13 @@ namespace Panthera
     class ShaderLibrary
     {
     public:
-        ShaderLibrary() = default;
-        ~ShaderLibrary() = default;
-
-        Ref<Shader> CreateShader(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc);
-        Ref<Shader> CreateShader(const std::string &name, const std::string &path);
-        Ref<Shader> GetShader(const std::string &name);
-
-
+        static Ref<Shader> CreateShader(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc);
+        static Ref<Shader> CreateShader(const std::string &name, const std::string &path);
+        static Ref<Shader> GetShader(const std::string &name);
 
     private:
-        std::unordered_map<std::string, Ref<Shader>> m_Shaders;
+        ShaderLibrary() = default;
+        ~ShaderLibrary() = default;
     };
 
 }

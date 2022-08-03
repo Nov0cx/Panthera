@@ -6,6 +6,8 @@
 
 namespace Panthera
 {
+    std::unordered_map<std::string, Ref<Shader>> m_Shaders;
+
     Ref <Shader> Shader::Create(const std::string &path)
     {
         switch (Renderer::GetAPI())
