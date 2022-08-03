@@ -11,5 +11,6 @@
 
 #include "Render/Renderer.hpp"
 #include "Render/RenderAPI.hpp"
+#include "Render/Shader.hpp"
 
 #endif //PANTHERA_PANTHERA_HPP

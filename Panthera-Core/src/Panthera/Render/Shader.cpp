@@ -35,13 +35,13 @@ namespace Panthera
 
     }
 
-    Ref <Shader> Shader::Create(const std::string &vertexSrc, const std::string &fragmentSrc)
+    Ref <Shader> Shader::Create(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc)
     {
 
         switch (Renderer::GetAPI())
         {
             case RendererAPI::OpenGL:
-                return CreateRef<OpenGLShader>(vertexSrc, fragmentSrc);
+                return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
             case RendererAPI::Vulkan:
                 LOG_WARN("Vulkan Shader is not supported yet!");
                 break;
@@ -67,7 +67,7 @@ namespace Panthera
 
     Ref <Shader> ShaderLibrary::CreateShader(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc)
     {
-        return m_Shaders[name] = Shader::Create(vertexSrc, fragmentSrc);
+        return m_Shaders[name] = Shader::Create(name, vertexSrc, fragmentSrc);
     }
 
     Ref <Shader> ShaderLibrary::CreateShader(const std::string &name, const std::string &path)

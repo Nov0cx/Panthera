@@ -21,7 +21,7 @@ namespace Panthera
 
         virtual RendererID GetRendererID() const = 0;
     private:
-        static Ref<Shader> Create(const std::string &vertexSrc, const std::string &fragmentSrc);
+        static Ref<Shader> Create(const std::string& name, const std::string &vertexSrc, const std::string &fragmentSrc);
         static Ref<Shader> Create(const std::string &path);
         friend class ShaderLibrary;
     };
