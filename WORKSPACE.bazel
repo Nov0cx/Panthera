@@ -45,12 +45,5 @@ http_archive(
 )
 
 
-http_archive(
-    name = "rules_vulkan",
-    strip_prefix = "rules_vulkan-main",
-    sha256 = "c1630a281f8554ae5073d46a9397c567075a61d2aeb2558073dbd5311e369909",
-    urls = ["https://github.com/jadarve/rules_vulkan/archive/main.zip"],
-)
-
-load("@rules_vulkan//vulkan:repositories.bzl", "vulkan_repositories")
+load("//vulkan/rules:repositories.bzl", "vulkan_repositories")
 vulkan_repositories()

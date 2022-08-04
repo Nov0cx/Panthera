@@ -1,6 +1,8 @@
 ![windows](https://github.com/Nov0cx/Panthera/actions/workflows/windows.yml/badge.svg)
 ![ubuntu](https://github.com/Nov0cx/Panthera/actions/workflows/ubuntu.yml/badge.svg)
 
+##### Disclaimer: Current development only under windows
+
 # Panthera
  > This is an open source C++ Game Engine under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
  > <br/>I'm planning to use [Carbon-Lang](https://github.com/carbon-language/carbon-lang) in the future.

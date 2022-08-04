@@ -2,39 +2,7 @@
 
 #include "Log.hpp"
 #include <string>
-
-/*
- *
- *
- * std::string error;
-    std::unique_ptr<Runfiles> runfiles(Runfiles::Create(argv[0], &error));
-
-    // Important:
-    //   If this is a test, use Runfiles::CreateForTest(&error).
-    //   Otherwise, if you don't have the value for argv[0] for whatever
-    //   reason, then use Runfiles::Create(&error).
-
-    if (runfiles == nullptr) {
-        std::cerr << "Failed to create runfiles: " << error << std::endl;
-    }
-
-    std::string path = runfiles->Rlocation("Panthera/Test/Example.tx");
-
-    std::ifstream in(path);
-
-    if (!in.is_open())
-    {
-        std::cout << "Example.tx not found" << std::endl;
-        return -1;
-    }
-
-    while (in.good())
-    {
-        std::string line;
-        std::getline(in, line);
-        std::cout << line << std::endl;
-    }
- */
+#include "Panthera/Render/Shader.hpp"
 
 namespace Panthera
 {
@@ -81,6 +49,26 @@ namespace Panthera
         std::string error;
         m_Runfiles = Runfiles::Create(props.Args[0], &error);
         ASSERT(m_Runfiles != nullptr, "Failed to create runfiles: {}", error);
+
+        std::string vertex = R""""(
+            #version 450
+            void main()
+            {
+
+            }
+        )"""";
+
+        std::string fragment = R""""(
+            #version 450
+            vec4 o_Color;
+            void main()
+            {
+                o_Color = vec4(1.0, 0.0, 0.0, 1.0);
+            }
+        )"""";
+
+
+        auto shader = ShaderLibrary::CreateShader("Test", vertex, fragment);
     }
 
     void Application::Run()

@@ -19,7 +19,7 @@ cc_library(
       "@com_github_Nov0cx_glfw//:glfw",
       "@com_github_Nov0cx_glm//:glm",
       "@com_github_Nov0cx_spdlog//:spdlog",
-      "@rules_vulkan//vulkan:vulkan_cc_library",
+      "//vulkan/rules:vulkan_cc_library",
       "@bazel_tools//tools/cpp/runfiles"
     ],
     visibility = ["//visibility:public"],
