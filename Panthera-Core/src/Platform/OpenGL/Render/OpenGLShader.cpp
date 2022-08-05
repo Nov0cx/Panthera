@@ -17,7 +17,7 @@
 namespace Panthera
 {
 
-    static const char* GLShaderTypeToString(GLenum type)
+    static const char *GLShaderTypeToString(GLenum type)
     {
         switch (type)
         {
@@ -58,7 +58,7 @@ namespace Panthera
         GLenum type;
     };
 
-    static const char* GetCachedShaderExtension(GLenum type)
+    static const char *GetCachedShaderExtension(GLenum type)
     {
         switch (type)
         {
@@ -108,7 +108,7 @@ namespace Panthera
         LOG_DEBUG("Compiling Shader: {}", m_Name)
         CreateCache();
 
-        std::vector<ShaderSrc> srcs = {};
+        std::vector <ShaderSrc> srcs = {};
 
         srcs.push_back({vertexSrc, GL_VERTEX_SHADER});
         srcs.push_back({fragmentSrc, GL_FRAGMENT_SHADER});
@@ -120,9 +120,9 @@ namespace Panthera
         CreateProgram();
     }
 
-    std::vector<ShaderSrc> GetShaders(const std::string &src)
+    std::vector <ShaderSrc> GetShaders(const std::string &src)
     {
-        std::vector<ShaderSrc> srcs = {};
+        std::vector <ShaderSrc> srcs = {};
         std::stringstream stream(src);
         std::stringstream currentShader;
         GLenum currentType = GL_NONE;
@@ -146,8 +146,8 @@ namespace Panthera
                 currentType = GL_VERTEX_SHADER;
 
                 currentShader << line << "\n";
-            }
-            else if (lower.find("// fragment shader") != std::string::npos || lower.find("// pixel shader") != std::string::npos)
+            } else if (lower.find("// fragment shader") != std::string::npos ||
+                       lower.find("// pixel shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -156,8 +156,7 @@ namespace Panthera
                 }
                 currentType = GL_FRAGMENT_SHADER;
                 currentShader << line << "\n";
-            }
-            else if (lower.find("// geometry shader") != std::string::npos)
+            } else if (lower.find("// geometry shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -166,8 +165,7 @@ namespace Panthera
                 }
                 currentType = GL_GEOMETRY_SHADER;
                 currentShader << line << "\n";
-            }
-            else if (lower.find("// tess control shader") != std::string::npos)
+            } else if (lower.find("// tess control shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -176,8 +174,7 @@ namespace Panthera
                 }
                 currentType = GL_TESS_CONTROL_SHADER;
                 currentShader << line << "\n";
-            }
-            else if (lower.find("// tess evaluation shader") != std::string::npos)
+            } else if (lower.find("// tess evaluation shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -186,8 +183,7 @@ namespace Panthera
                 }
                 currentType = GL_TESS_EVALUATION_SHADER;
                 currentShader << line << "\n";
-            }
-            else if (lower.find("// compute shader") != std::string::npos)
+            } else if (lower.find("// compute shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -196,8 +192,7 @@ namespace Panthera
                 }
                 currentType = GL_COMPUTE_SHADER;
                 currentShader << line << "\n";
-            }
-            else
+            } else
             {
                 currentShader << line << "\n";
             }
@@ -289,7 +284,8 @@ namespace Panthera
                     out.write(reinterpret_cast<char *>(binary.data()), binary.size() * sizeof(uint32_t));
                     out.flush();
                     out.close();
-                } else
+                }
+                else
                 {
                     ASSERT(false, "Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
                            m_Name)
@@ -374,7 +370,7 @@ namespace Panthera
         {
             GLint infoLogLength = 0;
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
-            std::vector<GLchar> infoLog(infoLogLength);
+            std::vector <GLchar> infoLog(infoLogLength);
             glGetProgramInfoLog(program, infoLogLength, nullptr, infoLog.data());
 
             glDeleteProgram(program);
