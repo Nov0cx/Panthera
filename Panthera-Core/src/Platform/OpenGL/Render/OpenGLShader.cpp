@@ -12,7 +12,7 @@
 #include <filesystem>
 #include <istream>
 #include <sstream>
-#include <iostream>
+#include <string>
 
 namespace Panthera
 {
@@ -56,7 +56,6 @@ namespace Panthera
     {
         std::string src;
         GLenum type;
-        std::string path;
     };
 
     static const char* GetCachedShaderExtension(GLenum type)
@@ -108,16 +107,11 @@ namespace Panthera
     {
         LOG_DEBUG("Compiling Shader: {}", m_Name)
         CreateCache();
-        std::vector <ShaderSrc> srcs = {};
-        std::stringstream pathCreateStream;
 
-        pathCreateStream << name << "_vertex.vert";
-        srcs.push_back({vertexSrc, GL_VERTEX_SHADER, pathCreateStream.str()});
+        std::vector<ShaderSrc> srcs = {};
 
-        pathCreateStream.str("");
-
-        pathCreateStream << name << "_fragment.frag";
-        srcs.push_back({fragmentSrc, GL_FRAGMENT_SHADER, pathCreateStream.str()});
+        srcs.push_back({vertexSrc, GL_VERTEX_SHADER});
+        srcs.push_back({fragmentSrc, GL_FRAGMENT_SHADER});
 
         CompileOrGetVulkanBinaryForOpenGL(srcs);
 
@@ -126,11 +120,116 @@ namespace Panthera
         CreateProgram();
     }
 
+    std::vector<ShaderSrc> GetShaders(const std::string &src)
+    {
+        std::vector<ShaderSrc> srcs = {};
+        std::stringstream stream(src);
+        std::stringstream currentShader;
+        GLenum currentType = GL_NONE;
+
+        std::string line;
+
+        while (std::getline(stream, line))
+        {
+            std::string lower = line;
+            std::transform(lower.begin(), lower.end(), lower.begin(),
+                           [](unsigned char c)
+                           { return std::tolower(c); });
+
+            if (lower.find("// vertex shader") != std::string::npos)
+            {
+                if (currentType != GL_NONE)
+                {
+                    srcs.push_back({currentShader.str(), currentType});
+                    currentShader.str("");
+                }
+                currentType = GL_VERTEX_SHADER;
+
+                currentShader << line << "\n";
+            }
+            else if (lower.find("// fragment shader") != std::string::npos || lower.find("// pixel shader") != std::string::npos)
+            {
+                if (currentType != GL_NONE)
+                {
+                    srcs.push_back({currentShader.str(), currentType});
+                    currentShader.str("");
+                }
+                currentType = GL_FRAGMENT_SHADER;
+                currentShader << line << "\n";
+            }
+            else if (lower.find("// geometry shader") != std::string::npos)
+            {
+                if (currentType != GL_NONE)
+                {
+                    srcs.push_back({currentShader.str(), currentType});
+                    currentShader.str("");
+                }
+                currentType = GL_GEOMETRY_SHADER;
+                currentShader << line << "\n";
+            }
+            else if (lower.find("// tess control shader") != std::string::npos)
+            {
+                if (currentType != GL_NONE)
+                {
+                    srcs.push_back({currentShader.str(), currentType});
+                    currentShader.str("");
+                }
+                currentType = GL_TESS_CONTROL_SHADER;
+                currentShader << line << "\n";
+            }
+            else if (lower.find("// tess evaluation shader") != std::string::npos)
+            {
+                if (currentType != GL_NONE)
+                {
+                    srcs.push_back({currentShader.str(), currentType});
+                    currentShader.str("");
+                }
+                currentType = GL_TESS_EVALUATION_SHADER;
+                currentShader << line << "\n";
+            }
+            else if (lower.find("// compute shader") != std::string::npos)
+            {
+                if (currentType != GL_NONE)
+                {
+                    srcs.push_back({currentShader.str(), currentType});
+                    currentShader.str("");
+                }
+                currentType = GL_COMPUTE_SHADER;
+                currentShader << line << "\n";
+            }
+            else
+            {
+                currentShader << line << "\n";
+            }
+        }
+
+        if (currentType != GL_NONE)
+        {
+            srcs.push_back({currentShader.str(), currentType});
+        }
+
+        return srcs;
+    }
+
     OpenGLShader::OpenGLShader(const std::string &path)
     {
         std::filesystem::path filePath = path;
         m_Name = filePath.filename().string();
-        ASSERT(false, "NOT IMPLEMENTED YET!");
+
+        LOG_DEBUG("Compiling Shader: {}, path: {}", m_Name, path)
+
+        std::ifstream file(filePath, std::ios::in | std::ios::binary);
+        ASSERT(file.is_open(), "Failed to open file: {}", filePath.string())
+
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        file.close();
+
+        auto srcs = GetShaders(buffer.str());
+
+        CompileOrGetVulkanBinaryForOpenGL(srcs);
+        CompileOrGetShaders();
+        CreateProgram();
     }
 
     void OpenGLShader::Bind() const

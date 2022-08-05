@@ -17,10 +17,9 @@ int main(int argc, char **argv)
     Leopardus app(props);
     auto path = app.GetAssetPath("Panthera/Assets/Shader/FlatColor.glsl");
     LOG_INFO("{}", path);
-    std::ifstream file(path);
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    LOG_INFO("{}", buffer.str());
+    auto shader = Panthera::ShaderLibrary::CreateShader("FlatColor", path);
+
+
     app.Run();
     return 0;
 }
