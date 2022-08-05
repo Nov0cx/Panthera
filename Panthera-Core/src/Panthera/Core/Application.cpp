@@ -51,23 +51,27 @@ namespace Panthera
         ASSERT(m_Runfiles != nullptr, "Failed to create runfiles: {}", error);
 
         std::string vertex = R""""(
-            #version 450
-            void main()
-            {
+#version 450
+layout(location = 0) in vec4 position;
+void main()
+{
 
-            }
+   gl_Position = position;
+
+}
         )"""";
 
         std::string fragment = R""""(
-            #version 450
-            vec4 o_Color;
-            void main()
-            {
-                o_Color = vec4(1.0, 0.0, 0.0, 1.0);
-            }
+#version 450 core
+layout(location = 0) out vec4 color;
+void main()
+{
+   color = vec4(0.2, 0.3, 0.8, 1.0);
+}
         )"""";
 
-
+        LOG_INFO("Vertex Shader: {}", vertex)
+        LOG_INFO("Fragment Shader: {}", fragment)
         auto shader = ShaderLibrary::CreateShader("Test", vertex, fragment);
     }
 

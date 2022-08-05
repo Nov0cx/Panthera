@@ -23,16 +23,13 @@ namespace Panthera
         if (need_init)
         {
             ASSERT(glfwInit(), "Failed to init GLFW!")
-            glfwWindowHint(GLFW_SAMPLES, 4);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-            glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         }
         p_WindowCount++;
 
         m_Window = glfwCreateWindow(width, height, title, nullptr, nullptr);
         ASSERT(m_Window, "Failed to create GLFW window!")
+
+
 
         m_Context = RenderContext::Create(m_Window);
         m_Context->MakeContext();
@@ -45,6 +42,15 @@ namespace Panthera
                 ASSERT(false, "Failed to initialize GLAD!")
             }
         }
+
+        if (GLAD_GL_VERSION_4_6)
+        {
+            LOG_DEBUG("OpenGL 4.6 is supported!")
+        } else {
+            ASSERT(false, "OpenGL 4.6 is not supported!")
+        }
+
+        LOG_DEBUG("OpenGL Version: {}", (char*)glGetString(GL_VERSION));
     }
 
     OpenGLWindow::~OpenGLWindow()

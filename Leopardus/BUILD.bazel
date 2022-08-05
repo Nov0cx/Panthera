@@ -4,4 +4,7 @@ cc_binary(
     deps = [
         "//Panthera-Core:Panthera-Core"
     ],
+    data = [
+        "//Assets:Assets"
+    ]
 )

@@ -18,7 +18,7 @@ The script will open the Vulkan Installer there you have to download core and al
 <br/>
 Run:
 ```bash
-bazel run //vulkan/...
+bazel run //vulkan:Vulkan
 ```
 
 # Build
