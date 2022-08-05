@@ -3,7 +3,7 @@
 
 #include "Panthera/Core/Event.hpp"
 
-namespace Raspberry
+namespace Panthera
 {
     struct WindowResizeEvent : public Event
     {
