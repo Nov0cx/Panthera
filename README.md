@@ -39,9 +39,6 @@ Run Leopardus(Editor):
 bazel run --config=not_msvc_config //Leopardus:Leopardus
 ```
 
-#### Optional:
-Use --cxxopt="-std=c++20" instead of --config=not_msvc_config
-
 ### MSVC
 Build all:
 ```bash
