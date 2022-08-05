@@ -2,8 +2,6 @@
 ![windows](https://github.com/Nov0cx/Panthera/actions/workflows/windows.yml/badge.svg)
 ![ubuntu](https://github.com/Nov0cx/Panthera/actions/workflows/ubuntu.yml/badge.svg)
 
-This Project is licensed under the [Apache License 2.0](LICENSE).
-
 ##### Disclaimer: Current development only under windows
 
 # Panthera
