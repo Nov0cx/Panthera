@@ -32,9 +32,14 @@ namespace Panthera
     private:
         void Init(const char* title, uint32_t width, uint32_t height);
 
+        struct WindowInfo
+        {
+            uint32_t Height, Width;
+            std::string Name;
+            bool VSync;
+        } m_Info;
+
         GLFWwindow* m_Window;
-        bool m_VSync;
-        uint32_t m_Width, m_Height;
 
         Ref<RenderContext> m_Context;
     };
