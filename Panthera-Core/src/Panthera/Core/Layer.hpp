@@ -5,6 +5,7 @@
 #include "Pointer.hpp"
 #include <vector>
 #include "Event.hpp"
+#include "Timestep.hpp"
 
 namespace Panthera
 {
@@ -16,7 +17,7 @@ namespace Panthera
     public:
         virtual void OnStart() = 0;
 
-        virtual void OnUpdate(/*Timestep*/) = 0;
+        virtual void OnUpdate(Timestep ts) = 0;
 
         virtual void OnEvent(Event& event) = 0;
         //virtual void OnImGuiRender() = 0;
@@ -52,7 +53,7 @@ namespace Panthera
 
         ~LayerStack();
 
-        void OnUpdate(/*Timestep ts*/) const;
+        void OnUpdate(Timestep ts) const;
 
         void OnEvent(Event &event) const;
 

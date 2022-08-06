@@ -13,13 +13,13 @@ namespace Panthera
         }
     }
 
-    void LayerStack::OnUpdate(/*Timestep ts*/) const
+    void LayerStack::OnUpdate(Timestep ts) const
     {
         for (auto& layer : m_Layers)
         {
             if (layer->IsActive())
             {
-                layer->OnUpdate(/*ts*/);
+                layer->OnUpdate(ts);
             }
         }
     }

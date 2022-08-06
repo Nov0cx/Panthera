@@ -1,7 +1,7 @@
 #include "UniformBuffer.hpp"
 
 #include "Panthera/Core/Log.hpp"
-#include "Redenderer.hpp"
+#include "Renderer.hpp"
 
 #include "Platform/OpenGL/Render/OpenGLUniformBuffer.hpp"
 

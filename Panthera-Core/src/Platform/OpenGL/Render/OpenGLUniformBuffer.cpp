@@ -1,5 +1,7 @@
 #include "OpenGLUniformBuffer.hpp"
 
+#include <glad/glad.h>
+
 namespace Panthera
 {
 

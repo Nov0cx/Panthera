@@ -6,6 +6,8 @@
 #include "Log.hpp"
 #include "Pointer.hpp"
 #include <string>
+#include "Timestep.hpp"
+#include "Panthera/Utils/Time.hpp"
 
 #include "tools/cpp/runfiles/runfiles.h"
 using bazel::tools::cpp::runfiles::Runfiles;
@@ -75,6 +77,8 @@ namespace Panthera
         bool m_Running = true;
         Ref<Window> m_Window;
         Runfiles* m_Runfiles;
+        Timestep m_Timestep;
+        Time::Time<std::chrono::seconds> m_LastFrameTime;
     };
 }
 

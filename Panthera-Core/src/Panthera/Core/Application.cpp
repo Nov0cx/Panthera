@@ -79,9 +79,14 @@ void main()
     {
         while (m_Running)
         {
+            auto now = Time::GetSeconds();
+            Time::Duration delta = now - m_LastFrameTime;
+            m_LastFrameTime = now;
+            m_Timestep = delta.count();
+
             m_Running = !m_Window->ShouldBeClosed();
 
-            m_LayerStack.OnUpdate();
+            m_LayerStack.OnUpdate(m_Timestep);
 
             /*
             m_LayerStack.OnImGuiUpdate()
