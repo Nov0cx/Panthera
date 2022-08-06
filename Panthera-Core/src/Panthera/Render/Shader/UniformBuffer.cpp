@@ -1,9 +1,9 @@
 #include "UniformBuffer.hpp"
 
 #include "Panthera/Core/Log.hpp"
-#include "Renderer.hpp"
+#include "Panthera/Render/Renderer.hpp"
 
-#include "Platform/OpenGL/Render/OpenGLUniformBuffer.hpp"
+#include "Platform/OpenGL/Render/Shader/OpenGLUniformBuffer.hpp"
 
 namespace Panthera
 {

@@ -1,7 +1,7 @@
 #ifndef PANTHERA_OPENGLUNIFORMBUFFER_HPP
 #define PANTHERA_OPENGLUNIFORMBUFFER_HPP
 
-#include "Panthera/Render/UniformBuffer.hpp"
+#include "Panthera/Render/Shader/UniformBuffer.hpp"
 #include "Panthera/Render/RenderAPI.hpp"
 
 namespace Panthera

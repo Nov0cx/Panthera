@@ -2,7 +2,7 @@
 
 #include "Log.hpp"
 #include <string>
-#include "Panthera/Render/Shader.hpp"
+#include "Panthera/Render/Shader/Shader.hpp"
 
 namespace Panthera
 {
@@ -48,31 +48,7 @@ namespace Panthera
 
         std::string error;
         m_Runfiles = Runfiles::Create(props.Args[0], &error);
-        ASSERT(m_Runfiles != nullptr, "Failed to create runfiles: {}", error);
-
-        std::string vertex = R""""(
-#version 450
-layout(location = 0) in vec4 position;
-void main()
-{
-
-   gl_Position = position;
-
-}
-        )"""";
-
-        std::string fragment = R""""(
-#version 450 core
-layout(location = 0) out vec4 color;
-void main()
-{
-   color = vec4(0.2, 0.3, 0.8, 1.0);
-}
-        )"""";
-
-        LOG_INFO("Vertex Shader: {}", vertex)
-        LOG_INFO("Fragment Shader: {}", fragment)
-        auto shader = ShaderLibrary::CreateShader("Test", vertex, fragment);
+        ASSERT(m_Runfiles != nullptr, "Failed to create runfiles: {}", error)
     }
 
     void Application::Run()

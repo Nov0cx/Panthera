@@ -213,6 +213,8 @@ namespace Panthera
 
         LOG_DEBUG("Compiling Shader: {}, path: {}", m_Name, path)
 
+        CreateCache();
+
         std::ifstream file(filePath, std::ios::in | std::ios::binary);
         ASSERT(file.is_open(), "Failed to open file: {}", filePath.string())
 

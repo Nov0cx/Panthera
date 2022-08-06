@@ -1,7 +1,7 @@
 #include "Shader.hpp"
 
-#include "Renderer.hpp"
-#include "Platform/OpenGL/Render/OpenGLShader.hpp"
+#include "Panthera/Render/Renderer.hpp"
+#include "Platform/OpenGL/Render/Shader/OpenGLShader.hpp"
 #include "Panthera/Core/Log.hpp"
 
 namespace Panthera

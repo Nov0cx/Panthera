@@ -1,7 +1,7 @@
 #ifndef PANTHERA_OPENGLSHADER_HPP
 #define PANTHERA_OPENGLSHADER_HPP
 
-#include "Panthera/Render/Shader.hpp"
+#include "Panthera/Render/Shader/Shader.hpp"
 #include "Panthera/Core/Pointer.hpp"
 #include <string>
 #include "Panthera/Render/RenderAPI.hpp"

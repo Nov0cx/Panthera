@@ -28,8 +28,9 @@ namespace Panthera
     };
 }
 
-#define LOG_TRACE(...) ::Panthera::Log::GetLogger()->trace(__VA_ARGS__);
+
 #define LOG_DEBUG(...) ::Panthera::Log::GetLogger()->debug(__VA_ARGS__);
+#define LOG_TRACE(...) ::Panthera::Log::GetLogger()->trace(__VA_ARGS__);
 #define LOG_INFO(...) ::Panthera::Log::GetLogger()->info(__VA_ARGS__);
 #define LOG_WARN(...) ::Panthera::Log::GetLogger()->warn(__VA_ARGS__);
 #define LOG_ERROR(...) ::Panthera::Log::GetLogger()->error(__VA_ARGS__);
@@ -40,5 +41,6 @@ namespace Panthera
             ::Panthera::Log::GetLogger()->critical("Assert failed at line {} in file {}. \n{}", __LINE__, __FILE__, __VA_ARGS__); \
             exit(-1);                        \
         }
+
 
 #endif
