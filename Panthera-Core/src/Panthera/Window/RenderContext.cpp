@@ -10,7 +10,7 @@ namespace Panthera
 
     Ref <RenderContext> RenderContext::Create(std::any nativeWindow)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return CreateRef<OpenGLRenderContext>(nativeWindow);
@@ -30,7 +30,7 @@ namespace Panthera
                 LOG_WARN("OpenGLES Render Context is not supported yet!");
                 break;
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int) Renderer::GetAPI());
+                ASSERT(false, "Unknown RendererAPI! {}", (int) RendererState::GetAPI());
         }
 
         ASSERT(false, "Not Supported RendererAPI")

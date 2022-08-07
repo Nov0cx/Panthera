@@ -1,16 +1,40 @@
 #include "Renderer.hpp"
 
-namespace Panthera {
+#include "Panthera/Core/Log.hpp"
+#include "Platform/OpenGL/Render/OpenGLRenderer.hpp"
+
+namespace Panthera
+{
 
     static RendererAPI s_API = RendererAPI::OpenGL;
 
-    RendererAPI Renderer::GetAPI()
+    RendererAPI RendererState::GetAPI()
     {
         return s_API;
     }
 
-    void Renderer::SetAPI(RendererAPI api)
+    void RendererState::SetAPI(RendererAPI api)
     {
         s_API = api;
+    }
+
+    Renderer *Renderer::CreateRenderer()
+    {
+        switch (s_API)
+        {
+            case RendererAPI::OpenGL:
+                return new OpenGLRenderer();
+            case RendererAPI::None:
+                ASSERT(false, "RendererAPI::None is not supported!");
+            case RendererAPI::Vulkan:
+                ASSERT(false, "RendererAPI::Vulkan is not supported!");
+            case RendererAPI::Direct3D:
+                ASSERT(false, "RendererAPI::Direct3D is not supported!");
+            case RendererAPI::Metal:
+                ASSERT(false, "RendererAPI::Metal is not supported!");
+            case RendererAPI::OpenGLES:
+                ASSERT(false, "RendererAPI::OpenGLES is not supported!");
+        }
+        ASSERT(false, "Unknown RendererAPI!");
     }
 }

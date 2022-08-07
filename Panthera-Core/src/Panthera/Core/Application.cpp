@@ -81,6 +81,11 @@ namespace Panthera
         return m_Runfiles->Rlocation(filepath);
     }
 
+    LayerStack *Application::GetLayerStack()
+    {
+        return &m_LayerStack;
+    }
+
 
     AppProps::AppProps(ProgramArgs args, const char *name, unsigned int width, unsigned int height, bool vSync) : Args(args), Name(name),
                                                                                                 Width(width),

@@ -10,7 +10,7 @@ namespace Panthera
 
     Ref <UniformBuffer> UniformBuffer::Create(size_t size, uint32_t binding)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return CreateRef<OpenGLUniformBuffer>(size, binding);
@@ -25,7 +25,7 @@ namespace Panthera
             case RendererAPI::OpenGLES:
                 ASSERT(false, "OpenGLES UniformBuffer is not supported yet!");
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int)Renderer::GetAPI());
+                ASSERT(false, "Unknown RendererAPI! {}", (int)RendererState::GetAPI());
         }
     }
 }

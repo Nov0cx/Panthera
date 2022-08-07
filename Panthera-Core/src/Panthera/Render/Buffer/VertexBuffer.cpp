@@ -10,7 +10,7 @@ namespace Panthera
 
     Ref <VertexBuffer> VertexBuffer::Create(const void *data, size_t size)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return CreateRef<OpenGLVertexBuffer>(data, size);
@@ -25,13 +25,13 @@ namespace Panthera
             case RendererAPI::OpenGLES:
                 ASSERT(false, "OpenGLES VertexBuffer is not supported yet!");
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int)Renderer::GetAPI());
+                ASSERT(false, "Unknown RendererAPI! {}", (int)RendererState::GetAPI());
         }
     }
 
     uint32_t GetDataTypeSize(ShaderDataType type)
     {
-        switch(Renderer::GetAPI())
+        switch(RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return GetDataTypeSizeOpenGL(type);
@@ -46,13 +46,13 @@ namespace Panthera
             case RendererAPI::OpenGLES:
                 ASSERT(false, "OpenGLES data type size is not supported yet!")
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int)Renderer::GetAPI())
+                ASSERT(false, "Unknown RendererAPI! {}", (int)RendererState::GetAPI())
         }
     }
 
     Ref <VertexBuffer> VertexBuffer::Create(size_t size)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return CreateRef<OpenGLVertexBuffer>(size);
@@ -67,7 +67,7 @@ namespace Panthera
             case RendererAPI::OpenGLES:
                 ASSERT(false, "OpenGLES VertexBuffer is not supported yet!")
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int)Renderer::GetAPI())
+                ASSERT(false, "Unknown RendererAPI! {}", (int)RendererState::GetAPI())
         }
     }
 

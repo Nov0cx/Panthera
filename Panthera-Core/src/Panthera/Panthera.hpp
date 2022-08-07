@@ -19,7 +19,11 @@
 #include "Render/Shader/Shader.hpp"
 #include "Render/Shader/UniformBuffer.hpp"
 #include "Render/Buffer/VertexBuffer.hpp"
+#include "Render/Buffer/IndexBuffer.hpp"
+#include "Render/VertexArray/VertexArray.hpp"
 
 #include "Utils/Time.hpp"
+
+#include <glm/glm.hpp>
 
 #endif //PANTHERA_PANTHERA_HPP

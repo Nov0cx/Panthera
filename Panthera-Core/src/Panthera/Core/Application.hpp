@@ -64,6 +64,8 @@ namespace Panthera
         // yeah a little mess because of Bazel
         std::string GetAssetPath(const char* filepath);
 
+        LayerStack *GetLayerStack();
+
     private:
         static void SetInstance(void *instance);
 

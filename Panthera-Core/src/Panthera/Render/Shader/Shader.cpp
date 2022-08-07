@@ -10,7 +10,7 @@ namespace Panthera
 
     Ref <Shader> Shader::Create(const std::string &path)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return CreateRef<OpenGLShader>(path);
@@ -30,7 +30,7 @@ namespace Panthera
                 LOG_WARN("OpenGLES Shader is not supported yet!");
                 break;
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int)Renderer::GetAPI());
+                ASSERT(false, "Unknown RendererAPI! {}", (int)RendererState::GetAPI());
         }
 
         ASSERT(false, "Not Supported RendererAPI")
@@ -40,7 +40,7 @@ namespace Panthera
     Ref <Shader> Shader::Create(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc)
     {
 
-        switch (Renderer::GetAPI())
+        switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
@@ -60,7 +60,7 @@ namespace Panthera
                 LOG_WARN("OpenGLES Shader is not supported yet!");
                 break;
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int)Renderer::GetAPI());
+                ASSERT(false, "Unknown RendererAPI! {}", (int)RendererState::GetAPI());
         }
 
         ASSERT(false, "Not Supported RendererAPI")

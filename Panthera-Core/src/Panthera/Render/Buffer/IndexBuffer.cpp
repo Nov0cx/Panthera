@@ -10,7 +10,7 @@ namespace Panthera
 
     Ref <IndexBuffer> IndexBuffer::Create(const void *indicies, uint32_t count)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return CreateRef<OpenGLIndexBuffer>(indicies, count);
@@ -25,7 +25,7 @@ namespace Panthera
             case RendererAPI::OpenGLES:
                 ASSERT(false, "OpenGLES IndexBuffer is not supported yet!")
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int)Renderer::GetAPI())
+                ASSERT(false, "Unknown RendererAPI! {}", (int)RendererState::GetAPI())
         }
     }
 }

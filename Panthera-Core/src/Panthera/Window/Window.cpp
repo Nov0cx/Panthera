@@ -9,7 +9,7 @@ namespace Panthera
 {
     Ref<Window> Window::Create(const Panthera::WindowProps &props)
     {
-        switch (Renderer::GetAPI())
+        switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
                 return CreateRef<OpenGLWindow>(props);
@@ -29,7 +29,7 @@ namespace Panthera
                 LOG_WARN("OpenGLES Window is not supported yet!");
                 break;
             default:
-                ASSERT(false, "Unknown RendererAPI! {}", (int)Renderer::GetAPI());
+                ASSERT(false, "Unknown RendererAPI! {}", (int)RendererState::GetAPI());
         }
 
         ASSERT(false, "Not Supported RendererAPI")
