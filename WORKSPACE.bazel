@@ -44,6 +44,14 @@ http_archive(
     urls = ["https://github.com/Nov0cx/spdlog/archive/v1.x.zip"],
 )
 
+http_archive(
+    name = "com_github_ocornut_imgui",
+    sha256 = "eb41440e95cdfe256feedf96bb59d7ccd927edc59dc807328f5afe37bf69b943",
+    strip_prefix = "imgui-docking",
+    urls = ["https://github.com/ocornut/imgui/archive/docking.zip"],
+    build_file = "@//extern:imgui.BUILD",
+)
+
 
 load("//vulkan/rules:repositories.bzl", "vulkan_repositories")
 vulkan_repositories()

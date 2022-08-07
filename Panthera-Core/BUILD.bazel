@@ -24,7 +24,8 @@ cc_library(
       "@com_github_Nov0cx_glm//:glm",
       "@com_github_Nov0cx_spdlog//:spdlog",
       "//vulkan/rules:vulkan_cc_library",
-      "@bazel_tools//tools/cpp/runfiles"
+      "@bazel_tools//tools/cpp/runfiles",
+      "@com_github_ocornut_imgui//:imgui",
     ],
     visibility = ["//visibility:public"],
     strip_include_prefix = "src"
