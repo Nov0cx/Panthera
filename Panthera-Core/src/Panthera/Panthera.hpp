@@ -18,6 +18,7 @@
 #include "Render/RenderAPI.hpp"
 #include "Render/Shader/Shader.hpp"
 #include "Render/Shader/UniformBuffer.hpp"
+#include "Render/Buffer/VertexBuffer.hpp"
 
 #include "Utils/Time.hpp"
 
