@@ -21,6 +21,7 @@
 #include "Render/Buffer/VertexBuffer.hpp"
 #include "Render/Buffer/IndexBuffer.hpp"
 #include "Render/VertexArray/VertexArray.hpp"
+#include "Render/Texture/Texture.hpp"
 
 #include "Utils/Time.hpp"
 

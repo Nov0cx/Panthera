@@ -274,8 +274,11 @@ namespace Panthera
                 shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv(src.src.c_str(),
                                                                                  GLShaderTypeToShaderC(src.type),
                                                                                  m_Name.c_str(), options);
-                ASSERT(result.GetCompilationStatus() == shaderc_compilation_status_success,
-                       "Failed to compile shader: {}", result.GetErrorMessage())
+                if (result.GetCompilationStatus() != shaderc_compilation_status_success)
+                {
+                    LOG_ERROR("Failed to compile shader: {}, error: {}", m_Name, result.GetErrorMessage())
+                    ASSERT(false, "Failed to compile shader: {}, error: {}", m_Name, result.GetErrorMessage())
+                }
 
                 m_VulkanBinary[src.type] = std::vector<uint32_t>(result.cbegin(), result.cend());
 
@@ -381,7 +384,8 @@ namespace Panthera
             {
                 glDeleteShader(shader);
             }
-            ASSERT(false, "Failed to link shader program: {}", infoLog.data())
+            LOG_ERROR("Failed to link shader: {}", infoLog.data())
+            ASSERT(false, "Failed to link shader program")
         }
 
         for (auto shader: shaders)
