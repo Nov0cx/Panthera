@@ -2,7 +2,7 @@
 ![windows](https://github.com/Nov0cx/Panthera/actions/workflows/windows.yml/badge.svg)
 ![ubuntu](https://github.com/Nov0cx/Panthera/actions/workflows/ubuntu.yml/badge.svg)
 <br/>
-![Roadmap](https://upload.wikimedia.org/wikipedia/en/8/8c/Trello_logo.svg)
+![Roadmap](https://upload.wikimedia.org/wikipedia/en/8/8c/Trello_logo.svg?link=https://trello.com/b/lO2g2KYQ/panthera)
 
 ##### Disclaimer: Current development only under windows
 
