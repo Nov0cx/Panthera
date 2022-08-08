@@ -1,2 +1,7 @@
 build:msvc_config --cxxopt="/std:c++20" --enable_runfiles
+build:msvc_config_release --config=msvc_config --define build_type=release
+build:msvc_config_debug --config=msvc_config --define build_type=debug
+
 build:not_msvc_config --cxxopt="-std=c++20" --enable_runfiles
+build:not_msvc_config_release --config=not_msvc_config --define build_type=release
+build:not_msvc_config_debug --config=not_msvc_config --define build_type=debug

@@ -39,6 +39,8 @@ Run Leopardus(Editor):
 bazel run --config=not_msvc_config //Leopardus:Leopardus
 ```
 
+For debug append '_debug' to the config name. For release builds append '_release' to the config name.
+
 ### MSVC
 Build all:
 ```bash
@@ -52,6 +54,8 @@ Run Leopardus(Editor):
 ```bash
 bazel run --config=msvc_config //Leopardus:Leopardus
 ```
+
+For debug append '_debug' to the config name. For release builds append '_release' to the config name.
 
 # Dependencies:
 We only depend on [Bazel](https://bazel.build/install/bazelisk).

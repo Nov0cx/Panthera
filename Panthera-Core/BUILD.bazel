@@ -1,3 +1,17 @@
+config_setting(
+    name = "release",
+    define_values = {
+        "build_type": "release",
+    }
+)
+
+config_setting(
+    name = "debug",
+    define_values = {
+        "build_type": "debug",
+    }
+)
+
 cc_library(
     name = "Panthera-Core",
     srcs = glob([
@@ -29,6 +43,17 @@ cc_library(
       "@bazel_tools//tools/cpp/runfiles",
       "@com_github_ocornut_imgui//:imgui",
     ],
+    defines = select({
+        ":debug": [
+            "PANTHERA_DEBUG",
+        ],
+        ":release": [
+            "PANTHERA_RELEASE",
+        ],
+        "//conditions:default": [
+            "PANTHERA_DEFAULT",
+        ],
+    }),
     visibility = ["//visibility:public"],
     strip_include_prefix = "src"
 )
