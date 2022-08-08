@@ -4,6 +4,7 @@ filegroup(
         "Shader/FlatColor.glsl",
         "Shader/Texture.glsl",
         "Textures/flower.jpg",
+        "Textures/color.jpg",
     ],
     visibility = ["//visibility:public"],
 )

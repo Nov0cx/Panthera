@@ -10,7 +10,7 @@ public:
     {
         m_Renderer = Panthera::Renderer::CreateRenderer();
         m_Renderer->Init();
-        m_Texture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/flower.jpg"));
+        m_Texture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/color.jpg"));
     }
 
     virtual void OnEnd() override
@@ -63,24 +63,28 @@ public:
                 2, 3, 0
         };
 
-        glm::vec4 color2 = {0.6, 0.3, 0.05, 1.};
+        glm::vec4 color2 = {1., 1., 1., 1.};
 
-        glm::vec3 rightBottom2 = glm::vec3(0.5, -0.5, 0.0f) + glm::vec3(1.0f, 1.0f, .0f);
-        glm::vec3 leftBottom2 = glm::vec3(-0.5, -0.5, 0.0f) + glm::vec3(1.0f, 1.0f, .0f);
-        glm::vec3 rightTop2 = glm::vec3(0.5, 0.5, 0.0f) + glm::vec3(1.0f, 1.0f, .0f);
-        glm::vec3 leftTop2 = glm::vec3(-0.5, 0.5, 0.0f) + glm::vec3(1.0f, 1.0f, .0f);
+        /*glm::vec3 rightBottom2 = glm::vec3(1.5, 0.5, 0.0f);
+        glm::vec3 leftBottom2 = glm::vec3(0.5, 0.5, 0.0f);
+        glm::vec3 rightTop2 = glm::vec3(1.5, 1.5, 0.0f);
+        glm::vec3 leftTop2 = glm::vec3(0.5, 1.5, 0.0f);*/
+        glm::vec3 rightBottom2 = glm::vec3(0.5, -0.5, 0.0f);
+        glm::vec3 leftBottom2 = glm::vec3(-0.5, -0.5, 0.0f);
+        glm::vec3 rightTop2 = glm::vec3(0.5, 0.5, 0.0f);
+        glm::vec3 leftTop2 = glm::vec3(-0.5, 0.5, 0.0f);
 
-        float positions2[3 * 4 * 4] = {
-                leftBottom2.x, leftBottom2.y, leftBottom2.z, color2.x, color2.y, color2.z, color2.w, 0, 1, 0,
-                rightBottom2.x, rightBottom2.y, rightBottom2.z, color2.x, color2.y, color2.z, color2.w, 0, 1, 0,
-                rightTop2.x, rightTop2.y, rightTop2.z, color2.x, color2.y, color2.z, color2.w, 0, 1, 0,
-                leftTop2.x, leftTop2.y, leftTop2.z, color2.x, color2.y, color2.z, color2.w, 0, 1, 0,
+        float positions2[] = {
+                leftBottom2.x, leftBottom2.y, leftBottom2.z, color2.x, color2.y, color2.z, color2.w, 0.f, 0.f, 0,
+                rightBottom2.x, rightBottom2.y, rightBottom2.z, color2.x, color2.y, color2.z, color2.w, 1.f, 0.f, 0,
+                rightTop2.x, rightTop2.y, rightTop2.z, color2.x, color2.y, color2.z, color2.w, 1.f, 1.f, 0,
+                leftTop2.x, leftTop2.y, leftTop2.z, color2.x, color2.y, color2.z, color2.w, 0.f, 1.f, 0,
         };
 
         auto shader2 = Panthera::ShaderLibrary::GetShader("Texture");
 
 
-        auto vb2 = Panthera::VertexBuffer::Create(positions, sizeof(positions2));
+        auto vb2 = Panthera::VertexBuffer::Create(positions2, sizeof(positions2));
         vb2->SetBufferLayout({
                                     {"a_Position", Panthera::ShaderDataType::Float3},
                                     {"a_Color", Panthera::ShaderDataType::Float4},
@@ -88,7 +92,7 @@ public:
                                     {"a_TexIndex", Panthera::ShaderDataType::Int}
                             });
         vertexArray2->AddVertexBuffer(vb2);
-        auto ib2 = Panthera::IndexBuffer::Create(indices, sizeof(indices2) / sizeof(uint32_t));
+        auto ib2 = Panthera::IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
         vertexArray2->SetIndexBuffer(ib2);
 
         m_Texture->Bind(0);

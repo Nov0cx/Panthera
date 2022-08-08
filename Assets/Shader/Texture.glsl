@@ -7,7 +7,7 @@ layout(location = 2) in vec2 a_TexCoord;
 layout(location = 3) in int a_TexIndex;
 
 layout(location = 0) out vec4 v_Color;
-layout(location = 1) out flat vec2 v_TexCoord;
+layout(location = 1) out vec2 v_TexCoord;
 layout(location = 2) out flat int v_TexIndex;
 
 void main()
@@ -23,10 +23,9 @@ void main()
 #version 450 core
 
 layout(location = 0) out vec4 o_Color;
-layout(location = 1) out int o_EntityID;
 
 layout(location = 0) in vec4 v_Color;
-layout(location = 1) in flat vec2 v_TexCoord;
+layout(location = 1) in vec2 v_TexCoord;
 layout(location = 2) in flat int v_TexIndex;
 
 layout (binding = 0) uniform sampler2D u_Textures[32];
