@@ -15,8 +15,11 @@ namespace Panthera
         virtual void DrawIndexed(uint32_t count) override;
         virtual void DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color) override;
         virtual void DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color) override;
-        virtual void DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, uint8_t index, Ref<Texture2D> &texture) override;
-        virtual void DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, uint8_t index, Ref<Texture2D> &texture) override;
+        virtual void DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) override;
+        virtual void DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) override;
+        virtual void BeginScene() override;
+        virtual void EndScene() override;
+        virtual void Flush() override;
     };
 }
 

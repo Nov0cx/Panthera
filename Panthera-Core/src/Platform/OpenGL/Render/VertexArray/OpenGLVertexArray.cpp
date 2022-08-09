@@ -19,8 +19,11 @@ namespace Panthera
     void OpenGLVertexArray::Bind() const
     {
         glBindVertexArray(m_RendererID);
-        m_IndexBuffer->Bind();
-        for (auto& buffer : m_Buffers)
+        if (m_IndexBuffer)
+        {
+            m_IndexBuffer->Bind();
+        }
+        for (auto& buffer : m_VertexBuffers)
         {
             buffer->Bind();
         }
@@ -61,7 +64,6 @@ namespace Panthera
     {
         ASSERT(!buffer->GetLayout().GetLayouts().empty(), "Vertex buffer has no layout");
         Bind();
-        buffer->Bind();
 
         auto bufferLayout = buffer->GetLayout();
         for (const auto &layout: bufferLayout.GetLayouts())
