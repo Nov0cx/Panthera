@@ -19,6 +19,11 @@ namespace Panthera
     void OpenGLVertexArray::Bind() const
     {
         glBindVertexArray(m_RendererID);
+        m_IndexBuffer->Bind();
+        for (auto& buffer : m_Buffers)
+        {
+            buffer->Bind();
+        }
     }
 
     void OpenGLVertexArray::Unbind() const

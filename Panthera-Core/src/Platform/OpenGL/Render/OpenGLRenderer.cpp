@@ -31,11 +31,9 @@ namespace Panthera
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void OpenGLRenderer::DrawIndexed(const Ref <VertexArray> &vertexArray)
+    void OpenGLRenderer::DrawIndexed(uint32_t count)
     {
-        vertexArray->Bind();
-        vertexArray->GetIndexBuffer()->Bind();
-        glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     }
 
     void OpenGLRenderer::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color)
@@ -69,7 +67,8 @@ namespace Panthera
         vertexArray->SetIndexBuffer(ib);
 
         shader->Bind();
-        DrawIndexed(vertexArray);
+        vertexArray->Bind();
+        DrawIndexed(vertexArray->GetIndexBuffer()->GetCount());
     }
 
     void OpenGLRenderer::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color)
@@ -108,7 +107,8 @@ namespace Panthera
         vertexArray->SetIndexBuffer(indexBuffer);
         shader->Bind();
         texture->Bind(index);
-        DrawIndexed(vertexArray);
+        vertexArray->Bind();
+        DrawIndexed(vertexArray->GetIndexBuffer()->GetCount());
     }
 
     void OpenGLRenderer::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, uint8_t index, Ref <Texture2D> &texture)
