@@ -38,7 +38,7 @@ namespace Panthera
         glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
     }
 
-    void OpenGLRenderer::DrawQuad(glm::vec3 center, glm::vec2 size, glm::vec4 color)
+    void OpenGLRenderer::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color)
     {
         glm::vec3 rightBottom = center + glm::vec3(size.x / 2, -size.y / 2, 0.f);
         glm::vec3 leftBottom = center + glm::vec3(-size.x / 2, -size.y / 2, 0.f);
@@ -72,13 +72,12 @@ namespace Panthera
         DrawIndexed(vertexArray);
     }
 
-    void OpenGLRenderer::DrawQuad(glm::vec2 center, glm::vec2 size, glm::vec4 color)
+    void OpenGLRenderer::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color)
     {
         DrawQuad(glm::vec3(center.x, center.y, 0.f), size, color);
     }
 
-    void
-    OpenGLRenderer::DrawQuad(glm::vec3 center, glm::vec2 size, glm::vec4 color, uint8_t index, Ref <Texture2D> &texture)
+    void OpenGLRenderer::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, uint8_t index, Ref <Texture2D> &texture)
     {
         glm::vec3 rightBottom = center + glm::vec3(size.x / 2, -size.y / 2, 0.f);
         glm::vec3 leftBottom = center + glm::vec3(-size.x / 2, -size.y / 2, 0.f);
@@ -112,8 +111,7 @@ namespace Panthera
         DrawIndexed(vertexArray);
     }
 
-    void
-    OpenGLRenderer::DrawQuad(glm::vec2 center, glm::vec2 size, glm::vec4 color, uint8_t index, Ref <Texture2D> &texture)
+    void OpenGLRenderer::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, uint8_t index, Ref <Texture2D> &texture)
     {
         DrawQuad(glm::vec3(center.x, center.y, 0.f), size, color, index, texture);
     }
