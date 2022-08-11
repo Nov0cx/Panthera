@@ -28,6 +28,10 @@ namespace Panthera
         virtual void DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color) = 0;
         virtual void DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) = 0;
         virtual void DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) = 0;
+        virtual void DrawTriangle(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color) = 0;
+        virtual void DrawTriangle(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color) = 0;
+        virtual void DrawTriangle(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) = 0;
+        virtual void DrawTriangle(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) = 0;
         virtual void BeginScene() = 0;
         virtual void EndScene() = 0;
         virtual void Flush() = 0;

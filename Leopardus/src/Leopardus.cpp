@@ -53,11 +53,6 @@ int main(int argc, char **argv)
     Panthera::ProgramArgs args(argc, argv);
     Panthera::AppProps props(args, "Leopardus", 800, 600, false);
     Leopardus app(props);
-    auto path = app.GetAssetPath("Panthera/Assets/Shader/FlatColor.glsl");
-    auto shader = Panthera::ShaderLibrary::CreateShader("FlatColor", path);
-
-    auto textureShaderPath = app.GetAssetPath("Panthera/Assets/Shader/Texture.glsl");
-    auto textureShader = Panthera::ShaderLibrary::CreateShader("Texture", textureShaderPath);
 
     app.Run();
     return 0;

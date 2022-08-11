@@ -2,7 +2,7 @@ filegroup(
     name = "Assets",
     srcs = [
         "Shader/FlatColor.glsl",
-        "Shader/Texture.glsl",
+        "Shader/Quad.glsl",
         "Textures/flower.jpg",
         "Textures/color.jpg",
     ],
