@@ -5,7 +5,7 @@ class LeopardusLayer : public Panthera::Layer
 public:
     LeopardusLayer() : Panthera::Layer()
     {
-        m_Camera = Panthera::OrthographicCamera(0, Panthera::Application::GetInstance()->GetWindowWidth(), 0, Panthera::Application::GetInstance()->GetWindowHeight());
+        m_Camera = Panthera::OrthographicCamera(-1.33, 1.33, -1, 1);
     }
 
     virtual void OnStart() override
@@ -25,7 +25,7 @@ public:
     virtual void OnUpdate(Panthera::Timestep ts) override
     {
         m_Renderer->Clear();
-        m_Renderer->BeginScene();
+        m_Renderer->BeginScene(m_Camera);
         m_Renderer->DrawQuad({-0.3f, -0.3f, 0.0f}, {0.6f, 0.6f}, {1.0f, 0.0f, 0.0f, 1.0f});
         m_Renderer->DrawQuad({0.3f, 0.3f, 0.0f}, {0.6f, 0.6f}, {1.0f, 1.0f, 1.0f, 1.0f}, 1.f, m_ColorTexture);
         m_Renderer->DrawQuad({-0.37f, 0.37f, 0.0f}, {0.63f, 0.63f}, {1.0f, 1.0f, 1.0f, 1.0f}, 1.f, m_FlowerTexture);
@@ -35,7 +35,30 @@ public:
 
     virtual void OnEvent(Panthera::Event &e) override
     {
+        Panthera::Event::Listener<Panthera::KeyPressedEvent> keyPressedEventListener([this](Panthera::KeyPressedEvent &e)
+        {
+            if (e.Key == (int)Panthera::Key::Escape)
+            {
 
+            }
+            else if (e.Key == (int)Panthera::Key::W)
+            {
+                m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.f, -0.1f, 0.0f));
+            }
+            else if (e.Key == (int)Panthera::Key::S)
+            {
+                m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.f, 0.1f, 0.0f));
+            }
+            else if (e.Key == (int)Panthera::Key::A)
+            {
+                m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.1f, 0.0f, 0.0f));
+            }
+            else if (e.Key == (int)Panthera::Key::D)
+            {
+                m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(-0.1f, 0.0f, 0.0f));
+            }
+        });
+        keyPressedEventListener.Run(e, Panthera::EventSubType::KeyPressedEvent);
     }
 
 private:

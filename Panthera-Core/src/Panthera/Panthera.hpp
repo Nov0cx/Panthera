@@ -7,6 +7,7 @@
 #include "Core/Pointer.hpp"
 #include "Core/Log.hpp"
 #include "Core/Timestep.hpp"
+#include "Core/Key.hpp"
 
 #include "Events/WindowEvents.hpp"
 #include "Events/KeyEvents.hpp"
