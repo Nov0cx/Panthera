@@ -6,6 +6,7 @@
 #include "VertexArray/VertexArray.hpp"
 #include "Texture/Texture.hpp"
 #include "Shader/Shader.hpp"
+#include "Camera/OrthographicCamera.hpp"
 
 namespace Panthera
 {
@@ -48,10 +49,10 @@ namespace Panthera
 #pragma section("Scene")
 
         virtual void BeginScene() = 0;
+        virtual void BeginScene(OrthographicCamera &camera) = 0;
         virtual void EndScene() = 0;
         virtual void Flush() = 0;
 
-#pragma section("")
     };
 }
 

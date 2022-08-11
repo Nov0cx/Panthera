@@ -29,6 +29,7 @@ namespace Panthera
         virtual void DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) override;
 
         virtual void BeginScene() override;
+        virtual void BeginScene(OrthographicCamera &camera) override;
         virtual void EndScene() override;
         virtual void Flush() override;
     };

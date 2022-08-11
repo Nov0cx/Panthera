@@ -6,6 +6,8 @@
 #include "Panthera/Render/VertexArray/VertexArray.hpp"
 #include "Panthera/Render/Texture/Texture.hpp"
 #include "Panthera/Render/Shader/Shader.hpp"
+#include "Panthera/Render/Shader/UniformBuffer.hpp"
+#include "Panthera/Render/Camera/OrthographicCamera.hpp"
 #include "Panthera/Render/Buffer/VertexBuffer.hpp"
 #include "Panthera/Render/Buffer/IndexBuffer.hpp"
 #include "Panthera/Core/Pointer.hpp"
@@ -47,6 +49,8 @@ namespace Panthera
 
         std::array <Ref<Texture2D>, RendererData::MAX_TEXTURES> Textures;
         uint32_t TextureIndex = 0;
+
+        Ref<UniformBuffer> CameraUniformBuffer;
 
         Ref <Shader> QuadShader;
         Ref <VertexArray> QuadVertexArray;
@@ -157,6 +161,8 @@ namespace Panthera
         uint32_t textureData = 0xFFFFFFFF;
         s_RendererData->Textures[0]->SetData(&textureData, sizeof(uint32_t));
 
+        s_RendererData->CameraUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), 0);
+
         InitQuad();
         InitTriangle();
     }
@@ -205,6 +211,18 @@ namespace Panthera
         s_RendererData->QuadIndicesCount = 0;
         s_RendererData->QuadVerticesCount = 0;
         s_RendererData->TextureIndex = 1;
+
+        glm::mat4 identity = glm::mat4(1.0f);
+        s_RendererData->CameraUniformBuffer->SetData(&identity, sizeof(glm::mat4));
+    }
+
+    void OpenGLRenderer::BeginScene(OrthographicCamera &camera)
+    {
+        s_RendererData->QuadIndicesCount = 0;
+        s_RendererData->QuadVerticesCount = 0;
+        s_RendererData->TextureIndex = 1;
+
+        s_RendererData->CameraUniformBuffer->SetData(&camera.GetViewProjectionMatrix(), sizeof(glm::mat4));
     }
 
     void OpenGLRenderer::EndScene()
@@ -438,5 +456,4 @@ namespace Panthera
         }
     }
 
-#pragma section("")
 }

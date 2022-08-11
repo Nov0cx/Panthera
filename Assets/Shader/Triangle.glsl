@@ -12,6 +12,11 @@ layout(location = 1) out vec2 v_TexCoord;
 layout(location = 2) out flat int v_TexIndex;
 layout(location = 3) out flat float v_Tiling;
 
+layout(std140, binding = 0) uniform Camera
+{
+    mat4 u_ViewProjectionMatrix;
+};
+
 void main()
 {
     v_Color = a_Color;
@@ -19,7 +24,7 @@ void main()
     v_TexIndex = int(a_TexIndex);
     v_Tiling = a_Tiling;
 
-    gl_Position = vec4(a_Position, 1.0f);
+    gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0f);
 }
 
 // fragment shader

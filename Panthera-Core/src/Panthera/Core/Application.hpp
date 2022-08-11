@@ -66,6 +66,9 @@ namespace Panthera
 
         LayerStack *GetLayerStack();
 
+        uint32_t GetWindowWidth();
+        uint32_t GetWindowHeight();
+
     private:
         static void SetInstance(void *instance);
 

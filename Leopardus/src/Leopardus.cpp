@@ -4,7 +4,9 @@ class LeopardusLayer : public Panthera::Layer
 {
 public:
     LeopardusLayer() : Panthera::Layer()
-    {}
+    {
+        m_Camera = Panthera::OrthographicCamera(0, Panthera::Application::GetInstance()->GetWindowWidth(), 0, Panthera::Application::GetInstance()->GetWindowHeight());
+    }
 
     virtual void OnStart() override
     {
@@ -12,6 +14,7 @@ public:
         m_Renderer->Init();
         m_ColorTexture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/color.jpg"));
         m_FlowerTexture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/flower.jpg"));
+
     }
 
     virtual void OnEnd() override
@@ -38,6 +41,7 @@ public:
 private:
     Panthera::Renderer *m_Renderer;
     Panthera::Ref<Panthera::Texture2D> m_ColorTexture, m_FlowerTexture;
+    Panthera::OrthographicCamera m_Camera;
 };
 
 class Leopardus : public Panthera::Application

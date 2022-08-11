@@ -22,6 +22,7 @@
 #include "Render/Buffer/IndexBuffer.hpp"
 #include "Render/VertexArray/VertexArray.hpp"
 #include "Render/Texture/Texture.hpp"
+#include "Render/Camera/OrthographicCamera.hpp"
 
 #include "Utils/Time.hpp"
 

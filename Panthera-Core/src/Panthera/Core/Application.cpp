@@ -86,6 +86,16 @@ namespace Panthera
         return &m_LayerStack;
     }
 
+    uint32_t Application::GetWindowWidth()
+    {
+        return m_Window->GetWidth();
+    }
+
+    uint32_t Application::GetWindowHeight()
+    {
+        return m_Window->GetHeight();
+    }
+
 
     AppProps::AppProps(ProgramArgs args, const char *name, unsigned int width, unsigned int height, bool vSync) : Args(args), Name(name),
                                                                                                 Width(width),
