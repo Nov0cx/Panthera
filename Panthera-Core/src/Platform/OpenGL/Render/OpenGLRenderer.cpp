@@ -410,6 +410,38 @@ namespace Panthera
         DrawTriangle(glm::vec3(center.x, center.y, 0.f), size, color, tiling, texture);
     }
 
+    void
+    OpenGLRenderer::DrawTriangle(const glm::vec3 &center, const glm::vec2 &size, float rotation, const glm::vec4 &color)
+    {
+        glm::mat4 transform =  glm::translate(glm::mat4(1.0f), center)
+                               * glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f))
+                               * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+        DrawTriangle(transform, color);
+    }
+
+    void
+    OpenGLRenderer::DrawTriangle(const glm::vec2 &center, const glm::vec2 &size, float rotation, const glm::vec4 &color)
+    {
+        DrawTriangle(glm::vec3(center.x, center.y, 0.f), size, rotation, color);
+    }
+
+    void
+    OpenGLRenderer::DrawTriangle(const glm::vec3 &center, const glm::vec2 &size, float rotation, const glm::vec4 &color,
+                                 float tiling, Ref <Texture2D> &texture)
+    {
+        glm::mat4 transform =  glm::translate(glm::mat4(1.0f), center)
+                               * glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f))
+                               * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+        DrawTriangle(transform, color, tiling, texture);
+    }
+
+    void
+    OpenGLRenderer::DrawTriangle(const glm::vec2 &center, const glm::vec2 &size, float rotation, const glm::vec4 &color,
+                                 float tiling, Ref <Texture2D> &texture)
+    {
+        DrawTriangle(glm::vec3(center.x, center.y, 0.f), size, rotation, color, tiling, texture);
+    }
+
     void OpenGLRenderer::DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color)
     {
         if (s_RendererData->TriangleVerticesCount + 3 > RendererData::MAX_QUAD_INDICES)
