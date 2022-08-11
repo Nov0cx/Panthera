@@ -19,7 +19,7 @@ void main()
     v_TexIndex = int(a_TexIndex);
     v_Tiling = a_Tiling;
 
-    gl_Position = vec4(a_Position, 1.0);
+    gl_Position = vec4(a_Position, 1.0f);
 }
 
 // fragment shader
