@@ -119,4 +119,9 @@ namespace Panthera
     {
         return m_IsLoaded;
     }
+
+    bool OpenGLTexture2D::operator==(const Texture2D &other) const
+    {
+        return m_RendererID == other.GetRendererID();
+    }
 }

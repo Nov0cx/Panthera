@@ -22,6 +22,8 @@ namespace Panthera
 
         RendererID GetRendererID() const override;
         bool IsLoaded() const override;
+
+        bool operator==(const Texture2D& other) const override;
     private:
         RendererID m_RendererID;
         uint32_t m_Width, m_Height;

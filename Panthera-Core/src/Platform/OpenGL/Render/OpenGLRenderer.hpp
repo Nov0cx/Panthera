@@ -8,8 +8,8 @@ namespace Panthera
     class OpenGLRenderer : public Renderer
     {
     public:
-        OpenGLRenderer();
-        virtual ~OpenGLRenderer();
+        OpenGLRenderer() = default;
+        virtual ~OpenGLRenderer() = default;
         virtual void Init() override;
         virtual void Clear(glm::vec4 color = glm::vec4(0.f, 0.f, 0.f, 1.f)) override;
         virtual void DrawIndexed(uint32_t count) override;
@@ -25,6 +25,8 @@ namespace Panthera
         virtual void DrawTriangle(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color) override;
         virtual void DrawTriangle(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) override;
         virtual void DrawTriangle(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) override;
+        virtual void DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color) override;
+        virtual void DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) override;
 
         virtual void BeginScene() override;
         virtual void EndScene() override;

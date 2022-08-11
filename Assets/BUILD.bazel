@@ -1,10 +1,5 @@
 filegroup(
     name = "Assets",
-    srcs = [
-        "Shader/FlatColor.glsl",
-        "Shader/Quad.glsl",
-        "Textures/flower.jpg",
-        "Textures/color.jpg",
-    ],
+    srcs = glob(["*.*", "**/*.*", "**/**/*.*"]),
     visibility = ["//visibility:public"],
 )
