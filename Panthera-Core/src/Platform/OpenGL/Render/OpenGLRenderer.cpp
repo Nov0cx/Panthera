@@ -271,6 +271,38 @@ namespace Panthera
         DrawQuad(transform, color, tiling, texture);
     }
 
+    void
+    OpenGLRenderer::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, float rotation, const glm::vec4 &color)
+    {
+        glm::mat4 transform =  glm::translate(glm::mat4(1.0f), center)
+                * glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f))
+                * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+        DrawQuad(transform, color);
+    }
+
+    void
+    OpenGLRenderer::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, float rotation, const glm::vec4 &color)
+    {
+        DrawQuad(glm::vec3(center.x, center.y, 0.f), size, rotation, color);
+    }
+
+    void
+    OpenGLRenderer::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, float rotation, const glm::vec4 &color,
+                             float tiling, Ref <Texture2D> &texture)
+    {
+        glm::mat4 transform =  glm::translate(glm::mat4(1.0f), center)
+                * glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, 1.0f))
+                * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+        DrawQuad(transform, color, tiling, texture);
+    }
+
+    void
+    OpenGLRenderer::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, float rotation, const glm::vec4 &color,
+                             float tiling, Ref <Texture2D> &texture)
+    {
+        DrawQuad(glm::vec3(center.x, center.y, 0.f), size, rotation, color, tiling, texture);
+    }
+
     void OpenGLRenderer::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color)
     {
         if (s_RendererData->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
