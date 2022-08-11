@@ -55,10 +55,10 @@ namespace Panthera
     {
         while (m_Running)
         {
-            auto now = Time::GetSeconds();
-            Time::Duration delta = now - m_LastFrameTime;
+            float now = Time::GetSeconds();
+            float delta = now - m_LastFrameTime;
             m_LastFrameTime = now;
-            m_Timestep = delta.count();
+            m_Timestep = delta;
 
             m_Running = !m_Window->ShouldBeClosed();
 

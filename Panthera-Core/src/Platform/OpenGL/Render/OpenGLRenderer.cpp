@@ -214,6 +214,9 @@ namespace Panthera
 
         glm::mat4 identity = glm::mat4(1.0f);
         s_RendererData->CameraUniformBuffer->SetData(&identity, sizeof(glm::mat4));
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void OpenGLRenderer::BeginScene(OrthographicCamera &camera)
@@ -223,6 +226,8 @@ namespace Panthera
         s_RendererData->TextureIndex = 1;
 
         s_RendererData->CameraUniformBuffer->SetData(&camera.GetViewProjectionMatrix(), sizeof(glm::mat4));
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void OpenGLRenderer::EndScene()

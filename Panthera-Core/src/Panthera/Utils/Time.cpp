@@ -5,21 +5,21 @@
 namespace Panthera::Time
 {
 
-    Time<std::chrono::seconds> GetSeconds()
+    float GetSeconds()
     {
         auto now = std::chrono::high_resolution_clock::now();
-        return std::chrono::time_point_cast<std::chrono::seconds>(now);
+        return std::chrono::time_point_cast<std::chrono::milliseconds>(now).time_since_epoch().count() * 0.001f;
     }
 
-    Time<std::chrono::milliseconds> GetMilliseconds()
+    float GetMilliseconds()
     {
         auto now = std::chrono::high_resolution_clock::now();
-        return std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+        return std::chrono::time_point_cast<std::chrono::microseconds>(now).time_since_epoch().count() * 0.001f;
     }
 
-    Time<std::chrono::minutes> GetMinutes()
+    float GetMinutes()
     {
         auto now = std::chrono::high_resolution_clock::now();
-        return std::chrono::time_point_cast<std::chrono::minutes>(now);
+        return std::chrono::time_point_cast<std::chrono::seconds>(now).time_since_epoch().count() * 60.0f;
     }
 }

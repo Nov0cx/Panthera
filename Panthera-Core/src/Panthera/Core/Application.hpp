@@ -83,7 +83,7 @@ namespace Panthera
         Ref<Window> m_Window;
         Runfiles* m_Runfiles;
         Timestep m_Timestep;
-        Time::Time<std::chrono::seconds> m_LastFrameTime;
+        float m_LastFrameTime;
     };
 }
 
