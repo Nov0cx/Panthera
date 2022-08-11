@@ -11,7 +11,8 @@ public:
         m_Renderer = Panthera::Renderer::CreateRenderer();
         m_Renderer->Init();
         LOG_INFO("Renderer initialized!");
-        m_Texture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/color.jpg"));
+        m_ColorTexture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/color.jpg"));
+        m_FlowerTexture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/flower.jpg"));
     }
 
     virtual void OnEnd() override
@@ -24,7 +25,8 @@ public:
         m_Renderer->Clear();
         m_Renderer->BeginScene();
         m_Renderer->DrawQuad({-0.3f, -0.3f, 0.0f}, {0.6f, 0.6f}, {1.0f, 0.0f, 0.0f, 1.0f});
-        m_Renderer->DrawQuad({0.3f, 0.3f, 0.0f}, {0.6f, 0.6f}, {1.0f, 1.0f, 1.0f, 1.0f}, 1.f, m_Texture);
+        m_Renderer->DrawQuad({0.3f, 0.3f, 0.0f}, {0.6f, 0.6f}, {1.0f, 1.0f, 1.0f, 1.0f}, 1.f, m_ColorTexture);
+        m_Renderer->DrawQuad({-0.37f, 0.37f, 0.0f}, {0.63f, 0.63f}, {1.0f, 1.0f, 1.0f, 1.0f}, 1.f, m_FlowerTexture);
         m_Renderer->EndScene();
     }
 
@@ -35,7 +37,7 @@ public:
 
 private:
     Panthera::Renderer *m_Renderer;
-    Panthera::Ref<Panthera::Texture2D> m_Texture;
+    Panthera::Ref<Panthera::Texture2D> m_ColorTexture, m_FlowerTexture;
 };
 
 class Leopardus : public Panthera::Application
