@@ -39,7 +39,7 @@ http_archive(
 
 http_archive(
     name = "com_github_Nov0cx_spdlog",
-    #sha256 = "e5598a6bf024bbdf993f4382a347d8bef23d46967e1534724aa646e7d0d83a22",
+    sha256 = "4b953202b7feddb13e18bab444d2932e8308ccb15cc5de5a35c141e4a4093d4d",
     strip_prefix = "spdlog-1.x",
     urls = ["https://github.com/Nov0cx/spdlog/archive/v1.x.zip"],
 )

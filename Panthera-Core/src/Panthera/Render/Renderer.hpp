@@ -54,6 +54,13 @@ namespace Panthera
         virtual void DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color) = 0;
         virtual void DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) = 0;
 
+#pragma section("Circle")
+
+        virtual void DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness) = 0;
+        virtual void DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness) = 0;
+        virtual void DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness, float tiling, Ref<Texture2D> &texture) = 0;
+        virtual void DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness, float tiling, Ref<Texture2D> &texture) = 0;
+
 #pragma section("Scene")
 
         virtual void BeginScene() = 0;

@@ -30,6 +30,8 @@ public:
         m_Renderer->DrawQuad({0.3f, 0.3f, 0.0f}, {0.6f, 0.6f}, {1.0f, 1.0f, 1.0f, 1.0f}, 1.f, m_ColorTexture);
         m_Renderer->DrawQuad({-0.37f, 0.37f, 0.0f}, {0.63f, 0.63f}, glm::radians(36.f), {1.0f, 1.0f, 1.0f, 0.8f}, 1.f, m_FlowerTexture);
         m_Renderer->DrawTriangle({.3f, -0.3f, 0.0f}, {0.6f, 0.6f},  -glm::radians(36.f), {1.0f, 1.0f, 1.0f, 0.6f}, 1.f, m_FlowerTexture);
+        m_Renderer->DrawCircle({-0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 0.3f, 0.3f);
+        m_Renderer->DrawCircle({0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 0.3f, 0.4f, 1.f, m_ColorTexture);
         m_Renderer->EndScene();
     }
 

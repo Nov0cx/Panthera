@@ -136,7 +136,7 @@ namespace Panthera
                            [](unsigned char c)
                            { return std::tolower(c); });
 
-            if (lower.find("// vertex shader") != std::string::npos)
+            if (lower.find("vertex") != std::string::npos && lower.find("shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -146,8 +146,8 @@ namespace Panthera
                 currentType = GL_VERTEX_SHADER;
 
                 currentShader << line << "\n";
-            } else if (lower.find("// fragment shader") != std::string::npos ||
-                       lower.find("// pixel shader") != std::string::npos)
+            } else if ((lower.find("fragment") != std::string::npos && lower.find("shader") != std::string::npos) ||
+                    (lower.find("pixel") != std::string::npos && lower.find("shader") != std::string::npos))
             {
                 if (currentType != GL_NONE)
                 {
@@ -156,7 +156,7 @@ namespace Panthera
                 }
                 currentType = GL_FRAGMENT_SHADER;
                 currentShader << line << "\n";
-            } else if (lower.find("// geometry shader") != std::string::npos)
+            } else if (lower.find("geometry") != std::string::npos && lower.find("shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -165,7 +165,7 @@ namespace Panthera
                 }
                 currentType = GL_GEOMETRY_SHADER;
                 currentShader << line << "\n";
-            } else if (lower.find("// tess control shader") != std::string::npos)
+            } else if (lower.find("tess control") != std::string::npos && lower.find("shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -174,7 +174,7 @@ namespace Panthera
                 }
                 currentType = GL_TESS_CONTROL_SHADER;
                 currentShader << line << "\n";
-            } else if (lower.find("// tess evaluation shader") != std::string::npos)
+            } else if (lower.find("tess evaluation") != std::string::npos && lower.find("shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {
@@ -183,7 +183,7 @@ namespace Panthera
                 }
                 currentType = GL_TESS_EVALUATION_SHADER;
                 currentShader << line << "\n";
-            } else if (lower.find("// compute shader") != std::string::npos)
+            } else if (lower.find("compute") != std::string::npos && lower.find("shader") != std::string::npos)
             {
                 if (currentType != GL_NONE)
                 {

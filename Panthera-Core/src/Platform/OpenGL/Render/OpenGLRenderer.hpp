@@ -36,6 +36,11 @@ namespace Panthera
         virtual void DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color) override;
         virtual void DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color, float tiling, Ref<Texture2D> &texture) override;
 
+        virtual void DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness) override;
+        virtual void DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness) override;
+        virtual void DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness, float tiling, Ref<Texture2D> &texture) override;
+        virtual void DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness, float tiling, Ref<Texture2D> &texture) override;
+
         virtual void BeginScene() override;
         virtual void BeginScene(OrthographicCamera &camera) override;
         virtual void EndScene() override;
