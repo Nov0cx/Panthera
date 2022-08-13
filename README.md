@@ -36,7 +36,7 @@ Build core:
 ```bash
 bazel build --config=not_msvc_config //Panthera-Core/...
 ```
-Run Leopardus(Editor):
+Run Leopardus (Editor):
 ```bash
 bazel run --config=not_msvc_config //Leopardus:Leopardus
 ```
@@ -52,7 +52,7 @@ Build core:
 ```bash
 bazel build --config=msvc_config //Panthera-Core/...
 ```
-Run Leopardus(Editor):
+Run Leopardus (Editor):
 ```bash
 bazel run --config=msvc_config //Leopardus:Leopardus
 ```
