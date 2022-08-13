@@ -69,6 +69,8 @@ namespace Panthera
         uint32_t GetWindowWidth();
         uint32_t GetWindowHeight();
 
+        Ref<Window> &GetWindow();
+
     private:
         static void SetInstance(void *instance);
 

@@ -24,6 +24,7 @@
 #include "Render/VertexArray/VertexArray.hpp"
 #include "Render/Texture/Texture.hpp"
 #include "Render/Camera/OrthographicCamera.hpp"
+#include "Render/Camera/OrthographicCameraController.hpp"
 
 #include "Utils/Time.hpp"
 

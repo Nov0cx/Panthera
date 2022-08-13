@@ -96,6 +96,11 @@ namespace Panthera
         return m_Window->GetHeight();
     }
 
+    Ref<Window> &Application::GetWindow()
+    {
+        return m_Window;
+    }
+
 
     AppProps::AppProps(ProgramArgs args, const char *name, unsigned int width, unsigned int height, bool vSync) : Args(args), Name(name),
                                                                                                 Width(width),
