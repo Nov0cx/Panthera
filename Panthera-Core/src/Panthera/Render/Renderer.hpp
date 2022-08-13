@@ -56,10 +56,12 @@ namespace Panthera
 
 #pragma section("Circle")
 
-        virtual void DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness) = 0;
-        virtual void DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness) = 0;
-        virtual void DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness, float tiling, Ref<Texture2D> &texture) = 0;
-        virtual void DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness, float tiling, Ref<Texture2D> &texture) = 0;
+        virtual void DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness, float fade) = 0;
+        virtual void DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness, float fade) = 0;
+        virtual void DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness, float fade, float tiling, Ref<Texture2D> &texture) = 0;
+        virtual void DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness, float fade, float tiling, Ref<Texture2D> &texture) = 0;
+        virtual void DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness, float fade) = 0;
+        virtual void DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness, float fade, float tiling, Ref<Texture2D> &texture) = 0;
 
 #pragma section("Scene")
 

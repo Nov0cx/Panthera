@@ -3,7 +3,7 @@
 layout (location = 0) in vec3 a_Position;
 layout (location = 1) in vec3 a_InterpolatingPosition;
 layout (location = 2) in vec4 a_Color;
-layout (location = 3) in float a_Radius;
+layout (location = 3) in float a_Fade;
 layout (location = 4) in float a_Border;
 layout (location = 5) in vec2 a_TexCoord;
 layout (location = 6) in float a_TexIndex;
@@ -11,7 +11,7 @@ layout (location = 7) in float a_Tiling;
 
 layout (location = 0) out vec4 v_Color;
 layout (location = 1) out vec3 v_InterpolatingPosition;
-layout (location = 2) out float v_Radius;
+layout (location = 2) out float v_Fade;
 layout (location = 3) out float v_Border;
 layout (location = 4) out vec2 v_TexCoord;
 layout (location = 5) out flat int v_TexIndex;
@@ -26,7 +26,7 @@ void main()
 {
     v_Color = a_Color;
     v_InterpolatingPosition = a_InterpolatingPosition;
-    v_Radius = a_Radius;
+    v_Fade = a_Fade;
     v_Border = a_Border;
     v_TexIndex = int(a_TexIndex);
     v_Tiling = a_Tiling;
@@ -35,12 +35,12 @@ void main()
     gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
 }
 
-    // fragment shader
-    #version 450 core
+// fragment shader
+#version 450 core
 
 layout (location = 0) in vec4 v_Color;
 layout (location = 1) in vec3 v_InterpolatingPosition;
-layout (location = 2) in float v_Radius;
+layout (location = 2) in float v_Fade;
 layout (location = 3) in float v_Border;
 layout (location = 4) in vec2 v_TexCoord;
 layout (location = 5) in flat int v_TexIndex;
@@ -58,8 +58,8 @@ void main()
     float d = 1.0 - length(uv);
     /*vec3 color = vec3(smoothstep(0.0, 0.005, d));
     color *= vec3(smoothstep(v_Border + 0.005, v_Border, d));*/
-    float alpha = smoothstep(0.0, 0.005, d);
-    alpha *= smoothstep(v_Border, v_Border + 0.005, d);
+    float alpha = smoothstep(0.0, v_Fade, d);
+    alpha *= smoothstep(v_Border, v_Border + v_Fade, d);
 
     o_Color = vec4(v_Color.rgb, v_Color.a * alpha);
 

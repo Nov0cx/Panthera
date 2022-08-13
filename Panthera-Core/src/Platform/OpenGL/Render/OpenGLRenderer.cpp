@@ -40,7 +40,7 @@ namespace Panthera
         glm::vec3 Position;
         glm::vec3 InterpolatingPosition;
         glm::vec4 Color;
-        float Radius;
+        float Fade;
         float Border;
         glm::vec2 TexCoord;
         float Index;
@@ -619,7 +619,8 @@ namespace Panthera
 #pragma section("Circle")
 
     void
-    OpenGLRenderer::DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness)
+    OpenGLRenderer::DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness,
+                               float fade)
     {
         ASSERT(radius > 0.f, "Radius must be greater than 0")
         ASSERT(borderThickness >= 0.f, "Border thickness must be greater than or equal to 0")
@@ -628,6 +629,44 @@ namespace Panthera
                 glm::translate(glm::mat4(1.0f), center) *
                 glm::scale(glm::mat4(1.0f), glm::vec3(radius * 2, radius * 2, 1.0f));
 
+        DrawCircle(transform, color, borderThickness, fade);
+    }
+
+    void
+    OpenGLRenderer::DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness,
+                               float fade)
+    {
+        DrawCircle(glm::vec3(center, 0.f), color, radius, borderThickness, fade);
+    }
+
+    void
+    OpenGLRenderer::DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness,
+                               float fade,
+                               float tiling, Ref <Texture2D> &texture)
+    {
+        ASSERT(texture, "Texture is null")
+        ASSERT(radius > 0.f, "Radius must be greater than 0")
+        ASSERT(borderThickness >= 0.f, "Border thickness must be greater than or equal to 0")
+        ASSERT(s_RendererData, "Renderer data is null")
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), center) *
+                glm::scale(glm::mat4(1.0f), glm::vec3(radius * 2, radius * 2, 1.0f));
+        DrawCircle(transform, color, borderThickness, fade, tiling, texture);
+        //LOG_INFO("Drawing circle at {0} with radius {1}", center.x, radius);
+    }
+
+    void
+    OpenGLRenderer::DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness,
+                               float fade,
+                               float tiling, Ref <Texture2D> &texture)
+    {
+        DrawCircle(glm::vec3(center, 0.f), color, radius, borderThickness, fade, tiling, texture);
+    }
+
+    void
+    OpenGLRenderer::DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness,
+                               float fade)
+    {
         if (s_RendererData->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
         {
             Flush();
@@ -644,7 +683,7 @@ namespace Panthera
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].InterpolatingPosition =
                     s_RendererData->CirclePositions[i] * 2.0f; // position between 0 and 1
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Color = color;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Radius = radius;
+            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Fade = fade;
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Border = borderThickness;
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].TexCoord = texCoords[i];
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Index = 0;
@@ -655,23 +694,10 @@ namespace Panthera
         s_RendererData->CircleIndicesCount += 6;
     }
 
-    void OpenGLRenderer::DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness)
-    {
-        DrawCircle(glm::vec3(center, 0.f), color, radius, borderThickness);
-    }
-
     void
-    OpenGLRenderer::DrawCircle(const glm::vec3 &center, const glm::vec4 &color, float radius, float borderThickness,
-                               float tiling, Ref <Texture2D> &texture)
+    OpenGLRenderer::DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness,
+                               float fade, float tiling, Ref <Texture2D> &texture)
     {
-        ASSERT(texture, "Texture is null")
-        ASSERT(radius > 0.f, "Radius must be greater than 0")
-        ASSERT(borderThickness >= 0.f, "Border thickness must be greater than or equal to 0")
-        ASSERT(s_RendererData, "Renderer data is null")
-        glm::mat4 transform =
-                glm::translate(glm::mat4(1.0f), center) *
-                glm::scale(glm::mat4(1.0f), glm::vec3(radius * 2, radius * 2, 1.0f));
-
         if (s_RendererData->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
         {
             Flush();
@@ -707,10 +733,11 @@ namespace Panthera
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].InterpolatingPosition =
                     s_RendererData->CirclePositions[i] * 2.0f; // position between 0 and 1
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Color = color;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Radius = radius;
+            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Fade = fade;
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Border = borderThickness;
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].TexCoord = texCoords[i];
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Index = found ? index : s_RendererData->TextureIndex;
+            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Index = found ? index
+                                                                                              : s_RendererData->TextureIndex;
             s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].TilingFactor = tiling;
             s_RendererData->CircleVerticesCount++;
         }
@@ -721,13 +748,6 @@ namespace Panthera
             s_RendererData->Textures[s_RendererData->TextureIndex] = texture;
             s_RendererData->TextureIndex++;
         }
-    }
-
-    void
-    OpenGLRenderer::DrawCircle(const glm::vec2 &center, const glm::vec4 &color, float radius, float borderThickness,
-                               float tiling, Ref <Texture2D> &texture)
-    {
-
     }
 
 }
