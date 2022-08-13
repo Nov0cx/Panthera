@@ -63,6 +63,9 @@ namespace Panthera
         virtual void DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness, float fade) = 0;
         virtual void DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness, float fade, float tiling, Ref<Texture2D> &texture) = 0;
 
+#pragma section("Line")
+        virtual void DrawLine(const glm::vec3 &start, const glm::vec3 &end, const glm::vec4 &color, float thickness) = 0;
+
 #pragma section("Scene")
 
         virtual void BeginScene() = 0;

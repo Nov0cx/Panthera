@@ -43,6 +43,8 @@ namespace Panthera
         virtual void DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness, float fade) override;
         virtual void DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness, float fade, float tiling, Ref<Texture2D> &texture) override;
 
+        virtual void DrawLine(const glm::vec3 &start, const glm::vec3 &end, const glm::vec4 &color, float thickness) override;
+
         virtual void BeginScene() override;
         virtual void BeginScene(OrthographicCamera &camera) override;
         virtual void EndScene() override;

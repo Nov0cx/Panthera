@@ -47,6 +47,16 @@ namespace Panthera
         float TilingFactor;
     };
 
+    struct LineVertex
+    {
+        glm::vec3 Position;
+        glm::vec3 PosA;
+        glm::vec3 PosB;
+        glm::vec2 InterpolatingPosition;
+        float Thickness;
+        glm::vec4 Color;
+    };
+
     struct RendererData
     {
         static const uint32_t MAX_TEXTURES = 32;
@@ -62,6 +72,10 @@ namespace Panthera
         static const uint32_t MAX_CIRCLES = 25037; // prime
         static const uint32_t MAX_CIRCLE_INDICES = MAX_CIRCLES * 6;
         static const uint32_t MAX_CIRCLE_VERTICES = MAX_CIRCLES * 4;
+
+        static const uint32_t MAX_LINES = 25037; // prime
+        static const uint32_t MAX_LINE_INDICES = MAX_LINES * 6;
+        static const uint32_t MAX_LINE_VERTICES = MAX_LINES * 4;
 
         std::array <Ref<Texture2D>, RendererData::MAX_TEXTURES> Textures;
         uint32_t TextureIndex = 0;
@@ -94,6 +108,15 @@ namespace Panthera
         uint32_t CircleIndicesCount;
         uint32_t CircleVerticesCount;
         std::array<glm::vec4, 4> CirclePositions;
+
+        Ref <Shader> LineShader;
+        Ref <VertexArray> LineVertexArray;
+        Ref <VertexBuffer> LineVertexBuffer;
+        Ref <IndexBuffer> LineIndexBuffer;
+        LineVertex *LineVertices;
+        uint32_t LineIndicesCount;
+        uint32_t LineVerticesCount;
+        std::array<glm::vec4, 4> LinePositions;
     };
 
     static RendererData *s_RendererData = nullptr;
@@ -228,6 +251,53 @@ namespace Panthera
                                            }};
     }
 
+    static void InitLine()
+    {
+        s_RendererData->LineVertices = new LineVertex[RendererData::MAX_LINE_VERTICES];
+
+        uint32_t *indices = new uint32_t[RendererData::MAX_LINE_INDICES];
+        uint32_t offset = 0;
+        for (uint32_t i = 0; i < RendererData::MAX_LINE_INDICES; i += 6)
+        {
+            indices[i] = offset + 0;
+            indices[i + 1] = offset + 1;
+            indices[i + 2] = offset + 2;
+
+            indices[i + 3] = offset + 2;
+            indices[i + 4] = offset + 3;
+            indices[i + 5] = offset + 0;
+            offset += 4;
+        }
+
+        s_RendererData->LineShader = ShaderLibrary::CreateShader("Line",
+                                                                 Application::GetInstance()->GetAssetPath(
+                                                                         "Panthera/Assets/Shader/Line.glsl"));
+
+        s_RendererData->LineVertexArray = VertexArray::Create();
+        s_RendererData->LineVertexBuffer = VertexBuffer::Create(
+                RendererData::MAX_LINE_VERTICES * sizeof(LineVertex));
+        s_RendererData->LineVertexBuffer->SetBufferLayout({
+                                                                  {"a_Position",              ShaderDataType::Float3},
+                                                                  {"a_PosA",                  ShaderDataType::Float3},
+                                                                  {"a_PosB",                  ShaderDataType::Float3},
+                                                                  {"a_InterpolatingPosition", ShaderDataType::Float2},
+                                                                  {"a_Thickness",             ShaderDataType::Float},
+                                                                  {"a_Color",                 ShaderDataType::Float4},
+                                                          });
+
+        s_RendererData->LineIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_LINE_INDICES);
+        s_RendererData->LineVertexArray->AddVertexBuffer(s_RendererData->LineVertexBuffer);
+        s_RendererData->LineVertexArray->SetIndexBuffer(s_RendererData->LineIndexBuffer);
+        delete[] indices;
+
+        s_RendererData->LinePositions = {{
+                                                 {-0.5f, -0.5f, 0.0f, 1.f},
+                                                 {0.5f, -0.5f, 0.0f, 1.f},
+                                                 {0.5f, 0.5f, 0.0f, 1.f},
+                                                 {-0.5f, 0.5f, 0.0f, 1.f}
+                                         }};
+    }
+
     void OpenGLRenderer::Init()
     {
         s_RendererData = new RendererData;
@@ -240,6 +310,7 @@ namespace Panthera
         InitQuad();
         InitTriangle();
         InitCircle();
+        InitLine();
     }
 
     void OpenGLRenderer::Flush()
@@ -289,6 +360,17 @@ namespace Panthera
             s_RendererData->CircleVerticesCount = 0;
         }
 
+        if (s_RendererData->LineVerticesCount)
+        {
+            s_RendererData->LineVertexBuffer->AddData(s_RendererData->LineVertices,
+                                                      s_RendererData->LineVerticesCount * sizeof(LineVertex));
+            s_RendererData->LineShader->Bind();
+            s_RendererData->LineVertexArray->Bind();
+            DrawIndexed(s_RendererData->LineIndicesCount);
+            s_RendererData->LineIndicesCount = 0;
+            s_RendererData->LineVerticesCount = 0;
+        }
+
         s_RendererData->TextureIndex = 1;
     }
 
@@ -303,6 +385,7 @@ namespace Panthera
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void OpenGLRenderer::BeginScene(OrthographicCamera &camera)
@@ -748,6 +831,32 @@ namespace Panthera
             s_RendererData->Textures[s_RendererData->TextureIndex] = texture;
             s_RendererData->TextureIndex++;
         }
+    }
+
+#pragma section("Line")
+
+    void OpenGLRenderer::DrawLine(const glm::vec3 &start, const glm::vec3 &end, const glm::vec4 &color, float thickness)
+    {
+        if (thickness < 0.0067f)
+            thickness = 0.0067f;
+
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), (end - start) * 0.5f);
+
+        for (uint32_t i = 0; i < 4; i++)
+        {
+            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].Position =
+                    transform * s_RendererData->LinePositions[i];
+            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].InterpolatingPosition =
+                    s_RendererData->LinePositions[i] * 2.0f;
+            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].PosA = start;
+            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].PosB = end;
+            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].Thickness = thickness;
+            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].Color = color;
+            s_RendererData->LineVerticesCount++;
+        }
+//
+        s_RendererData->LineIndicesCount += 6;
     }
 
 }

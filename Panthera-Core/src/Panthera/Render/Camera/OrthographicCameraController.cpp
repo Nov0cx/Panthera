@@ -15,19 +15,19 @@ namespace Panthera
     {
         if (Input::IsKeyPressed(Key::A))
         {
-            m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(1.0f, 0.0f, 0.0f) * ts.GetSeconds());
+            m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(-1.0f, 0.0f, 0.0f) * ts.GetSeconds());
         }
         if (Input::IsKeyPressed(Key::D))
         {
-            m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(-1.0f, 0.0f, 0.0f) * ts.GetSeconds());
+            m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(1.0f, 0.0f, 0.0f) * ts.GetSeconds());
         }
         if (Input::IsKeyPressed(Key::W))
         {
-            m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, -1.0f, 0.0f) * ts.GetSeconds());
+            m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, 1.0f, 0.0f) * ts.GetSeconds());
         }
         if (Input::IsKeyPressed(Key::S))
         {
-            m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, 1.0f, 0.0f) * ts.GetSeconds());
+            m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(0.0f, -1.0f, 0.0f) * ts.GetSeconds());
         }
         if (Input::IsKeyPressed(Key::Q))
         {
