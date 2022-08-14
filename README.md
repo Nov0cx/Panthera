@@ -61,5 +61,5 @@ For debug append '_debug' to the config name. For release builds append '_releas
 
 # Dependencies:
 We only depend on [Bazel](https://bazel.build/install/bazelisk).
-Bazel does the complete package management for us.
+Bazel does the complete package management for us. If you install bazelisk, rename the file into bazel and add it to the path.
 
