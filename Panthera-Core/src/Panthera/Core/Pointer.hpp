@@ -22,7 +22,6 @@ namespace Panthera
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
-
 }
 
 #endif //PANTHERA_POINTER_HPP

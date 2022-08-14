@@ -7,12 +7,14 @@
 
 #include "Panthera/Core/Log.hpp"
 #include "Panthera/Render/RenderAPI.hpp"
+#include "Panthera/Core/Application.hpp"
 
 #include <vector>
 #include <filesystem>
 #include <istream>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 
 namespace Panthera
 {
@@ -40,7 +42,7 @@ namespace Panthera
 
     static const char *GetShaderCache()
     {
-        return "assets/cache/opengl/shader";
+        return "cache/opengl/shader";
     }
 
     static void CreateCache()
@@ -147,7 +149,7 @@ namespace Panthera
 
                 currentShader << line << "\n";
             } else if ((lower.find("fragment") != std::string::npos && lower.find("shader") != std::string::npos) ||
-                    (lower.find("pixel") != std::string::npos && lower.find("shader") != std::string::npos))
+                       (lower.find("pixel") != std::string::npos && lower.find("shader") != std::string::npos))
             {
                 if (currentType != GL_NONE)
                 {
@@ -227,6 +229,7 @@ namespace Panthera
         CompileOrGetVulkanBinaryForOpenGL(srcs);
         CompileOrGetShaders();
         CreateProgram();
+
     }
 
     void OpenGLShader::Bind() const
@@ -289,8 +292,7 @@ namespace Panthera
                     out.write(reinterpret_cast<char *>(binary.data()), binary.size() * sizeof(uint32_t));
                     out.flush();
                     out.close();
-                }
-                else
+                } else
                 {
                     ASSERT(false, "Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
                            m_Name)

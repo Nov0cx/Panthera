@@ -13,6 +13,8 @@
 
 #include "Panthera/Core/Pointer.hpp"
 
+#include <memory>
+
 namespace Panthera
 {
     class Log
@@ -20,7 +22,7 @@ namespace Panthera
     public:
         static void Init();
 
-        static Ref <spdlog::logger> &GetLogger()
+        static Ref<spdlog::logger> &GetLogger()
         { return s_Logger; }
 
     private:

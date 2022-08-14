@@ -20,6 +20,6 @@ namespace Panthera::Time
     float GetMinutes()
     {
         auto now = std::chrono::high_resolution_clock::now();
-        return std::chrono::time_point_cast<std::chrono::seconds>(now).time_since_epoch().count() * 60.0f;
+        return std::chrono::time_point_cast<std::chrono::seconds>(now).time_since_epoch().count() * 0.0166666667f;
     }
 }

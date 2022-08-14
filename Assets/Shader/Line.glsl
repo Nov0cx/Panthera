@@ -44,14 +44,14 @@ layout (location = 0) out vec4 o_Color;
 //https://www.shadertoy.com/view/Mtj3Dd
 
 float distanceToLine(vec2 p1, vec2 p2, vec2 point) {
-    float a = p1.y-p2.y;
-    float b = p2.x-p1.x;
-    return abs(a*point.x+b*point.y+p1.x*p2.y-p2.x*p1.y) / sqrt(a*a+b*b);
+    float a = p1.y - p2.y;
+    float b = p2.x - p1.x;
+    return abs(a * point.x + b * point.y + p1.x * p2.y - p2.x * p1.y) / sqrt(a * a + b * b);
 }
 
 vec2 midpoint (vec2 p1, vec2 p2)
 {
-    return vec2((p1.x+p2.x)/2., (p1.y+p2.y) /2.);
+    return vec2((p1.x+p2.x) / 2., (p1.y+p2.y) / 2.);
 
 }
 
@@ -77,7 +77,7 @@ void main()
     float distance = distanceToLine (v_PosA.xy,v_PosB.xy,uv);
     //line
     float radius = v_Thickness;
-    float line =  smoothstep (radius/2., radius/2.-0.00001, distance);
+    float line =  smoothstep (radius, radius - 0.00001, distance);
 
     line =  clampToLine(v_PosA.xy, v_PosB.xy, uv, line);
 
