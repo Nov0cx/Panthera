@@ -29,6 +29,7 @@ namespace Panthera
     class ShaderLibrary
     {
     public:
+        [[deprecated("Better use ShaderLibrary::CreateShader(name, path). The function has more possibilities for shader types.")]]
         static Ref<Shader> CreateShader(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc);
         static Ref<Shader> CreateShader(const std::string &name, const std::string &path);
         static Ref<Shader> GetShader(const std::string &name);
