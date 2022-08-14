@@ -30,8 +30,12 @@ namespace Panthera
     };
 }
 
-
+#ifdef PANTHERA_DEBUG
 #define LOG_DEBUG(...) ::Panthera::Log::GetLogger()->debug(__VA_ARGS__);
+#else
+#define LOG_DEBUG(...)
+#endif
+#ifndef PANTHERA_RELEASE
 #define LOG_TRACE(...) ::Panthera::Log::GetLogger()->trace(__VA_ARGS__);
 #define LOG_INFO(...) ::Panthera::Log::GetLogger()->info(__VA_ARGS__);
 #define LOG_WARN(...) ::Panthera::Log::GetLogger()->warn(__VA_ARGS__);
@@ -45,5 +49,11 @@ namespace Panthera
             _LOG_CRITICAL(__VA_ARGS__);\
             exit(-1);                        \
         }
-
+#else
+#define LOG_TRACE(...) ;
+#define LOG_INFO(...) ;
+#define LOG_WARN(...) ;
+#define LOG_ERROR(...) ;
+#define ASSERT(condition, ...) condition; if (false) exit(-1);
+#endif
 #endif
