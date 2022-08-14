@@ -12,8 +12,18 @@ public:
     {
         m_Renderer = Panthera::Renderer::CreateRenderer();
         m_Renderer->Init();
-        m_ColorTexture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/color.jpg"));
-        m_FlowerTexture = Panthera::Texture2D::Create(Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/flower.jpg"));
+        Panthera::Texture2DSpecification spec {
+                .Path = Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/color.jpg").c_str(),
+                .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
+                .DataFormat = Panthera::Texture2DDataFormat::RGB,
+        };
+        m_ColorTexture = Panthera::Texture2D::Create(spec);
+        Panthera::Texture2DSpecification spec2  {
+                .Path = Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/flower.jpg").c_str(),
+                .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
+                .DataFormat = Panthera::Texture2DDataFormat::RGB,
+        };
+        m_FlowerTexture = Panthera::Texture2D::Create(spec2);
     }
 
     virtual void OnEnd() override

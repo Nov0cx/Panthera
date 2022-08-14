@@ -8,6 +8,7 @@
 #include <string>
 #include "Timestep.hpp"
 #include "Panthera/Utils/Time.hpp"
+#include "Panthera/Events/WindowEvents.hpp"
 
 #include "tools/cpp/runfiles/runfiles.h"
 using bazel::tools::cpp::runfiles::Runfiles;
@@ -77,15 +78,17 @@ namespace Panthera
         static Application *s_Instance;
     private:
         void Init(const AppProps &props);
-
+        void OnResize(WindowResizeEvent &event);
+    protected:
+        bool p_Running = true;
     private:
         ProgramArgs m_Args;
         LayerStack m_LayerStack;
-        bool m_Running = true;
         Ref<Window> m_Window;
         Runfiles* m_Runfiles;
         Timestep m_Timestep;
         float m_LastFrameTime;
+        bool m_Minimized = false;
     };
 }
 

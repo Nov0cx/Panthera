@@ -3,78 +3,143 @@
 #include <glad/glad.h>
 #include "Panthera/Core/Log.hpp"
 #include "Vendor/stb/stb_image.h"
+#include <cstring>
 
 namespace Panthera
 {
 
-    OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
+    GLenum InternalFormatToOpenGL(Texture2DInternalFormat format)
     {
-        m_Width = width;
-        m_Height = height;
-
-        m_Format = GL_RGBA8;
-        m_DataFormat = GL_RGBA;
-
-        glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-        glTextureStorage2D(m_RendererID, 1, m_Format, m_Width, m_Height);
-
-        glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-        m_IsLoaded = true;
+        switch (format)
+        {
+            case Texture2DInternalFormat::R8:
+                return GL_R8;
+            case Texture2DInternalFormat::RG8:
+                return GL_RG8;
+            case Texture2DInternalFormat::RGB8:
+                return GL_RGB8;
+            case Texture2DInternalFormat::RGBA8:
+                return GL_RGBA8;
+        }
     }
 
-    OpenGLTexture2D::OpenGLTexture2D(const std::string &path)
+    GLenum DataFormatToOpenGL(Texture2DDataFormat format)
     {
-        m_IsLoaded = false;
-        stbi_set_flip_vertically_on_load(true);
-        int width, height, nrChannels;
-        unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-
-        ASSERT(data, "Failed to load texture")
-
-        m_Width = width;
-        m_Height = height;
-
-        switch (nrChannels)
+        switch (format)
         {
-            case 1:
-                m_Format = GL_R8;
-                m_DataFormat = GL_RED;
-                break;
-            case 2:
-                m_Format = GL_RG8;
-                m_DataFormat = GL_RG;
-                break;
-            case 3:
-                m_Format = GL_RGB8;
-                m_DataFormat = GL_RGB;
-                break;
-            case 4:
-                m_Format = GL_RGBA8;
-                m_DataFormat = GL_RGBA;
-                break;
-            default:
-                ASSERT(false, "Unsupported texture format")
+            case Texture2DDataFormat::Red:
+                return GL_RED;
+            case Texture2DDataFormat::RG:
+                return GL_RG;
+            case Texture2DDataFormat::RGB:
+                return GL_RGB;
+            case Texture2DDataFormat::RGBA:
+                return GL_RGBA;
         }
+    }
 
-        glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-        glTextureStorage2D(m_RendererID, 1, m_Format, m_Width, m_Height);
+    GLenum FilterToOpenGL(Texture2DFilter filter)
+    {
+        switch (filter)
+        {
+            case Texture2DFilter::Nearest:
+                return GL_NEAREST;
+            case Texture2DFilter::Linear:
+                return GL_LINEAR;
+        }
+    }
 
-        glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    GLenum WrappingToOpenGL(Texture2DWrapping wrapping)
+    {
+        switch (wrapping)
+        {
+            case Texture2DWrapping::ClampToEdge:
+                return GL_CLAMP_TO_EDGE;
+            case Texture2DWrapping::Repeat:
+                return GL_REPEAT;
+        }
+    }
 
-        glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    OpenGLTexture2D::OpenGLTexture2D(const Texture2DSpecification& spec)
+    {
+        if (strcmp(spec.Path, "") == 0)
+        {
+            m_Width = spec.Width;
+            m_Height = spec.Height;
 
-        glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+            m_Format = InternalFormatToOpenGL(spec.InternalFormat);
+            m_DataFormat = DataFormatToOpenGL(spec.DataFormat);
 
-        stbi_image_free(data);
+            glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+            glTextureStorage2D(m_RendererID, 1, m_Format, m_Width, m_Height);
 
-        m_IsLoaded = true;
+            glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, FilterToOpenGL(spec.Filter));
+            glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, FilterToOpenGL(spec.Filter));
+
+            glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, WrappingToOpenGL(spec.Wrapping));
+            glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, WrappingToOpenGL(spec.Wrapping));
+
+            m_IsLoaded = true;
+
+        }
+        else
+        {
+            m_IsLoaded = false;
+            stbi_set_flip_vertically_on_load(true);
+            int width, height, nrChannels;
+            unsigned char *data = stbi_load(spec.Path, &width, &height, &nrChannels, 0);
+
+            ASSERT(data, "Failed to load texture: '{}'", spec.Path);
+
+            m_Width = width;
+            m_Height = height;
+
+            switch (nrChannels)
+            {
+                case 1:
+                    m_Format = GL_R8;
+                    m_DataFormat = GL_RED;
+                    break;
+                case 2:
+                    m_Format = GL_RG8;
+                    m_DataFormat = GL_RG;
+                    break;
+                case 3:
+                    m_Format = GL_RGB8;
+                    m_DataFormat = GL_RGB;
+                    break;
+                case 4:
+                    m_Format = GL_RGBA8;
+                    m_DataFormat = GL_RGBA;
+                    break;
+                default:
+                    ASSERT(false, "Unsupported texture format")
+            }
+
+            if (m_Format != InternalFormatToOpenGL(spec.InternalFormat))
+            {
+                LOG_WARN("The loaded texture '{}' has not the same format as the format given in the specification.", spec.Path)
+            }
+            if (m_DataFormat != DataFormatToOpenGL(spec.DataFormat))
+            {
+                LOG_WARN("The loaded texture '{}' has not the same data format as the data format given in the specification.", spec.Path)
+            }
+
+            glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+            glTextureStorage2D(m_RendererID, 1, m_Format, m_Width, m_Height);
+
+            glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, FilterToOpenGL(spec.Filter));
+            glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, FilterToOpenGL(spec.Filter));
+
+            glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, WrappingToOpenGL(spec.Wrapping));
+            glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, WrappingToOpenGL(spec.Wrapping));
+
+            glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+
+            stbi_image_free(data);
+
+            m_IsLoaded = true;
+        }
     }
 
     OpenGLTexture2D::~OpenGLTexture2D()

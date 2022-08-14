@@ -37,12 +37,13 @@ namespace Panthera
 #define LOG_WARN(...) ::Panthera::Log::GetLogger()->warn(__VA_ARGS__);
 #define LOG_ERROR(...) ::Panthera::Log::GetLogger()->error(__VA_ARGS__);
 
+#define _LOG_CRITICAL(...) ::Panthera::Log::GetLogger()->critical(__VA_ARGS__);
 #define ASSERT(condition, ...) \
         if (!(condition))         \
         {                       \
-            ::Panthera::Log::GetLogger()->critical("Assert failed at line {} in file {}. \n{}", __LINE__, __FILE__, __VA_ARGS__); \
+            _LOG_CRITICAL("Assert failed at line {} in file {}.", __LINE__, __FILE__); \
+            _LOG_CRITICAL(__VA_ARGS__);\
             exit(-1);                        \
         }
-
 
 #endif

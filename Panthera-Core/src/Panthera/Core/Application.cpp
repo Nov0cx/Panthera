@@ -53,27 +53,44 @@ namespace Panthera
 
     void Application::Run()
     {
-        while (m_Running)
+        while (p_Running)
         {
+
             float now = Time::GetSeconds();
             float delta = now - m_LastFrameTime;
             m_LastFrameTime = now;
             m_Timestep = delta;
 
-            m_Running = !m_Window->ShouldBeClosed();
+            p_Running = !m_Window->ShouldBeClosed();
 
-            m_LayerStack.OnUpdate(m_Timestep);
+            if (!m_Minimized)
+                m_LayerStack.OnUpdate(m_Timestep);
 
             /*
             m_LayerStack.OnImGuiUpdate()
              */
-            m_Window->OnUpdate();
+            if (!m_Minimized)
+                m_Window->OnUpdate();
         }
     }
 
     void Application::CallEvent(Event &event)
     {
+        Event::Listener<WindowResizeEvent> resizeListener([this](auto  &&PH1) { OnResize(std::forward<decltype(PH1)>(PH1)); });
+        resizeListener.Run(event, EventSubType::WindowResizeEvent);
+
         m_LayerStack.OnEvent(event);
+    }
+
+    void Application::OnResize(WindowResizeEvent &event)
+    {
+        if (event.Width == 0 || event.Height == 0)
+        {
+            m_Minimized = true;
+            return;
+        }
+
+        m_Minimized = false;
     }
 
     std::string Application::GetAssetPath(const char *filepath)

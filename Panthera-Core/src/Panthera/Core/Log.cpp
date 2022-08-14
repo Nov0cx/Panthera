@@ -10,7 +10,7 @@ namespace Panthera
     void Log::Init()
     {
         auto colorRef = CreateRef<spdlog::sinks::stdout_color_sink_mt>();
-        colorRef->set_pattern("%^[%T] %n: %v%$");
+        colorRef->set_pattern("%^[%T] [%l] %n: %v%$");
 
         s_Logger = CreateRef<spdlog::logger>("PANTHERA", spdlog::sinks_init_list{
                 colorRef,

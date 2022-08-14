@@ -301,7 +301,7 @@ namespace Panthera
     void OpenGLRenderer::Init()
     {
         s_RendererData = new RendererData;
-        s_RendererData->Textures[0] = Texture2D::Create(1, 1);
+        s_RendererData->Textures[0] = Texture2D::Create(Texture2DSpecification{});
         uint32_t textureData = 0xFFFFFFFF;
         s_RendererData->Textures[0]->SetData(&textureData, sizeof(uint32_t));
 
@@ -385,7 +385,6 @@ namespace Panthera
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_DEPTH_TEST);
     }
 
     void OpenGLRenderer::BeginScene(OrthographicCamera &camera)
