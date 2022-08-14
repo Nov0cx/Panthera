@@ -1,6 +1,7 @@
 #include "OrthographicCameraController.hpp"
 
 #include "Panthera/Core/Input.hpp"
+#include "Panthera/Events/MouseEvents.hpp"
 
 namespace Panthera
 {
@@ -49,7 +50,8 @@ namespace Panthera
 
     void OrthographicCameraController::OnEvent(Event &event)
     {
-
+        static Event::Listener<MouseScrollEvent> scrollListener([this](auto &&e){ SetZoom(m_Zoom + e.PosY * 0.1f); });
+        scrollListener.Run(event, EventSubType::MouseScrollEvent);
     }
 
     void OrthographicCameraController::SetZoom(float zoom)

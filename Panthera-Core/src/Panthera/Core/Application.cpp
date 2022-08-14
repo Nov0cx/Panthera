@@ -76,7 +76,7 @@ namespace Panthera
 
     void Application::CallEvent(Event &event)
     {
-        Event::Listener<WindowResizeEvent> resizeListener([this](auto  &&PH1) { OnResize(std::forward<decltype(PH1)>(PH1)); });
+        static Event::Listener<WindowResizeEvent> resizeListener([this](auto  &&PH1) { OnResize(std::forward<decltype(PH1)>(PH1)); });
         resizeListener.Run(event, EventSubType::WindowResizeEvent);
 
         m_LayerStack.OnEvent(event);
