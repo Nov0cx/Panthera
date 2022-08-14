@@ -15,13 +15,14 @@
 # Setup
 In the setup phase, bazel will run a shell script
 and install [Vulkan](https://www.vulkan.org/) if it isn't already installed. 
-It will create a Lib folder which is excluded form git.
+It will create a Lib folder which is excluded form git, if vulkan isn't already installed.
 The script will open the Vulkan Installer there you have to download core and all debug options.
 <br/>
 <br/>
 Run:
 ```bash
-bazel run //vulkan:Vulkan
+bazel run //vulkan:VulkanPackages
+bazel run //vulkan:VulkanDownlaod
 ```
 
 # Build
