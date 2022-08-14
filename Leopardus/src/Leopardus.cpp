@@ -24,6 +24,12 @@ public:
                 .DataFormat = Panthera::Texture2DDataFormat::RGB,
         };
         m_FlowerTexture = Panthera::Texture2D::Create(spec2);
+        Panthera::Texture2DSpecification spec3  {
+                .Path = Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/form.jpg").c_str(),
+                .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
+                .DataFormat = Panthera::Texture2DDataFormat::RGB,
+        };
+        m_FormTexture = Panthera::Texture2D::Create(spec3);
     }
 
     virtual void OnEnd() override
@@ -41,7 +47,7 @@ public:
         m_Renderer->DrawQuad({-0.37f, 0.37f, 0.0f}, {0.63f, 0.63f}, glm::radians(36.f), {1.0f, 1.0f, 1.0f, 0.8f}, 1.f, m_FlowerTexture);
         m_Renderer->DrawTriangle({.3f, -0.3f, 0.0f}, {0.6f, 0.6f},  -glm::radians(36.f), {1.0f, 1.0f, 1.0f, 0.6f}, 1.f, m_FlowerTexture);
         m_Renderer->DrawCircle({-0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 0.3f, 0.3f, 0.4f);
-        m_Renderer->DrawCircle({0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 0.3f, 0.4f, 0.02f, 1.f, m_ColorTexture);
+        m_Renderer->DrawCircle({0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 0.3f, 0.4f, 0.02f, 1.f, m_FormTexture);
         m_Renderer->DrawLine({0.f, 0.f, 0.0f}, {0.8f, 0.8f, 0.0f}, {.0f, .0f, 1.0f, 1.0f}, 0.0067f);
         m_Renderer->EndScene();
     }
@@ -53,7 +59,7 @@ public:
 
 private:
     Panthera::Renderer *m_Renderer;
-    Panthera::Ref<Panthera::Texture2D> m_ColorTexture, m_FlowerTexture;
+    Panthera::Ref<Panthera::Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
     Panthera::OrthographicCameraController m_CameraController;
 };
 
