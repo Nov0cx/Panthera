@@ -1,4 +1,17 @@
-sh_binary(
-    name = "Vulkan",
-    srcs = ["Run.sh"]
+py_binary(
+    name = "VulkanPackages",
+    srcs = ["VulkanPackages.py"]
+)
+
+py_library(
+    name = "Utils",
+    srcs = ["Utils.py"]
+)
+
+py_binary(
+    name = "VulkanDownload",
+    srcs = ["VulkanDownload.py"],
+    deps = [
+	":Utils",	
+    ],
 )
