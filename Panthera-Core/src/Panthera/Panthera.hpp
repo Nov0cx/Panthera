@@ -25,6 +25,7 @@
 #include "Render/Texture/Texture.hpp"
 #include "Render/Camera/OrthographicCamera.hpp"
 #include "Render/Camera/OrthographicCameraController.hpp"
+#include "Render/Framebuffer/Framebuffer.hpp"
 
 #include "Utils/Time.hpp"
 
