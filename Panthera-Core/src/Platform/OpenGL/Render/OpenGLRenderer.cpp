@@ -10,6 +10,7 @@
 #include "Panthera/Render/Camera/OrthographicCamera.hpp"
 #include "Panthera/Render/Buffer/VertexBuffer.hpp"
 #include "Panthera/Render/Buffer/IndexBuffer.hpp"
+#include "Panthera/Render/Framebuffer/Framebuffer.hpp"
 #include "Panthera/Core/Pointer.hpp"
 #include "Panthera/Core/Log.hpp"
 #include "Panthera/Core/Application.hpp"
@@ -117,6 +118,8 @@ namespace Panthera
         uint32_t LineIndicesCount;
         uint32_t LineVerticesCount;
         std::array<glm::vec4, 4> LinePositions;
+
+        Ref <Framebuffer> Framebuffer;
     };
 
     static RendererData *s_RendererData = nullptr;
@@ -311,6 +314,32 @@ namespace Panthera
         InitTriangle();
         InitCircle();
         InitLine();
+
+        s_RendererData->Framebuffer = Framebuffer::Create({
+            FramebufferAttachmentSpecification {
+                .AttachmentType = FramebufferAttachmentType::Color,
+                .TextureSpecification = Texture2DSpecification {
+                    .Width = Application::GetInstance()->GetWindowWidth(),
+                    .Height = Application::GetInstance()->GetWindowHeight(),
+                    .InternalFormat = Texture2DInternalFormat::RGBA8,
+                    .DataFormat = Texture2DDataFormat::RGBA,
+                    .Filter = Texture2DFilter::Linear,
+                    .Wrapping = Texture2DWrapping::ClampToEdge,
+                }
+            },
+            FramebufferAttachmentSpecification {
+                .AttachmentType = FramebufferAttachmentType::Depth,
+                .TextureSpecification = Texture2DSpecification {
+                    .Width = Application::GetInstance()->GetWindowWidth(),
+                    .Height = Application::GetInstance()->GetWindowHeight(),
+                    .InternalFormat = Texture2DInternalFormat::Depth24Stencil8,
+                    .DataFormat = Texture2DDataFormat::DepthStencil,
+                    .Filter = Texture2DFilter::Linear,
+                    .Wrapping = Texture2DWrapping::ClampToEdge,
+                }
+            }
+        });
+        s_RendererData->Framebuffer->Unbind();
     }
 
     void OpenGLRenderer::Flush()
@@ -406,7 +435,7 @@ namespace Panthera
     void OpenGLRenderer::Clear(glm::vec4 color)
     {
         glClearColor(color.r, color.g, color.b, color.a);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void OpenGLRenderer::DrawIndexed(uint32_t count)

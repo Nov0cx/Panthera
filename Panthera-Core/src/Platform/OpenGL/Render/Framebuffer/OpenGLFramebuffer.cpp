@@ -18,10 +18,7 @@ namespace Panthera
         {
             switch (attachment.AttachmentType)
             {
-                case FramebufferAttachmentType::Red:
-                case FramebufferAttachmentType::RG:
-                case FramebufferAttachmentType::RGB:
-                case FramebufferAttachmentType::RGBA:
+                case FramebufferAttachmentType::Color:
                 {
                     Ref<Texture2D> tex = CreateTextureAttachment(attachment);
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_Attachments.size(), GL_TEXTURE_2D, tex->GetRendererID(), 0);
@@ -29,8 +26,6 @@ namespace Panthera
                     break;
                 }
                 case FramebufferAttachmentType::Depth:
-                case FramebufferAttachmentType::Stencil:
-                case FramebufferAttachmentType::DepthStencil:
                 {
                     Ref<Texture2D> tex = CreateDepthBufferAttachment(attachment);
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->GetRendererID(), 0);

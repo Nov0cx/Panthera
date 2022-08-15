@@ -10,14 +10,8 @@ namespace Panthera
 {
     enum class FramebufferAttachmentType
     {
-        Red,
-        RG,
-        RGB,
-        RGBA,
-
+        Color,
         Depth,
-        Stencil,
-        DepthStencil
     };
 
     struct FramebufferAttachmentSpecification
