@@ -107,24 +107,79 @@ namespace Panthera
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
+    static bool IsTextureAttachmentFormat(Texture2DInternalFormat format)
+    {
+        switch (format)
+        {
+            case Texture2DInternalFormat::R8:
+            case Texture2DInternalFormat::RG8:
+            case Texture2DInternalFormat::RGB8:
+            case Texture2DInternalFormat::RGBA8:
+            {
+                return true;
+            }
+            default:
+            {
+                return false;
+            }
+        }
+    }
+
+    static bool IsDepthBufferAttachmentFormat(Texture2DInternalFormat format)
+    {
+        switch (format)
+        {
+            case Texture2DInternalFormat::Depth24Stencil8:
+            {
+                return true;
+            }
+            default:
+            {
+                return false;
+            }
+        }
+    }
+
     Ref<Texture2D> OpenGLFramebuffer::CreateTextureAttachment(const FramebufferAttachmentSpecification &attachment)
     {
-        Texture2DSpecification spec {
-            .Width = Application::GetInstance()->GetWindow()->GetWidth(),
-            .Height = Application::GetInstance()->GetWindow()->GetHeight(),
-        };
-        Ref<Texture2D> tex = Texture2D::Create(spec);
-        return tex;
+        if (IsTextureAttachmentFormat(attachment.TextureSpecification.InternalFormat))
+        {
+            return Texture2D::Create(attachment.TextureSpecification);
+        }
+        else
+        {
+            LOG_WARN("Framebuffer attachment format is not a texture format. Using RGBA8.");
+            Texture2DSpecification spec {
+                .Width = attachment.TextureSpecification.Width,
+                .Height = attachment.TextureSpecification.Height,
+                .InternalFormat = Texture2DInternalFormat::RGBA8,
+                .DataFormat = Texture2DDataFormat::RGBA,
+                .Filter = attachment.TextureSpecification.Filter,
+                .Wrapping = attachment.TextureSpecification.Wrapping,
+            };
+            return Texture2D::Create(spec);
+        }
     }
 
     Ref<Texture2D> OpenGLFramebuffer::CreateDepthBufferAttachment(const FramebufferAttachmentSpecification &attachment)
     {
-        Texture2DSpecification spec {
-                .Width = Application::GetInstance()->GetWindow()->GetWidth(),
-                .Height = Application::GetInstance()->GetWindow()->GetHeight(),
-        };
-        Ref<Texture2D> tex = Texture2D::Create(spec);
-        return tex;
+        if (IsDepthBufferAttachmentFormat(attachment.TextureSpecification.InternalFormat))
+        {
+            return Texture2D::Create(attachment.TextureSpecification);
+        }
+        else
+        {
+            LOG_WARN("Framebuffer attachment format is not a depth buffer format. Using Depth24Stencil8.");
+            Texture2DSpecification spec {
+                .Width = attachment.TextureSpecification.Width,
+                .Height = attachment.TextureSpecification.Height,
+                .InternalFormat = Texture2DInternalFormat::Depth24Stencil8,
+                .DataFormat = Texture2DDataFormat::DepthStencil,
+                .Filter = attachment.TextureSpecification.Filter,
+                .Wrapping = attachment.TextureSpecification.Wrapping,
+            };
+            return Texture2D::Create(spec);
+        }
     }
 
 }

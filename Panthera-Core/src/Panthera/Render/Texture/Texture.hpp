@@ -30,6 +30,7 @@ namespace Panthera
         RG8,
         RGB8,
         RGBA8,
+        Depth24Stencil8,
     };
 
     enum class Texture2DDataFormat
@@ -38,6 +39,7 @@ namespace Panthera
         RG,
         RGB,
         RGBA,
+        DepthStencil,
     };
 
     enum class Texture2DFilter

@@ -20,6 +20,8 @@ namespace Panthera
                 return GL_RGB8;
             case Texture2DInternalFormat::RGBA8:
                 return GL_RGBA8;
+            case Texture2DInternalFormat::Depth24Stencil8:
+                return GL_DEPTH24_STENCIL8;
             default:
                 ASSERT(false, "Unknown Texture2DInternalFormat");
         }
@@ -37,6 +39,8 @@ namespace Panthera
                 return GL_RGB;
             case Texture2DDataFormat::RGBA:
                 return GL_RGBA;
+            case Texture2DDataFormat::DepthStencil:
+                return GL_DEPTH_STENCIL;
             default:
                 ASSERT(false, "Unknown Texture2DDataFormat");
         }
