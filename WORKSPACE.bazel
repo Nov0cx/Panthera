@@ -52,6 +52,12 @@ http_archive(
     build_file = "@//extern:imgui.BUILD",
 )
 
-
 load("//vulkan/rules:repositories.bzl", "vulkan_repositories")
 vulkan_repositories()
+
+http_archive(
+    name = "com_github_skypjack_entt",
+    sha256 = "55ec23c7f93ddac1d8b54738ffecc1e7a50fbdc38473ccd9f0ec5e0535acb33f",
+    strip_prefix = "entt-85ca2f356234de3c945667d12857dea2a26c214d",
+    urls = ["https://github.com/skypjack/entt/archive/85ca2f356234de3c945667d12857dea2a26c214d.zip"],
+)

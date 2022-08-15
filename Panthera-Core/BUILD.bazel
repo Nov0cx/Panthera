@@ -42,6 +42,7 @@ cc_library(
       "//vulkan/rules:vulkan_cc_library",
       "@bazel_tools//tools/cpp/runfiles",
       "@com_github_ocornut_imgui//:imgui",
+      "@com_github_skypjack_entt//:entt",
     ],
     defines = select({
         ":debug": [
