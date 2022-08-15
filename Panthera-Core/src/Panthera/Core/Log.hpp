@@ -3,41 +3,41 @@
 
 #include "Panthera/Core/Pointer.hpp"
 
+#pragma warning(push, 0)
+
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
+
+#pragma warning(pop)
 
 namespace Panthera
 {
     class Log
     {
     public:
-        enum class LogLevel
-        {
-            Trace,
-            Debug,
-            Info,
-            Warn,
-            Error,
-            Critical,
-        };
-
         static void Init();
 
-        template<class... Args>
-        static void LogMessage(LogLevel level, Args... args);
+        inline static Ref<spdlog::logger>& GetLogger() { return s_Logger; }
+
+    private:
+        static Ref<spdlog::logger> s_Logger;
     };
+
+
 }
 
 #ifdef PANTHERA_DEBUG
-#define LOG_DEBUG(...) ::Panthera::Log::LogMessage(::Panthera::Log::LogLevel::Debug, __VA_ARGS__)
+#define LOG_DEBUG(...) ::Panthera::Log::GetLogger()->debug(__VA_ARGS__);
 #else
 #define LOG_DEBUG(...)
 #endif
 #ifndef PANTHERA_RELEASE
-#define LOG_TRACE(...) ::Panthera::Log::LogMessage(::Panthera::Log::LogLevel::Trace, __VA_ARGS__)
-#define LOG_INFO(...) ::Panthera::Log::LogMessage(::Panthera::Log::LogLevel::Info, __VA_ARGS__)
-#define LOG_WARN(...) ::Panthera::Log::LogMessage(::Panthera::Log::LogLevel::Warn, __VA_ARGS__)
-#define LOG_ERROR(...) ::Panthera::Log::LogMessage(::Panthera::Log::LogLevel::Error, __VA_ARGS__)
+#define LOG_TRACE(...) ::Panthera::Log::GetLogger()->trace(__VA_ARGS__);
+#define LOG_INFO(...) ::Panthera::Log::GetLogger()->info(__VA_ARGS__);
+#define LOG_WARN(...) ::Panthera::Log::GetLogger()->warn(__VA_ARGS__);
+#define LOG_ERROR(...) ::Panthera::Log::GetLogger()->error(__VA_ARGS__);
 
-#define _LOG_CRITICAL(...) ::Panthera::Log::LogMessage(::Panthera::Log::LogLevel::Critical, __VA_ARGS__)
+#define _LOG_CRITICAL(...) ::Panthera::Log::GetLogger()->critical(__VA_ARGS__);
 #define ASSERT(condition, ...) \
         if (!(condition))         \
         {                       \
@@ -50,6 +50,6 @@ namespace Panthera
 #define LOG_INFO(...) ;
 #define LOG_WARN(...) ;
 #define LOG_ERROR(...) ;
-#define ASSERT(condition, ...) condition; if (false) exit(-1);
+#define ASSERT(condition, ...) condition;
 #endif
 #endif

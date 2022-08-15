@@ -1,0 +1,54 @@
+#ifndef PANTHERA_FRAMEBUFFER_HPP
+#define PANTHERA_FRAMEBUFFER_HPP
+
+#include "Panthera/Render/Texture/Texture.hpp"
+#include <initializer_list>
+#include <vector>
+#include "Panthera/Core/Pointer.hpp"
+
+namespace Panthera
+{
+    enum class FramebufferAttachmentType
+    {
+        Red,
+        RG,
+        RGB,
+        RGBA,
+
+        Depth,
+        Stencil,
+        DepthStencil
+    };
+
+    struct FramebufferAttachmentSpecification
+    {
+        FramebufferAttachmentType AttachmentType;
+        Texture2DSpecification TextureSpecification;
+    };
+
+    struct FramebufferAttachment
+    {
+        FramebufferAttachmentType AttachmentType;
+        Ref<Texture2D> Texture;
+    };
+
+    class Framebuffer
+    {
+    public:
+        static Ref<Framebuffer> Create(const std::initializer_list<FramebufferAttachmentSpecification>& attachments);
+
+        virtual void AddAttachment(const FramebufferAttachmentSpecification& attachment) = 0;
+        virtual void AddAttachments(const std::initializer_list<FramebufferAttachmentSpecification>& attachments) = 0;
+
+        virtual FramebufferAttachment &GetAttachment(uint32_t index) = 0;
+        virtual std::vector<FramebufferAttachment> &GetAttachments() = 0;
+        virtual Ref<std::vector<FramebufferAttachment>> GetAttachments(FramebufferAttachmentType type) = 0;
+        virtual Ref<std::vector<FramebufferAttachment>> GetAttachments(const std::initializer_list<FramebufferAttachmentType>& types) = 0;
+
+        virtual void Bind() const = 0;
+        virtual void Unbind() const = 0;
+    private:
+    };
+}
+
+#endif //PANTHERA_FRAMEBUFFER_HPP

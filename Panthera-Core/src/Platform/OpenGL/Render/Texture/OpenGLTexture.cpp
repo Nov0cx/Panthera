@@ -20,6 +20,8 @@ namespace Panthera
                 return GL_RGB8;
             case Texture2DInternalFormat::RGBA8:
                 return GL_RGBA8;
+            default:
+                ASSERT(false, "Unknown Texture2DInternalFormat");
         }
     }
 
@@ -35,6 +37,8 @@ namespace Panthera
                 return GL_RGB;
             case Texture2DDataFormat::RGBA:
                 return GL_RGBA;
+            default:
+                ASSERT(false, "Unknown Texture2DDataFormat");
         }
     }
 
@@ -46,6 +50,8 @@ namespace Panthera
                 return GL_NEAREST;
             case Texture2DFilter::Linear:
                 return GL_LINEAR;
+            default:
+                ASSERT(false, "Unknown Texture2DFilter");
         }
     }
 
@@ -57,6 +63,8 @@ namespace Panthera
                 return GL_CLAMP_TO_EDGE;
             case Texture2DWrapping::Repeat:
                 return GL_REPEAT;
+            default:
+                ASSERT(false, "Unknown Texture2DWrapping");
         }
     }
 
@@ -77,6 +85,7 @@ namespace Panthera
             glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, FilterToOpenGL(spec.Filter));
 
             glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, WrappingToOpenGL(spec.Wrapping));
+            glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_R, WrappingToOpenGL(spec.Wrapping));
             glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, WrappingToOpenGL(spec.Wrapping));
 
             m_IsLoaded = true;
@@ -131,6 +140,7 @@ namespace Panthera
             glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, FilterToOpenGL(spec.Filter));
             glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, FilterToOpenGL(spec.Filter));
 
+            glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_R, WrappingToOpenGL(spec.Wrapping));
             glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, WrappingToOpenGL(spec.Wrapping));
             glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, WrappingToOpenGL(spec.Wrapping));
 
@@ -160,7 +170,24 @@ namespace Panthera
 
     void OpenGLTexture2D::SetData(void *data, uint32_t size)
     {
-        uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
+        uint32_t bpp = 0;
+        switch (m_DataFormat)
+        {
+            case GL_RED:
+                bpp = 1;
+                break;
+            case GL_RG:
+                bpp = 2;
+                break;
+            case GL_RGB:
+                bpp = 3;
+                break;
+            case GL_RGBA:
+                bpp = 4;
+                break;
+            default:
+                ASSERT(false, "Unknown Texture2DDataFormat");
+        }
         ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!")
         glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
     }
