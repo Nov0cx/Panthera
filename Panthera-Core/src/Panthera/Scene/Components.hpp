@@ -83,6 +83,20 @@ namespace Panthera
         }
     };
 
+    struct LineComponent
+    {
+        glm::vec4 Color = glm::vec4(1.0f);
+        glm::vec3 Start = glm::vec3(0.0f);
+        glm::vec3 End = glm::vec3(0.0f);
+        float Thickness = 1.0f;
+
+        LineComponent() = default;
+        LineComponent(const glm::vec4& color, const glm::vec3& start, const glm::vec3& end, float thickness = 1.0f)
+            : Color(color), Start(start), End(end), Thickness(thickness)
+        {
+        }
+    };
+
     struct NameComponent
     {
         std::string Name;
