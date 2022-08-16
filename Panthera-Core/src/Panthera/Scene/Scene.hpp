@@ -20,7 +20,7 @@ namespace Panthera
         void OnUpdate(Timestep ts);
         void OnEvent(Event& e);
 
-        SceneEntity CreateEntity();
+        SceneEntity CreateEntity(const char* name);
 
     private:
         entt::registry m_Registry;

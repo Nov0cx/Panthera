@@ -22,7 +22,13 @@ namespace Panthera
         glm::vec3 Rotation = glm::vec3(0.0f);
         glm::vec3 Scale = glm::vec3(1.0f);
 
-        glm::mat4 GetTransform()
+        TransformComponent() = default;
+        TransformComponent(const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scale)
+            : Translation(translation), Rotation(rotation), Scale(scale)
+        {
+        }
+
+        inline glm::mat4 GetTransform()
         {
             glm::mat4 rotationMatrix = glm::toMat4(glm::quat(Rotation));
 
@@ -38,6 +44,28 @@ namespace Panthera
 
         Ref<Texture2D> Texture = nullptr;
         float Tiling = 1.0f;
+
+        QuadComponent() = default;
+        QuadComponent(const glm::vec4& color)
+            : Color(color)
+        {
+        }
+
+        QuadComponent(const glm::vec4& color, Ref<Texture2D> texture = nullptr, float tiling = 1.0f)
+            : Color(color), Texture(texture), Tiling(tiling)
+        {
+        }
+    };
+
+    struct NameComponent
+    {
+        std::string Name;
+
+        NameComponent() = default;
+        NameComponent(const std::string& name)
+            : Name(name)
+        {
+        }
     };
 }
 

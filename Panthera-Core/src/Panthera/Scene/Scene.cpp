@@ -45,8 +45,10 @@ namespace Panthera
 
     }
 
-    SceneEntity Scene::CreateEntity()
+    SceneEntity Scene::CreateEntity(const char* name)
     {
-        return SceneEntity(m_Registry.create(), this);
+        SceneEntity entity(m_Registry.create(), this);
+        entity.CreateComponent<NameComponent>(name);
+        return entity;
     }
 }
