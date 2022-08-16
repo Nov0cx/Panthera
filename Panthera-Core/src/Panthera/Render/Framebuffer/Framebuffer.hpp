@@ -34,10 +34,12 @@ namespace Panthera
         virtual void AddAttachment(const FramebufferAttachmentSpecification& attachment) = 0;
         virtual void AddAttachments(const std::initializer_list<FramebufferAttachmentSpecification>& attachments) = 0;
 
-        virtual FramebufferAttachment &GetAttachment(uint32_t index) = 0;
-        virtual std::vector<FramebufferAttachment> &GetAttachments() = 0;
+        virtual FramebufferAttachment &GetColorAttachment(uint32_t index) = 0;
+        virtual std::vector<FramebufferAttachment> &GetColorAttachments() = 0;
         virtual Ref<std::vector<FramebufferAttachment>> GetAttachments(FramebufferAttachmentType type) = 0;
         virtual Ref<std::vector<FramebufferAttachment>> GetAttachments(const std::initializer_list<FramebufferAttachmentType>& types) = 0;
+
+        virtual FramebufferAttachment &GetDepthAttachment() = 0;
 
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;

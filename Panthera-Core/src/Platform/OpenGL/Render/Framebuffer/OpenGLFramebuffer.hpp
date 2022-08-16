@@ -6,6 +6,7 @@
 
 namespace Panthera
 {
+    // TODO only one depth attachment is supported
     class OpenGLFramebuffer : public Framebuffer
     {
     public:
@@ -15,15 +16,18 @@ namespace Panthera
         virtual void AddAttachment(const FramebufferAttachmentSpecification& attachment) override;
         virtual void AddAttachments(const std::initializer_list<FramebufferAttachmentSpecification>& attachments) override;
 
-        virtual FramebufferAttachment &GetAttachment(uint32_t index) override;
-        virtual std::vector<FramebufferAttachment> &GetAttachments() override;
+        virtual FramebufferAttachment &GetColorAttachment(uint32_t index) override;
+        virtual std::vector<FramebufferAttachment> &GetColorAttachments() override;
         virtual Ref<std::vector<FramebufferAttachment>> GetAttachments(FramebufferAttachmentType type) override;
         virtual Ref<std::vector<FramebufferAttachment>> GetAttachments(const std::initializer_list<FramebufferAttachmentType>& types) override;
+
+        virtual FramebufferAttachment &GetDepthAttachment() override;
 
         virtual void Bind() const override;
         virtual void Unbind() const override;
     private:
-        std::vector<FramebufferAttachment> m_Attachments;
+        std::vector<FramebufferAttachment> m_ColorAttachments;
+        FramebufferAttachment m_DepthAttachment;
         Ref<Texture2D> CreateTextureAttachment(const FramebufferAttachmentSpecification& attachment);
         Ref<Texture2D> CreateDepthBufferAttachment(const FramebufferAttachmentSpecification& attachment);
         RendererID m_RendererID;

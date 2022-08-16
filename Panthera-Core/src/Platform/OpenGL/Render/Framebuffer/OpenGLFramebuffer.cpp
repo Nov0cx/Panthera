@@ -21,15 +21,15 @@ namespace Panthera
                 case FramebufferAttachmentType::Color:
                 {
                     Ref<Texture2D> tex = CreateTextureAttachment(attachment);
-                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_Attachments.size(), GL_TEXTURE_2D, tex->GetRendererID(), 0);
-                    m_Attachments.push_back({attachment.AttachmentType, tex});
+                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_ColorAttachments.size(), GL_TEXTURE_2D, tex->GetRendererID(), 0);
+                    m_ColorAttachments.push_back({attachment.AttachmentType, tex});
                     break;
                 }
                 case FramebufferAttachmentType::Depth:
                 {
                     Ref<Texture2D> tex = CreateDepthBufferAttachment(attachment);
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->GetRendererID(), 0);
-                    m_Attachments.push_back({attachment.AttachmentType, tex});
+                    m_DepthAttachment = {attachment.AttachmentType, tex};
                     break;
                 }
             }
@@ -43,29 +43,64 @@ namespace Panthera
 
     void OpenGLFramebuffer::AddAttachment(const FramebufferAttachmentSpecification &attachment)
     {
-
+        switch (attachment.AttachmentType)
+        {
+            case FramebufferAttachmentType::Color:
+            {
+                Ref<Texture2D> tex = CreateTextureAttachment(attachment);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_ColorAttachments.size(), GL_TEXTURE_2D, tex->GetRendererID(), 0);
+                m_ColorAttachments.push_back({attachment.AttachmentType, tex});
+                break;
+            }
+            case FramebufferAttachmentType::Depth:
+            {
+                Ref<Texture2D> tex = CreateDepthBufferAttachment(attachment);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->GetRendererID(), 0);
+                m_DepthAttachment = {attachment.AttachmentType, tex};
+                break;
+            }
+        }
     }
 
     void
     OpenGLFramebuffer::AddAttachments(const std::initializer_list <FramebufferAttachmentSpecification> &attachments)
     {
-
+        for (const auto &attachment: attachments)
+        {
+            switch (attachment.AttachmentType)
+            {
+                case FramebufferAttachmentType::Color:
+                {
+                    Ref<Texture2D> tex = CreateTextureAttachment(attachment);
+                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_ColorAttachments.size(), GL_TEXTURE_2D, tex->GetRendererID(), 0);
+                    m_ColorAttachments.push_back({attachment.AttachmentType, tex});
+                    break;
+                }
+                case FramebufferAttachmentType::Depth:
+                {
+                    Ref<Texture2D> tex = CreateDepthBufferAttachment(attachment);
+                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->GetRendererID(), 0);
+                    m_DepthAttachment = {attachment.AttachmentType, tex};
+                    break;
+                }
+            }
+        }
     }
 
-    FramebufferAttachment &OpenGLFramebuffer::GetAttachment(uint32_t index)
+    FramebufferAttachment &OpenGLFramebuffer::GetColorAttachment(uint32_t index)
     {
-        return m_Attachments[index];
+        return m_ColorAttachments[index];
     }
 
-    std::vector <FramebufferAttachment> &OpenGLFramebuffer::GetAttachments()
+    std::vector <FramebufferAttachment> &OpenGLFramebuffer::GetColorAttachments()
     {
-        return m_Attachments;
+        return m_ColorAttachments;
     }
 
     Ref <std::vector<FramebufferAttachment>> OpenGLFramebuffer::GetAttachments(FramebufferAttachmentType type)
     {
         Ref <std::vector<FramebufferAttachment>> attachments = CreateRef<std::vector<FramebufferAttachment>>();
-        for (auto &attachment: m_Attachments)
+        for (auto &attachment: m_ColorAttachments)
         {
             if (attachment.AttachmentType == type)
             {
@@ -78,7 +113,7 @@ namespace Panthera
     Ref<std::vector<FramebufferAttachment>> OpenGLFramebuffer::GetAttachments(const std::initializer_list<FramebufferAttachmentType>& types)
     {
         Ref<std::vector<FramebufferAttachment>> attachments = CreateRef<std::vector<FramebufferAttachment>>();
-        for (auto &attachment: m_Attachments)
+        for (auto &attachment: m_ColorAttachments)
         {
             for (auto &type: types)
             {
@@ -90,6 +125,11 @@ namespace Panthera
             }
         }
         return attachments;
+    }
+
+    FramebufferAttachment &OpenGLFramebuffer::GetDepthAttachment()
+    {
+        return m_DepthAttachment;
     }
 
     void OpenGLFramebuffer::Bind() const
@@ -176,5 +216,6 @@ namespace Panthera
             return Texture2D::Create(spec);
         }
     }
+
 
 }
