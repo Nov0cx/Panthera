@@ -60,6 +60,6 @@ bazel run --config=msvc_config //Leopardus:Leopardus
 For debug append '_debug' to the config name. For release builds append '_release' to the config name.
 
 # Dependencies:
-We only depend on [Bazel](https://bazel.build/install/bazelisk).
+We only depend on [Bazel](https://bazel.build/install/bazelisk) if Vulkan is already installed (otherwise python3 is needed).
 Bazel does the complete package management for us. If you install bazelisk, rename the file into bazel and add it to the path.
 
