@@ -24,9 +24,10 @@ namespace Panthera
 
     private:
         entt::registry m_Registry;
-        friend class Entity;
         Renderer* m_Renderer;
         OrthographicCamera m_Camera;
+
+        friend class SceneEntity;
     };
 }
 

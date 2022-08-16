@@ -37,6 +37,22 @@ namespace Panthera
             }
         }
 
+        auto circleGroup = m_Registry.group<TransformComponent>(entt::get<CircleComponent>);
+        for (auto entity : circleGroup)
+        {
+            auto transform = circleGroup.get<TransformComponent>(entity);
+            auto circle = circleGroup.get<CircleComponent>(entity);
+            glm::mat4 circleTransform = transform.GetTransform();
+            if (circle.Texture)
+            {
+                m_Renderer->DrawCircle(circleTransform, circle.Color, circle.BorderThickness, circle.Fade, circle.Tiling, circle.Texture);
+            }
+            else
+            {
+                m_Renderer->DrawCircle(circleTransform, circle.Color, circle.BorderThickness, circle.Fade);
+            }
+        }
+
         m_Renderer->EndScene();
     }
 
