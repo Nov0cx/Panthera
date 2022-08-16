@@ -42,11 +42,12 @@ namespace Panthera
     {
         glm::vec4 Color = glm::vec4(1.0f);
 
-        Ref<Texture2D> Texture = nullptr;
         float Tiling = 1.0f;
+        Ref<Texture2D> Texture = nullptr;
+
 
         QuadComponent() = default;
-        QuadComponent(const glm::vec4& color, Ref<Texture2D> texture = nullptr, float tiling = 1.0f)
+        QuadComponent(const glm::vec4& color, float tiling = 1.0f, Ref<Texture2D> texture = nullptr)
             : Color(color), Texture(texture), Tiling(tiling)
         {
         }
@@ -64,6 +65,20 @@ namespace Panthera
         CircleComponent() = default;
         CircleComponent(const glm::vec4& color, float borderThickness = 1.0f, float fade = 0.01f, float tiling = 1.0f, Ref<Texture2D> texture = nullptr)
             : Color(color), BorderThickness(borderThickness), Fade(fade), Tiling(tiling), Texture(texture)
+        {
+        }
+    };
+
+    struct TriangleComponent
+    {
+        glm::vec4 Color = glm::vec4(1.0f);
+
+        float Tiling = 1.0f;
+        Ref<Texture2D> Texture = nullptr;
+
+        TriangleComponent() = default;
+        TriangleComponent(const glm::vec4& color, float tiling = 1.0f, Ref<Texture2D> texture = nullptr)
+            : Color(color), Tiling(tiling), Texture(texture)
         {
         }
     };

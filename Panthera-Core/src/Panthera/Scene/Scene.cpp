@@ -53,12 +53,27 @@ namespace Panthera
             }
         }
 
+        auto triangleGroup = m_Registry.group<TransformComponent>(entt::get<TriangleComponent>);
+        for (auto entity : triangleGroup)
+        {
+            auto transform = triangleGroup.get<TransformComponent>(entity);
+            auto triangle = triangleGroup.get<TriangleComponent>(entity);
+            glm::mat4 triangleTransform = transform.GetTransform();
+            if (triangle.Texture)
+            {
+                m_Renderer->DrawTriangle(triangleTransform, triangle.Color, triangle.Tiling, triangle.Texture);
+            }
+            else
+            {
+                m_Renderer->DrawTriangle(triangleTransform, triangle.Color);
+            }
+        }
+
         m_Renderer->EndScene();
     }
 
     void Scene::OnEvent(Event &e)
     {
-
     }
 
     SceneEntity Scene::CreateEntity(const char* name)
