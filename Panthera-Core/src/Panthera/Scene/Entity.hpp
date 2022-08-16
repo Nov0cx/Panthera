@@ -4,13 +4,14 @@
 #include <entt/entt.hpp>
 #include "Scene.hpp"
 #include "Panthera/Core/Log.hpp"
+#include "UUID.hpp"
 
 namespace Panthera
 {
     class SceneEntity
     {
     public:
-        SceneEntity(entt::entity entity, Scene *scene);
+        SceneEntity(entt::entity entity, Scene *scene, UUID uuid);
 
         ~SceneEntity();
 
@@ -68,7 +69,9 @@ namespace Panthera
         entt::entity GetEntity();
         operator entt::entity();
 
+        UUID GetUUID();
     private:
+        UUID m_UUID;
         entt::entity m_Entity;
         Scene *m_Scene;
     };

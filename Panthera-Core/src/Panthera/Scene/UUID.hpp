@@ -2,6 +2,7 @@
 #define PANTHERA_UUID_HPP
 
 #include <cinttypes>
+#include <functional>
 
 namespace Panthera
 {
@@ -17,7 +18,7 @@ namespace Panthera
             return m_UUID;
         }
 
-        inline operator==(const UUID& other) const
+        inline bool operator==(const UUID& other) const
         {
             return m_UUID == other.m_UUID;
         }
@@ -28,7 +29,7 @@ namespace Panthera
 
 namespace std
 {
-    template <typename T> struct hash;
+    //template <typename T> struct hash;
 
     template<>
     struct hash<Panthera::UUID>

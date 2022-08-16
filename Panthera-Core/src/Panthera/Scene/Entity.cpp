@@ -5,10 +5,11 @@
 namespace Panthera
 {
 
-    SceneEntity::SceneEntity(entt::entity entity, Scene* scene)
+    SceneEntity::SceneEntity(entt::entity entity, Scene* scene, UUID uuid)
     {
         m_Entity = entity;
         m_Scene = scene;
+        m_UUID = uuid;
     }
 
     SceneEntity::~SceneEntity()
@@ -24,5 +25,10 @@ namespace Panthera
     SceneEntity::operator entt::entity()
     {
         return m_Entity;
+    }
+
+    UUID SceneEntity::GetUUID()
+    {
+        return m_UUID;
     }
 }

@@ -1,5 +1,7 @@
 #include "Random.hpp"
 
+#include <random>
+
 namespace Panthera::Random
 {
     static std::random_device s_RandomDevice;
@@ -20,12 +22,6 @@ namespace Panthera::Random
     uint16_t RandomU16()
     {
         static std::uniform_int_distribution<uint16_t> s_Distribution;
-        return s_Distribution(s_Engine);
-    }
-
-    uint8_t RandomU8()
-    {
-        static std::uniform_int_distribution<uint8_t> s_Distribution;
         return s_Distribution(s_Engine);
     }
 
