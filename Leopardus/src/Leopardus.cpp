@@ -10,7 +10,7 @@ public:
 
     virtual void OnStart() override
     {
-        m_Renderer = Panthera::Renderer::CreateRenderer();
+        m_Renderer = Panthera::Renderer::Create();
         m_Renderer->Init();
         Panthera::Texture2DSpecification spec{
                 .Path = Panthera::Application::GetInstance()->GetAssetPath(

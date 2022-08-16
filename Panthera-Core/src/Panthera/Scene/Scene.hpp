@@ -4,6 +4,8 @@
 #include <entt/entt.hpp>
 #include "Panthera/Core/Timestep.hpp"
 #include "Panthera/Core/Event.hpp"
+#include "Panthera/Render/Renderer.hpp"
+#include "Panthera/Render/Camera/OrthographicCamera.hpp"
 
 namespace Panthera
 {
@@ -12,7 +14,7 @@ namespace Panthera
     class Scene
     {
     public:
-        Scene();
+        Scene(OrthographicCamera& camera);
         ~Scene();
 
         void OnUpdate(Timestep ts);
@@ -23,6 +25,8 @@ namespace Panthera
     private:
         entt::registry m_Registry;
         friend class Entity;
+        Renderer* m_Renderer;
+        OrthographicCamera m_Camera;
     };
 }
 

@@ -21,7 +21,7 @@ namespace Panthera
     class Renderer
     {
     public:
-        static Renderer* CreateRenderer();
+        static Renderer* Create();
 
 #pragma section("Core")
         virtual void Init() = 0;

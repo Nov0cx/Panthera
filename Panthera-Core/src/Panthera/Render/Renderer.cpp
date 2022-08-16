@@ -18,7 +18,7 @@ namespace Panthera
         s_API = api;
     }
 
-    Renderer *Renderer::CreateRenderer()
+    Renderer *Renderer::Create()
     {
         switch (s_API)
         {
