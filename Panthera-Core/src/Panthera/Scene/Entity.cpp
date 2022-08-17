@@ -1,15 +1,15 @@
 #include "Entity.hpp"
 
 #include "Scene.hpp"
+#include "Components.hpp"
 
 namespace Panthera
 {
 
-    SceneEntity::SceneEntity(entt::entity entity, Scene* scene, UUID uuid)
+    SceneEntity::SceneEntity(entt::entity entity, Scene* scene)
     {
         m_Entity = entity;
         m_Scene = scene;
-        m_UUID = uuid;
     }
 
     SceneEntity::~SceneEntity()
@@ -29,6 +29,6 @@ namespace Panthera
 
     UUID SceneEntity::GetUUID()
     {
-        return m_UUID;
+        return GetComponent<IDComponent>().ID;
     }
 }

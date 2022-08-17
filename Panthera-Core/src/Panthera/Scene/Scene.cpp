@@ -2,6 +2,7 @@
 
 #include "Entity.hpp"
 #include "Components.hpp"
+#include "SceneSerializer.hpp"
 
 namespace Panthera
 {
@@ -85,8 +86,8 @@ namespace Panthera
 
     SceneEntity Scene::CreateEntity(const char* name)
     {
-        UUID uuid;
-        SceneEntity entity(m_Registry.create(), this, uuid);
+        SceneEntity entity(m_Registry.create(), this);
+        entity.CreateComponent<IDComponent>(UUID::UUID());
         entity.CreateComponent<NameComponent>(name);
         return entity;
     }

@@ -22,6 +22,8 @@ namespace Panthera
 
         virtual RendererID GetRendererID() const = 0;
         virtual bool IsLoaded() const = 0;
+
+        virtual const char* GetPath() const = 0;
     };
 
     enum class Texture2DInternalFormat

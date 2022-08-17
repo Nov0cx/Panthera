@@ -76,6 +76,7 @@ namespace Panthera
     {
         if (strcmp(spec.Path, "") == 0)
         {
+            m_Path = "";
             m_Width = spec.Width;
             m_Height = spec.Height;
 
@@ -153,6 +154,7 @@ namespace Panthera
             stbi_image_free(data);
 
             m_IsLoaded = true;
+            m_Path = spec.Path;
         }
     }
 
@@ -219,5 +221,10 @@ namespace Panthera
     bool OpenGLTexture2D::operator==(const Texture2D &other) const
     {
         return m_RendererID == other.GetRendererID();
+    }
+
+    const char *OpenGLTexture2D::GetPath() const
+    {
+        return m_Path;
     }
 }

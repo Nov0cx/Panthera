@@ -11,7 +11,7 @@ namespace Panthera
     class SceneEntity
     {
     public:
-        SceneEntity(entt::entity entity, Scene *scene, UUID uuid);
+        SceneEntity(entt::entity entity, Scene *scene);
 
         ~SceneEntity();
 
@@ -71,7 +71,6 @@ namespace Panthera
 
         UUID GetUUID();
     private:
-        UUID m_UUID;
         entt::entity m_Entity;
         Scene *m_Scene;
     };

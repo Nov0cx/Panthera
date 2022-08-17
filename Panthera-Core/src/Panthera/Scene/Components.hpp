@@ -8,6 +8,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "Panthera/Render/Texture/Texture.hpp"
+#include "UUID.hpp"
 
 namespace Panthera
 {
@@ -104,6 +105,17 @@ namespace Panthera
         NameComponent() = default;
         NameComponent(const std::string& name)
             : Name(name)
+        {
+        }
+    };
+
+    struct IDComponent
+    {
+        UUID ID;
+
+        IDComponent() = default;
+        IDComponent(const UUID& id)
+            : ID(id)
         {
         }
     };

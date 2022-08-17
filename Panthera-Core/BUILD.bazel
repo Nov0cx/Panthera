@@ -33,6 +33,7 @@ cc_library(
         "src/Platform/**/**/*.hpp",
         "src/Platform/**/**/**/*.hpp",
         "src/Vendor/stb/*.h",
+        "src/Vendor/nlohmann/*.hpp",
     ]),
     deps = [
       "@com_github_Nov0cx_glad//:glad",
@@ -43,6 +44,7 @@ cc_library(
       "@bazel_tools//tools/cpp/runfiles",
       "@com_github_ocornut_imgui//:imgui",
       "@com_github_skypjack_entt//:entt",
+      "@com_github_nlohmann_json//:json",
     ],
     defines = select({
         ":debug": [

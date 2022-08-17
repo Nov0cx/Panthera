@@ -23,12 +23,15 @@ namespace Panthera
         bool IsLoaded() const override;
 
         bool operator==(const Texture2D& other) const override;
+
+        const char* GetPath() const override;
     private:
         RendererID m_RendererID;
         uint32_t m_Width, m_Height;
         bool m_IsLoaded;
         uint32_t m_CurrentSlot = 0;
         uint32_t m_Format, m_DataFormat;
+        const char* m_Path;
     };
 }
 

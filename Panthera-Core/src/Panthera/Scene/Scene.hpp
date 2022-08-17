@@ -9,7 +9,9 @@
 
 namespace Panthera
 {
+    // fwd
     class SceneEntity;
+    class SceneSerializer;
 
     class Scene
     {
@@ -28,6 +30,7 @@ namespace Panthera
         OrthographicCamera m_Camera;
 
         friend class SceneEntity;
+        friend class SceneSerializer;
     };
 }
 

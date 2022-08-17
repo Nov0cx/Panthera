@@ -61,3 +61,11 @@ http_archive(
     strip_prefix = "entt-85ca2f356234de3c945667d12857dea2a26c214d",
     urls = ["https://github.com/skypjack/entt/archive/85ca2f356234de3c945667d12857dea2a26c214d.zip"],
 )
+
+http_archive(
+    name = "com_github_nlohmann_json",
+    build_file = "//extern:nlohmann.BUILD",
+    sha256 = "95651d7d1fcf2e5c3163c3d37df6d6b3e9e5027299e6bd050d157322ceda9ac9",
+    strip_prefix = "json-3.11.2",
+    urls = ["https://github.com/nlohmann/json/archive/v3.11.2.zip"],
+)
