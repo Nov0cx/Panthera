@@ -1,7 +1,6 @@
-#include "OpenGLWindow.hpp"
+#include "GLFWWindow.hpp"
 
 #include "Panthera/Core/Log.hpp"
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Panthera/Events/KeyEvents.hpp"
 #include "Panthera/Events/MouseEvents.hpp"
@@ -10,15 +9,14 @@
 
 namespace Panthera
 {
-
-    OpenGLWindow::OpenGLWindow(const WindowProps &props)
+    GLFWWindow::GLFWWindow(const WindowProps &props)
     {
         m_Info = {props.Width, props.Height, props.Title, props.VSync};
 
         Init(props.Title, props.Width, props.Height);
     }
 
-    void OpenGLWindow::Init(const char *title, uint32_t width, uint32_t height)
+    void GLFWWindow::Init(const char *title, uint32_t width, uint32_t height)
     {
         bool need_init = p_WindowCount == 0;
 
@@ -34,32 +32,12 @@ namespace Panthera
         m_Context = RenderContext::Create(m_Window);
         m_Context->MakeContext();
 
-        if (need_init)
-        {
-            if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-            {
-                glfwTerminate();
-                ASSERT(false, "Failed to initialize GLAD!")
-            }
-        }
-
-        if (GLAD_GL_VERSION_4_6)
-        {
-            LOG_DEBUG("OpenGL 4.6 is supported!")
-        }
-        else
-        {
-            ASSERT(false, "OpenGL 4.6 is not supported!")
-        }
-
-        LOG_DEBUG("OpenGL Version: {}", (char *) glGetString(GL_VERSION));
-
         glfwSetWindowUserPointer(m_Window, &m_Info);
 
         glfwSetErrorCallback([](int error, const char *description)
-        {
-            LOG_ERROR("GLFW error: {}", description)
-        });
+                             {
+                                 LOG_ERROR("GLFW error: {}", description)
+                             });
 
         glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height)
         {
@@ -77,6 +55,11 @@ namespace Panthera
         /*glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window)
         {
         });*/
+
+        glfwSetErrorCallback([](int error, const char *description)
+        {
+            LOG_ERROR("GLFW error: {}", description)
+        });
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
         {
@@ -144,7 +127,7 @@ namespace Panthera
         });
     }
 
-    OpenGLWindow::~OpenGLWindow()
+    GLFWWindow::~GLFWWindow()
     {
         if (p_WindowCount-- == 0)
         {
@@ -152,27 +135,27 @@ namespace Panthera
         }
     }
 
-    void OpenGLWindow::OnEvent(Event &event)
+    void GLFWWindow::OnEvent(Event &event)
     {
 
     }
 
-    std::any OpenGLWindow::GetNativeWindow() const
+    std::any GLFWWindow::GetNativeWindow() const
     {
         return m_Window;
     }
 
-    uint32_t OpenGLWindow::GetWidth() const
+    uint32_t GLFWWindow::GetWidth() const
     {
         return m_Info.Width;
     }
 
-    uint32_t OpenGLWindow::GetHeight() const
+    uint32_t GLFWWindow::GetHeight() const
     {
         return m_Info.Height;
     }
 
-    void OpenGLWindow::SetVSync(bool state)
+    void GLFWWindow::SetVSync(bool state)
     {
         m_Info.VSync = state;
 
@@ -182,18 +165,18 @@ namespace Panthera
             glfwSwapInterval(0);
     }
 
-    bool OpenGLWindow::IsVSync() const
+    bool GLFWWindow::IsVSync() const
     {
         return m_Info.VSync;
     }
 
-    void OpenGLWindow::OnUpdate()
+    void GLFWWindow::OnUpdate()
     {
         m_Context->SwapBuffers();
         glfwPollEvents();
     }
 
-    bool OpenGLWindow::ShouldBeClosed() const
+    bool GLFWWindow::ShouldBeClosed() const
     {
         return glfwWindowShouldClose(m_Window);
     }

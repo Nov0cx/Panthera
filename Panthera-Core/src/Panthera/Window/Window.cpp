@@ -3,7 +3,7 @@
 #include "Panthera/Render/Renderer.hpp"
 #include "Panthera/Core/Log.hpp"
 #include "Panthera/Core/Pointer.hpp"
-#include "Platform/OpenGL/Window/OpenGLWindow.hpp"
+#include "Platform/GLFW/Window/GLFWWindow.hpp"
 
 namespace Panthera
 {
@@ -12,7 +12,7 @@ namespace Panthera
         switch (RendererState::GetAPI())
         {
             case RendererAPI::OpenGL:
-                return CreateRef<OpenGLWindow>(props);
+                return CreateRef<GLFWWindow>(props);
             case RendererAPI::Vulkan:
                 LOG_WARN("Vulkan Window is not supported yet!");
                 break;

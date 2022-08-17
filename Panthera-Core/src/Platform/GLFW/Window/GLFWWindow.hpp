@@ -1,5 +1,5 @@
-#ifndef PANTHERA_OPENGLWINDOW_HPP
-#define PANTHERA_OPENGLWINDOW_HPP
+#ifndef PANTHERA_GLFWWINDOW_HPP
+#define PANTHERA_GLFWWINDOW_HPP
 
 #include "Panthera/Window/Window.hpp"
 #include "Panthera/Render/Renderer.hpp"
@@ -11,26 +11,31 @@ typedef struct GLFWwindow GLFWwindow;
 
 namespace Panthera
 {
-    class OpenGLWindow : public Window
+    class GLFWWindow : public Window
     {
     public:
-        OpenGLWindow(const WindowProps& props);
-        ~OpenGLWindow();
+        GLFWWindow(const WindowProps &props);
+
+        ~GLFWWindow();
 
         virtual void OnUpdate() override;
-        virtual void OnEvent(Event& event) override;
+
+        virtual void OnEvent(Event &event) override;
+
         virtual std::any GetNativeWindow() const override;
 
         virtual uint32_t GetWidth() const override;
+
         virtual uint32_t GetHeight() const override;
 
         virtual void SetVSync(bool state) override;
+
         virtual bool IsVSync() const override;
 
         virtual bool ShouldBeClosed() const override;
 
     private:
-        void Init(const char* title, uint32_t width, uint32_t height);
+        void Init(const char *title, uint32_t width, uint32_t height);
 
         struct WindowInfo
         {
@@ -39,10 +44,10 @@ namespace Panthera
             bool VSync;
         } m_Info;
 
-        GLFWwindow* m_Window;
+        GLFWwindow *m_Window;
 
-        Ref<RenderContext> m_Context;
+        Ref <RenderContext> m_Context;
     };
 }
 
-#endif //PANTHERA_OPENGLWINDOW_HPP
+#endif //PANTHERA_GLFWWINDOW_HPP
