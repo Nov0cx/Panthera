@@ -7,7 +7,7 @@
 namespace Panthera
 {
 
-    Scene::Scene(OrthographicCamera& camera)
+    Scene::Scene(OrthographicCamera* camera)
         : m_Renderer(Renderer::Create())
     {
         m_Camera = camera;
@@ -20,7 +20,7 @@ namespace Panthera
 
     void Scene::OnUpdate(Timestep ts)
     {
-        m_Renderer->BeginScene(m_Camera);
+        m_Renderer->BeginScene(*m_Camera);
 
         auto quadGroup = m_Registry.group<TransformComponent>(entt::get<QuadComponent>);
         for (auto entity : quadGroup)
@@ -89,6 +89,14 @@ namespace Panthera
     {
         SceneEntity entity(m_Registry.create(), this);
         entity.CreateComponent<IDComponent>(UUID::UUID());
+        entity.CreateComponent<NameComponent>(name);
+        return entity;
+    }
+
+    SceneEntity Scene::CreateEntity(Panthera::UUID uuid, const char *name)
+    {
+        SceneEntity entity(m_Registry.create(), this);
+        entity.CreateComponent<IDComponent>(uuid);
         entity.CreateComponent<NameComponent>(name);
         return entity;
     }

@@ -10,6 +10,7 @@ namespace Panthera
     {
     public:
         UUID();
+        UUID(uint64_t uuid);
 
         uint64_t Get();
 
