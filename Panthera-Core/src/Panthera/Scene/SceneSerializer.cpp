@@ -77,6 +77,52 @@ namespace Panthera
             };
         }
 
+        if (entity.HasComponent<TriangleComponent>())
+        {
+            TriangleComponent triangle = entity.GetComponent<TriangleComponent>();
+            entityJson[entityID]["components"]["triangle"] = {
+                    {"color", {
+                            {"r", triangle.Color.r},
+                            {"g", triangle.Color.g},
+                            {"b", triangle.Color.b},
+                            {"a", triangle.Color.a}
+                    }},
+                    {"tiling", triangle.Tiling},
+                    {"texture", triangle.Texture ? triangle.Texture->GetPath() : ""}
+            };
+        }
+
+        if (entity.HasComponent<LineTransformComponent>())
+        {
+            LineTransformComponent lineTransform = entity.GetComponent<LineTransformComponent>();
+            entityJson[entityID]["components"]["lineTransform"] = {
+                    {"start", {
+                            {"x", lineTransform.Start.x},
+                            {"y", lineTransform.Start.y},
+                            {"z", lineTransform.Start.z}
+                    }},
+                    {"end", {
+                            {"x", lineTransform.End.x},
+                            {"y", lineTransform.End.y},
+                            {"z", lineTransform.End.z}
+                    }},
+            };
+        }
+
+        if (entity.HasComponent<LineComponent>())
+        {
+            LineComponent line = entity.GetComponent<LineComponent>();
+            entityJson[entityID]["components"]["line"] = {
+                    {"color", {
+                            {"r", line.Color.r},
+                            {"g", line.Color.g},
+                            {"b", line.Color.b},
+                            {"a", line.Color.a}
+                    }},
+                    {"thickness", line.Thickness},
+            };
+        }
+
         return entityJson;
     }
 
