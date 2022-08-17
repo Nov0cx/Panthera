@@ -84,16 +84,26 @@ namespace Panthera
         }
     };
 
+    struct LineTransformComponent
+    {
+        glm::vec3 Start = glm::vec3(0.0f);
+        glm::vec3 End = glm::vec3(0.0f);
+
+        LineTransformComponent() = default;
+        LineTransformComponent(const glm::vec3& start, const glm::vec3& end)
+            : Start(start), End(end)
+        {
+        }
+    };
+
     struct LineComponent
     {
         glm::vec4 Color = glm::vec4(1.0f);
-        glm::vec3 Start = glm::vec3(0.0f);
-        glm::vec3 End = glm::vec3(0.0f);
         float Thickness = 1.0f;
 
         LineComponent() = default;
-        LineComponent(const glm::vec4& color, const glm::vec3& start, const glm::vec3& end, float thickness = 1.0f)
-            : Color(color), Start(start), End(end), Thickness(thickness)
+        LineComponent(const glm::vec4& color, float thickness = 1.0f)
+            : Color(color), Thickness(thickness)
         {
         }
     };

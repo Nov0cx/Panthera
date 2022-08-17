@@ -70,11 +70,12 @@ namespace Panthera
             }
         }
 
-        auto lineGroup = m_Registry.group<TransformComponent>(entt::get<LineComponent>);
+        auto lineGroup = m_Registry.group<LineTransformComponent>(entt::get<LineComponent>);
         for (auto entity : lineGroup)
         {
+            auto transform = lineGroup.get<LineTransformComponent>(entity);
             auto line = lineGroup.get<LineComponent>(entity);
-            m_Renderer->DrawLine(line.Start, line.End, line.Color, line.Thickness);
+            m_Renderer->DrawLine(transform.Start, transform.End, line.Color, line.Thickness);
         }
 
         m_Renderer->EndScene();
