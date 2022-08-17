@@ -24,6 +24,11 @@ bazel run //vulkan:VulkanPackages
 bazel run //vulkan:VulkanDownload
 ```
 
+Oneliner:
+```bash
+git clone https://github.com/Nov0cx/Panthera.git && cd Panthera && bazel run //vulkan:VulkanPackages && bazel run //vulkan:VulkanDownload
+```
+
 # Build
 
 ### Not MSVC
