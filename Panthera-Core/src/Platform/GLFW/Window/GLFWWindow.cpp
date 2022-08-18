@@ -56,10 +56,12 @@ namespace Panthera
         {
         });*/
 
+#ifdef PANTHERA_DEBUG
         glfwSetErrorCallback([](int error, const char *description)
         {
             LOG_ERROR("GLFW error: {}", description)
         });
+#endif
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
         {
