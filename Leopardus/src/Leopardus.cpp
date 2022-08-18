@@ -119,7 +119,7 @@ public:
 int main(int argc, char **argv)
 {
     Panthera::ProgramArgs args(argc, argv);
-    Panthera::AppProps props(args, "Leopardus", 800, 600, false);
+    Panthera::AppProps props(args, "Leopardus", 1920, 1080, false);
     Leopardus app(props);
 
     app.Run();

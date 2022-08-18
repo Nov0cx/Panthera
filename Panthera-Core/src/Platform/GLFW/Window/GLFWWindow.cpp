@@ -125,6 +125,8 @@ namespace Panthera
             MouseMoveEvent event(xPos, yPos);
             Application::GetInstance()->CallEvent(event);
         });
+
+        SetVSync(m_Info.VSync);
     }
 
     GLFWWindow::~GLFWWindow()
