@@ -3,6 +3,7 @@
 #include "Entity.hpp"
 #include "Components.hpp"
 #include "SceneSerializer.hpp"
+#include "Panthera/Core/Log.hpp"
 
 namespace Panthera
 {
@@ -11,6 +12,7 @@ namespace Panthera
         : m_Renderer(Renderer::Create())
     {
         m_Camera = camera;
+        m_Renderer->Init();
     }
 
     Scene::~Scene()
@@ -20,13 +22,13 @@ namespace Panthera
 
     void Scene::OnUpdate(Timestep ts)
     {
+        m_Renderer->Clear();
         m_Renderer->BeginScene(*m_Camera);
 
-        auto quadGroup = m_Registry.group<TransformComponent>(entt::get<QuadComponent>);
-        for (auto entity : quadGroup)
+        auto quadView = m_Registry.view<TransformComponent, QuadComponent>();
+        for (auto entity : quadView)
         {
-            auto transform = quadGroup.get<TransformComponent>(entity);
-            auto quad = quadGroup.get<QuadComponent>(entity);
+            auto[transform, quad] = quadView.get<TransformComponent, QuadComponent>(entity);
             glm::mat4 quadTransform = transform.GetTransform();
             if (quad.Texture)
             {
@@ -38,11 +40,10 @@ namespace Panthera
             }
         }
 
-        auto circleGroup = m_Registry.group<TransformComponent>(entt::get<CircleComponent>);
-        for (auto entity : circleGroup)
+        auto circleView = m_Registry.view<TransformComponent, CircleComponent>();
+        for (auto entity : circleView)
         {
-            auto transform = circleGroup.get<TransformComponent>(entity);
-            auto circle = circleGroup.get<CircleComponent>(entity);
+            auto[transform, circle] = circleView.get<TransformComponent, CircleComponent>(entity);
             glm::mat4 circleTransform = transform.GetTransform();
             if (circle.Texture)
             {
@@ -54,11 +55,10 @@ namespace Panthera
             }
         }
 
-        auto triangleGroup = m_Registry.group<TransformComponent>(entt::get<TriangleComponent>);
-        for (auto entity : triangleGroup)
+        auto triangleView = m_Registry.view<TransformComponent, TriangleComponent>();
+        for (auto entity : triangleView)
         {
-            auto transform = triangleGroup.get<TransformComponent>(entity);
-            auto triangle = triangleGroup.get<TriangleComponent>(entity);
+            auto[transform, triangle] = triangleView.get<TransformComponent, TriangleComponent>(entity);
             glm::mat4 triangleTransform = transform.GetTransform();
             if (triangle.Texture)
             {
@@ -70,11 +70,10 @@ namespace Panthera
             }
         }
 
-        auto lineGroup = m_Registry.group<LineTransformComponent>(entt::get<LineComponent>);
-        for (auto entity : lineGroup)
+        auto lineView = m_Registry.view<LineTransformComponent, LineComponent>(entt::exclude<TransformComponent>);
+        for (auto entity : lineView)
         {
-            auto transform = lineGroup.get<LineTransformComponent>(entity);
-            auto line = lineGroup.get<LineComponent>(entity);
+            auto[transform, line] = lineView.get<LineTransformComponent, LineComponent>(entity);
             m_Renderer->DrawLine(transform.Start, transform.End, line.Color, line.Thickness);
         }
 

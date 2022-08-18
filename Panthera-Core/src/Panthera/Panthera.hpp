@@ -27,8 +27,15 @@
 #include "Render/Camera/OrthographicCameraController.hpp"
 #include "Render/Framebuffer/Framebuffer.hpp"
 
-
 #include "Utils/Time.hpp"
+#include "Utils/Random.hpp"
+#include <nlohmann/json.hpp>
+
+#include "Scene/Scene.hpp"
+#include "Scene/SceneSerializer.hpp"
+#include "Scene/Entity.hpp"
+#include "Scene/Components.hpp"
+#include "Scene/UUID.hpp"
 
 #include <glm/glm.hpp>
 

@@ -1,59 +1,97 @@
 #include "Panthera/Panthera.hpp"
 
+#include <fstream>
+
 class LeopardusLayer : public Panthera::Layer
 {
 public:
     LeopardusLayer() : Panthera::Layer()
     {
         m_CameraController = Panthera::OrthographicCameraController(1.33);
+        std::fstream scene = std::fstream("scene.json", std::ios::in);
+        if (scene.is_open())
+        {
+            LOG_INFO("Scene file found!");
+            m_Scene = Panthera::SceneSerializer::Deserialize("scene.json");
+            loadedScene = true;
+            LOG_INFO("Scene loaded!");
+        }
+        else
+        {
+            m_Scene = new Panthera::Scene(&m_CameraController.GetCamera());
+        }
+    }
+
+    ~LeopardusLayer()
+    {
+        Panthera::SceneSerializer::Serialize(*m_Scene, "scene.json");
+        delete m_Scene;
     }
 
     virtual void OnStart() override
     {
-        m_Renderer = Panthera::Renderer::Create();
-        m_Renderer->Init();
-        Panthera::Texture2DSpecification spec{
-                .Path = Panthera::Application::GetInstance()->GetAssetPath(
-                        "Panthera/Assets/Textures/color.jpg").c_str(),
-                .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
-                .DataFormat = Panthera::Texture2DDataFormat::RGB,
-        };
-        m_ColorTexture = Panthera::Texture2D::Create(spec);
-        Panthera::Texture2DSpecification spec2{
-                .Path = Panthera::Application::GetInstance()->GetAssetPath(
-                        "Panthera/Assets/Textures/flower.jpg").c_str(),
-                .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
-                .DataFormat = Panthera::Texture2DDataFormat::RGB,
-        };
-        m_FlowerTexture = Panthera::Texture2D::Create(spec2);
-        Panthera::Texture2DSpecification spec3{
-                .Path = Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/form.jpg").c_str(),
-                .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
-                .DataFormat = Panthera::Texture2DDataFormat::RGB,
-        };
-        m_FormTexture = Panthera::Texture2D::Create(spec3);
+        if (!loadedScene)
+        {
+            Panthera::Texture2DSpecification spec{
+                    .Path = Panthera::Application::GetInstance()->GetAssetPath(
+                            "Panthera/Assets/Textures/color.jpg").c_str(),
+                    .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
+                    .DataFormat = Panthera::Texture2DDataFormat::RGB,
+            };
+            m_ColorTexture = Panthera::Texture2D::Create(spec);
+            Panthera::Texture2DSpecification spec2{
+                    .Path = Panthera::Application::GetInstance()->GetAssetPath(
+                            "Panthera/Assets/Textures/flower.jpg").c_str(),
+                    .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
+                    .DataFormat = Panthera::Texture2DDataFormat::RGB,
+            };
+            m_FlowerTexture = Panthera::Texture2D::Create(spec2);
+            Panthera::Texture2DSpecification spec3{
+                    .Path = Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/form.jpg").c_str(),
+                    .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
+                    .DataFormat = Panthera::Texture2DDataFormat::RGB,
+            };
+            m_FormTexture = Panthera::Texture2D::Create(spec3);
+            {
+                Panthera::SceneEntity entity = m_Scene->CreateEntity("Quad1");
+                entity.CreateComponent<Panthera::QuadComponent>(
+                        Panthera::QuadComponent({1.0, 1.0, 1.0, 1.0}, 1.0f, m_FormTexture));
+                entity.CreateComponent<Panthera::TransformComponent>(
+                        Panthera::TransformComponent({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}));
+            }
+            {
+                Panthera::SceneEntity entity = m_Scene->CreateEntity("Circle1");
+                entity.CreateComponent<Panthera::CircleComponent>(
+                        Panthera::CircleComponent({1.0, 1.0, 1.0, 1.0}, 0.0f, 0.01f, 1.0f, m_ColorTexture));
+                entity.CreateComponent<Panthera::TransformComponent>(
+                        Panthera::TransformComponent({1.2, 1.2, 0.}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}));
+            }
+            {
+                Panthera::SceneEntity entity = m_Scene->CreateEntity("Triangle1");
+                entity.CreateComponent<Panthera::TriangleComponent>(
+                        Panthera::TriangleComponent({1.0, 1.0, 1.0, 1.0}, 1.0f, m_FlowerTexture));
+                entity.CreateComponent<Panthera::TransformComponent>(
+                        Panthera::TransformComponent({-1.2, -1.2, 0.}, {0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}));
+            }
+            {
+                Panthera::SceneEntity entity = m_Scene->CreateEntity("Line1");
+                entity.CreateComponent<Panthera::LineComponent>(
+                        Panthera::LineComponent({1.0, .0, 1.0, 1.0}, 0.0f));
+                entity.CreateComponent<Panthera::LineTransformComponent>(
+                        Panthera::LineTransformComponent({-1.2, -1.2, 0.}, {2.2, 1.2, 0.0}));
+            }
+        }
+
     }
 
     virtual void OnEnd() override
     {
-        delete m_Renderer;
     }
 
     virtual void OnUpdate(Panthera::Timestep ts) override
     {
         m_CameraController.OnUpdate(ts);
-        m_Renderer->Clear();
-        m_Renderer->BeginScene(m_CameraController.GetCamera());
-        m_Renderer->DrawQuad({-0.3f, -0.3f, 0.0f}, {0.6f, 0.6f}, {1.0f, 0.0f, 0.0f, 1.0f});
-        m_Renderer->DrawQuad({0.3f, 0.3f, 0.0f}, {0.6f, 0.6f}, {1.0f, 1.0f, 1.0f, 1.0f}, 1.f, m_ColorTexture);
-        m_Renderer->DrawQuad({-0.37f, 0.37f, 0.0f}, {0.63f, 0.63f}, glm::radians(36.f), {1.0f, 1.0f, 1.0f, 0.8f}, 1.f,
-                             m_FlowerTexture);
-        m_Renderer->DrawTriangle({.3f, -0.3f, 0.0f}, {0.6f, 0.6f}, -glm::radians(36.f), {1.0f, 1.0f, 1.0f, 0.6f}, 1.f,
-                                 m_FlowerTexture);
-        m_Renderer->DrawCircle({-0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 0.3f, 0.3f, 0.4f);
-        m_Renderer->DrawCircle({0.8f, -0.8f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}, 0.3f, 0.4f, 0.02f, 1.f, m_FormTexture);
-        m_Renderer->DrawLine({0.f, 0.f, 0.0f}, {0.8f, 0.8f, 0.0f}, {.0f, .0f, 1.0f, 1.0f}, 0.0067f);
-        m_Renderer->EndScene();
+        m_Scene->OnUpdate(ts);
     }
 
     virtual void OnEvent(Panthera::Event &e) override
@@ -62,9 +100,10 @@ public:
     }
 
 private:
-    Panthera::Renderer *m_Renderer;
     Panthera::Ref <Panthera::Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
     Panthera::OrthographicCameraController m_CameraController;
+    Panthera::Scene* m_Scene;
+    bool loadedScene = false;
 };
 
 class Leopardus : public Panthera::Application

@@ -9,6 +9,7 @@
 #include <fstream>
 #include <glm/glm.hpp>
 #include "Panthera/Render/Texture/Texture.hpp"
+#include <Panthera/Core/Log.hpp>
 
 using json = nlohmann::json;
 
@@ -160,6 +161,16 @@ namespace Panthera
                                   sceneJson["entities"].push_back(
                                           SerializeEntity(scene, SceneEntity(entity, &scene)));
                               });
+        std::ofstream o(filename);
+        if (o.is_open())
+        {
+            o << sceneJson.dump(4);
+            o.close();
+        }
+        else
+        {
+            LOG_ERROR("Could not open file: " + filename);
+        }
     }
 
     static void DeserializeEntity(Scene &scene, json entity)
@@ -245,7 +256,7 @@ namespace Panthera
                     entity["components"]["line"]["thickness"]);
         }
 
-        
+
     }
 
     Scene *SceneSerializer::Deserialize(std::string filename)
@@ -254,11 +265,17 @@ namespace Panthera
         Scene *scene = new Scene(camera);
 
         std::fstream file(filename);
+        ASSERT(file.is_open(), "Could not open file: " + filename);
+        LOG_INFO("Deserializing scene: " + filename);
         json sceneJson = json::parse(file);
+        LOG_INFO("sceneJson: " + sceneJson.dump(4));
         file.close();
         camera->SetPosition(glm::vec3(sceneJson["camera"]["position"]["x"], sceneJson["camera"]["position"]["y"],
                                       sceneJson["camera"]["position"]["z"]));
         camera->SetRotation(sceneJson["camera"]["rotation"]["rot"]);
+
+        LOG_DEBUG("Camera position: " + std::to_string(camera->GetPosition().x) + " " + std::to_string(camera->GetPosition().y) + " " + std::to_string(camera->GetPosition().z));
+        LOG_DEBUG("Camera rotation: " + std::to_string(camera->GetRotation()));
 
         for (json entity: sceneJson["entities"])
         {

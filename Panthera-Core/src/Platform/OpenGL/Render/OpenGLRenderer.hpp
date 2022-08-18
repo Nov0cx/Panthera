@@ -5,6 +5,12 @@
 
 namespace Panthera
 {
+    struct RendererData;
+    struct QuadVertex;
+    struct CircleVertex;
+    struct TriangleVertex;
+    struct LineVertex;
+
     class OpenGLRenderer : public Renderer
     {
     public:
@@ -49,6 +55,13 @@ namespace Panthera
         virtual void BeginScene(OrthographicCamera &camera) override;
         virtual void EndScene() override;
         virtual void Flush() override;
+
+    private:
+        RendererData *m_Data = nullptr;
+        void InitQuad();
+        void InitCircle();
+        void InitTriangle();
+        void InitLine();
     };
 }
 

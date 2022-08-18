@@ -81,7 +81,7 @@ namespace Panthera
         std::array <Ref<Texture2D>, RendererData::MAX_TEXTURES> Textures;
         uint32_t TextureIndex = 0;
 
-        Ref <UniformBuffer> CameraUniformBuffer;
+
 
         Ref <Shader> QuadShader;
         Ref <VertexArray> QuadVertexArray;
@@ -122,11 +122,11 @@ namespace Panthera
         Ref <Framebuffer> Framebuffer;
     };
 
-    static RendererData *s_RendererData = nullptr;
+    static Ref <UniformBuffer> s_CameraUniformBuffer;
 
-    static void InitQuad()
+    void OpenGLRenderer::InitQuad()
     {
-        s_RendererData->QuadVertices = new QuadVertex[RendererData::MAX_QUAD_VERTICES];
+        m_Data->QuadVertices = new QuadVertex[RendererData::MAX_QUAD_VERTICES];
 
         uint32_t *indices = new uint32_t[RendererData::MAX_QUAD_INDICES];
         uint32_t offset = 0;
@@ -142,12 +142,12 @@ namespace Panthera
             offset += 4;
         }
 
-        s_RendererData->QuadShader = ShaderLibrary::CreateShader("Quad", Application::GetInstance()->GetAssetPath(
+        m_Data->QuadShader = ShaderLibrary::CreateShader("Quad", Application::GetInstance()->GetAssetPath(
                 "Panthera/Assets/Shader/Quad.glsl"));
 
-        s_RendererData->QuadVertexArray = VertexArray::Create();
-        s_RendererData->QuadVertexBuffer = VertexBuffer::Create(RendererData::MAX_QUAD_VERTICES * sizeof(QuadVertex));
-        s_RendererData->QuadVertexBuffer->SetBufferLayout({
+        m_Data->QuadVertexArray = VertexArray::Create();
+        m_Data->QuadVertexBuffer = VertexBuffer::Create(RendererData::MAX_QUAD_VERTICES * sizeof(QuadVertex));
+        m_Data->QuadVertexBuffer->SetBufferLayout({
                                                                   {"a_Position", ShaderDataType::Float3},
                                                                   {"a_Color",    ShaderDataType::Float4},
                                                                   {"a_TexCoord", ShaderDataType::Float2},
@@ -155,12 +155,12 @@ namespace Panthera
                                                                   {"a_Tiling",   ShaderDataType::Float}
                                                           });
 
-        s_RendererData->QuadIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_QUAD_INDICES);
-        s_RendererData->QuadVertexArray->AddVertexBuffer(s_RendererData->QuadVertexBuffer);
-        s_RendererData->QuadVertexArray->SetIndexBuffer(s_RendererData->QuadIndexBuffer);
+        m_Data->QuadIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_QUAD_INDICES);
+        m_Data->QuadVertexArray->AddVertexBuffer(m_Data->QuadVertexBuffer);
+        m_Data->QuadVertexArray->SetIndexBuffer(m_Data->QuadIndexBuffer);
         delete[] indices;
 
-        s_RendererData->QuadPositions = {{
+        m_Data->QuadPositions = {{
                                                  {-0.5f, -0.5f, 0.0f, 1.f},
                                                  {0.5f, -0.5f, 0.0f, 1.f},
                                                  {0.5f, 0.5f, 0.0f, 1.f},
@@ -168,9 +168,9 @@ namespace Panthera
                                          }};
     }
 
-    static void InitTriangle()
+    void OpenGLRenderer::InitTriangle()
     {
-        s_RendererData->TriangleVertices = new TriangleVertex[RendererData::MAX_TRIANGLE_VERTICES];
+        m_Data->TriangleVertices = new TriangleVertex[RendererData::MAX_TRIANGLE_VERTICES];
         uint32_t *indices = new uint32_t[RendererData::MAX_TRIANGLE_INDICES];
         uint32_t offset = 0;
         for (uint32_t i = 0; i < RendererData::MAX_TRIANGLE_INDICES; i += 3)
@@ -180,34 +180,34 @@ namespace Panthera
             indices[i + 2] = offset + 2;
             offset += 3;
         }
-        s_RendererData->TriangleShader = ShaderLibrary::CreateShader("Triangle",
+        m_Data->TriangleShader = ShaderLibrary::CreateShader("Triangle",
                                                                      Application::GetInstance()->GetAssetPath(
                                                                              "Panthera/Assets/Shader/Triangle.glsl"));
-        s_RendererData->TriangleVertexArray = VertexArray::Create();
-        s_RendererData->TriangleVertexBuffer = VertexBuffer::Create(
+        m_Data->TriangleVertexArray = VertexArray::Create();
+        m_Data->TriangleVertexBuffer = VertexBuffer::Create(
                 RendererData::MAX_TRIANGLE_VERTICES * sizeof(TriangleVertex));
-        s_RendererData->TriangleVertexBuffer->SetBufferLayout({
+        m_Data->TriangleVertexBuffer->SetBufferLayout({
                                                                       {"a_Position", ShaderDataType::Float3},
                                                                       {"a_Color",    ShaderDataType::Float4},
                                                                       {"a_TexCoord", ShaderDataType::Float2},
                                                                       {"a_Index",    ShaderDataType::Float},
                                                                       {"a_Tiling",   ShaderDataType::Float}
                                                               });
-        s_RendererData->TriangleIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_TRIANGLE_INDICES);
-        s_RendererData->TriangleVertexArray->AddVertexBuffer(s_RendererData->TriangleVertexBuffer);
-        s_RendererData->TriangleVertexArray->SetIndexBuffer(s_RendererData->TriangleIndexBuffer);
+        m_Data->TriangleIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_TRIANGLE_INDICES);
+        m_Data->TriangleVertexArray->AddVertexBuffer(m_Data->TriangleVertexBuffer);
+        m_Data->TriangleVertexArray->SetIndexBuffer(m_Data->TriangleIndexBuffer);
         delete[] indices;
 
-        s_RendererData->TrianglePositions = {{
+        m_Data->TrianglePositions = {{
                                                      {-0.5f, -0.5f, 0.0f, 1.f},
                                                      {0.5f, -0.5f, 0.0f, 1.f},
                                                      {0.0f, 0.5f, 0.0f, 1.f}
                                              }};
     }
 
-    static void InitCircle()
+    void OpenGLRenderer::InitCircle()
     {
-        s_RendererData->CircleVertices = new CircleVertex[RendererData::MAX_CIRCLE_VERTICES];
+        m_Data->CircleVertices = new CircleVertex[RendererData::MAX_CIRCLE_VERTICES];
 
         uint32_t *indices = new uint32_t[RendererData::MAX_CIRCLE_INDICES];
         uint32_t offset = 0;
@@ -223,14 +223,14 @@ namespace Panthera
             offset += 4;
         }
 
-        s_RendererData->CircleShader = ShaderLibrary::CreateShader("FilledCircle",
+        m_Data->CircleShader = ShaderLibrary::CreateShader("FilledCircle",
                                                                    Application::GetInstance()->GetAssetPath(
                                                                            "Panthera/Assets/Shader/FilledCircle.glsl"));
 
-        s_RendererData->CircleVertexArray = VertexArray::Create();
-        s_RendererData->CircleVertexBuffer = VertexBuffer::Create(
+        m_Data->CircleVertexArray = VertexArray::Create();
+        m_Data->CircleVertexBuffer = VertexBuffer::Create(
                 RendererData::MAX_CIRCLE_VERTICES * sizeof(CircleVertex));
-        s_RendererData->CircleVertexBuffer->SetBufferLayout({
+        m_Data->CircleVertexBuffer->SetBufferLayout({
                                                                     {"a_Position", ShaderDataType::Float3},
                                                                     {"a_Center",   ShaderDataType::Float3},
                                                                     {"a_Color",    ShaderDataType::Float4},
@@ -241,12 +241,12 @@ namespace Panthera
                                                                     {"a_Tiling",   ShaderDataType::Float}
                                                             });
 
-        s_RendererData->CircleIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_CIRCLE_INDICES);
-        s_RendererData->CircleVertexArray->AddVertexBuffer(s_RendererData->CircleVertexBuffer);
-        s_RendererData->CircleVertexArray->SetIndexBuffer(s_RendererData->CircleIndexBuffer);
+        m_Data->CircleIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_CIRCLE_INDICES);
+        m_Data->CircleVertexArray->AddVertexBuffer(m_Data->CircleVertexBuffer);
+        m_Data->CircleVertexArray->SetIndexBuffer(m_Data->CircleIndexBuffer);
         delete[] indices;
 
-        s_RendererData->CirclePositions = {{
+        m_Data->CirclePositions = {{
                                                    {-0.5f, -0.5f, 0.0f, 1.f},
                                                    {0.5f, -0.5f, 0.0f, 1.f},
                                                    {0.5f, 0.5f, 0.0f, 1.f},
@@ -254,9 +254,9 @@ namespace Panthera
                                            }};
     }
 
-    static void InitLine()
+    void OpenGLRenderer::InitLine()
     {
-        s_RendererData->LineVertices = new LineVertex[RendererData::MAX_LINE_VERTICES];
+        m_Data->LineVertices = new LineVertex[RendererData::MAX_LINE_VERTICES];
 
         uint32_t *indices = new uint32_t[RendererData::MAX_LINE_INDICES];
         uint32_t offset = 0;
@@ -272,14 +272,14 @@ namespace Panthera
             offset += 4;
         }
 
-        s_RendererData->LineShader = ShaderLibrary::CreateShader("Line",
+        m_Data->LineShader = ShaderLibrary::CreateShader("Line",
                                                                  Application::GetInstance()->GetAssetPath(
                                                                          "Panthera/Assets/Shader/Line.glsl"));
 
-        s_RendererData->LineVertexArray = VertexArray::Create();
-        s_RendererData->LineVertexBuffer = VertexBuffer::Create(
+        m_Data->LineVertexArray = VertexArray::Create();
+        m_Data->LineVertexBuffer = VertexBuffer::Create(
                 RendererData::MAX_LINE_VERTICES * sizeof(LineVertex));
-        s_RendererData->LineVertexBuffer->SetBufferLayout({
+        m_Data->LineVertexBuffer->SetBufferLayout({
                                                                   {"a_Position",              ShaderDataType::Float3},
                                                                   {"a_PosA",                  ShaderDataType::Float3},
                                                                   {"a_PosB",                  ShaderDataType::Float3},
@@ -288,12 +288,12 @@ namespace Panthera
                                                                   {"a_Color",                 ShaderDataType::Float4},
                                                           });
 
-        s_RendererData->LineIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_LINE_INDICES);
-        s_RendererData->LineVertexArray->AddVertexBuffer(s_RendererData->LineVertexBuffer);
-        s_RendererData->LineVertexArray->SetIndexBuffer(s_RendererData->LineIndexBuffer);
+        m_Data->LineIndexBuffer = IndexBuffer::Create(indices, RendererData::MAX_LINE_INDICES);
+        m_Data->LineVertexArray->AddVertexBuffer(m_Data->LineVertexBuffer);
+        m_Data->LineVertexArray->SetIndexBuffer(m_Data->LineIndexBuffer);
         delete[] indices;
 
-        s_RendererData->LinePositions = {{
+        m_Data->LinePositions = {{
                                                  {-0.5f, -0.5f, 0.0f, 1.f},
                                                  {0.5f, -0.5f, 0.0f, 1.f},
                                                  {0.5f, 0.5f, 0.0f, 1.f},
@@ -301,21 +301,25 @@ namespace Panthera
                                          }};
     }
 
+
     void OpenGLRenderer::Init()
     {
-        s_RendererData = new RendererData;
-        s_RendererData->Textures[0] = Texture2D::Create(Texture2DSpecification{});
+        m_Data = new RendererData;
+        m_Data->Textures[0] = Texture2D::Create(Texture2DSpecification{});
         uint32_t textureData = 0xFFFFFFFF;
-        s_RendererData->Textures[0]->SetData(&textureData, sizeof(uint32_t));
+        m_Data->Textures[0]->SetData(&textureData, sizeof(uint32_t));
 
-        s_RendererData->CameraUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), 0);
+        if (!s_CameraUniformBuffer)
+        {
+            s_CameraUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), 0);
+        }
 
         InitQuad();
         InitTriangle();
         InitCircle();
         InitLine();
 
-        s_RendererData->Framebuffer = Framebuffer::Create({
+        m_Data->Framebuffer = Framebuffer::Create({
             FramebufferAttachmentSpecification {
                 .AttachmentType = FramebufferAttachmentType::Color,
                 .TextureSpecification = Texture2DSpecification {
@@ -339,78 +343,78 @@ namespace Panthera
                 }
             }
         });
-        s_RendererData->Framebuffer->Unbind();
+        m_Data->Framebuffer->Unbind();
     }
 
     void OpenGLRenderer::Flush()
     {
-        ASSERT(s_RendererData, "Renderer not initialized!");
-        for (uint32_t i = 0; i < s_RendererData->TextureIndex; i++)
+        ASSERT(m_Data, "Renderer not initialized!");
+        for (uint32_t i = 0; i < m_Data->TextureIndex; i++)
         {
-            s_RendererData->Textures[i]->Bind(i);
+            m_Data->Textures[i]->Bind(i);
         }
 
-        if (s_RendererData->QuadVerticesCount)
+        if (m_Data->QuadVerticesCount)
         {
-            s_RendererData->QuadVertexBuffer->AddData(s_RendererData->QuadVertices,
-                                                      s_RendererData->QuadVerticesCount * sizeof(QuadVertex));
+            m_Data->QuadVertexBuffer->AddData(m_Data->QuadVertices,
+                                                      m_Data->QuadVerticesCount * sizeof(QuadVertex));
 
 
-            s_RendererData->QuadShader->Bind();
-            s_RendererData->QuadVertexArray->Bind();
-            DrawIndexed(s_RendererData->QuadIndicesCount);
+            m_Data->QuadShader->Bind();
+            m_Data->QuadVertexArray->Bind();
+            DrawIndexed(m_Data->QuadIndicesCount);
 
-            s_RendererData->QuadIndicesCount = 0;
-            s_RendererData->QuadVerticesCount = 0;
+            m_Data->QuadIndicesCount = 0;
+            m_Data->QuadVerticesCount = 0;
         }
 
-        if (s_RendererData->TriangleVerticesCount)
+        if (m_Data->TriangleVerticesCount)
         {
-            s_RendererData->TriangleVertexBuffer->AddData(s_RendererData->TriangleVertices,
-                                                          s_RendererData->TriangleVerticesCount *
+            m_Data->TriangleVertexBuffer->AddData(m_Data->TriangleVertices,
+                                                          m_Data->TriangleVerticesCount *
                                                           sizeof(TriangleVertex));
 
-            s_RendererData->TriangleShader->Bind();
-            s_RendererData->TriangleVertexArray->Bind();
-            DrawIndexed(s_RendererData->TriangleIndicesCount);
+            m_Data->TriangleShader->Bind();
+            m_Data->TriangleVertexArray->Bind();
+            DrawIndexed(m_Data->TriangleIndicesCount);
 
-            s_RendererData->TriangleIndicesCount = 0;
-            s_RendererData->TriangleVerticesCount = 0;
+            m_Data->TriangleIndicesCount = 0;
+            m_Data->TriangleVerticesCount = 0;
         }
 
-        if (s_RendererData->CircleVerticesCount)
+        if (m_Data->CircleVerticesCount)
         {
-            s_RendererData->CircleVertexBuffer->AddData(s_RendererData->CircleVertices,
-                                                        s_RendererData->CircleVerticesCount * sizeof(CircleVertex));
-            s_RendererData->CircleShader->Bind();
-            s_RendererData->CircleVertexArray->Bind();
-            DrawIndexed(s_RendererData->CircleIndicesCount);
-            s_RendererData->CircleIndicesCount = 0;
-            s_RendererData->CircleVerticesCount = 0;
+            m_Data->CircleVertexBuffer->AddData(m_Data->CircleVertices,
+                                                        m_Data->CircleVerticesCount * sizeof(CircleVertex));
+            m_Data->CircleShader->Bind();
+            m_Data->CircleVertexArray->Bind();
+            DrawIndexed(m_Data->CircleIndicesCount);
+            m_Data->CircleIndicesCount = 0;
+            m_Data->CircleVerticesCount = 0;
         }
 
-        if (s_RendererData->LineVerticesCount)
+        if (m_Data->LineVerticesCount)
         {
-            s_RendererData->LineVertexBuffer->AddData(s_RendererData->LineVertices,
-                                                      s_RendererData->LineVerticesCount * sizeof(LineVertex));
-            s_RendererData->LineShader->Bind();
-            s_RendererData->LineVertexArray->Bind();
-            DrawIndexed(s_RendererData->LineIndicesCount);
-            s_RendererData->LineIndicesCount = 0;
-            s_RendererData->LineVerticesCount = 0;
+            m_Data->LineVertexBuffer->AddData(m_Data->LineVertices,
+                                                      m_Data->LineVerticesCount * sizeof(LineVertex));
+            m_Data->LineShader->Bind();
+            m_Data->LineVertexArray->Bind();
+            DrawIndexed(m_Data->LineIndicesCount);
+            m_Data->LineIndicesCount = 0;
+            m_Data->LineVerticesCount = 0;
         }
 
-        s_RendererData->TextureIndex = 1;
+        m_Data->TextureIndex = 1;
     }
 
     void OpenGLRenderer::BeginScene()
     {
-        s_RendererData->QuadIndicesCount = 0;
-        s_RendererData->QuadVerticesCount = 0;
-        s_RendererData->TextureIndex = 1;
+        m_Data->QuadIndicesCount = 0;
+        m_Data->QuadVerticesCount = 0;
+        m_Data->TextureIndex = 1;
 
         glm::mat4 identity = glm::mat4(1.0f);
-        s_RendererData->CameraUniformBuffer->SetData(&identity, sizeof(glm::mat4));
+        s_CameraUniformBuffer->SetData(&identity, sizeof(glm::mat4));
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -418,11 +422,12 @@ namespace Panthera
 
     void OpenGLRenderer::BeginScene(OrthographicCamera &camera)
     {
-        s_RendererData->QuadIndicesCount = 0;
-        s_RendererData->QuadVerticesCount = 0;
-        s_RendererData->TextureIndex = 1;
+        m_Data->QuadIndicesCount = 0;
+        m_Data->QuadVerticesCount = 0;
+        m_Data->TextureIndex = 1;
 
-        s_RendererData->CameraUniformBuffer->SetData(&camera.GetViewProjectionMatrix(), sizeof(glm::mat4));
+        s_CameraUniformBuffer->SetData(&camera.GetViewProjectionMatrix(), sizeof(glm::mat4));
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
@@ -507,8 +512,8 @@ namespace Panthera
 
     void OpenGLRenderer::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color)
     {
-        ASSERT(s_RendererData, "Renderer data is null");
-        if (s_RendererData->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
+        ASSERT(m_Data, "Renderer data is null");
+        if (m_Data->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
         {
             Flush();
         }
@@ -519,24 +524,24 @@ namespace Panthera
                                         {0, 1}};
         for (uint32_t i = 0; i < 4; i++)
         {
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].Position
-                    = transform * s_RendererData->QuadPositions[i];
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].Color = color;
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].TexCoord = texCoords[i];
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].Index = 0;
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].TilingFactor = 1.f;
-            s_RendererData->QuadVerticesCount++;
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].Position
+                    = transform * m_Data->QuadPositions[i];
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].Color = color;
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].TexCoord = texCoords[i];
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].Index = 0;
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].TilingFactor = 1.f;
+            m_Data->QuadVerticesCount++;
         }
 
-        s_RendererData->QuadIndicesCount += 6;
+        m_Data->QuadIndicesCount += 6;
     }
 
     void
     OpenGLRenderer::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color, float tiling, Ref <Texture2D> &texture)
     {
         ASSERT(texture, "Texture is nullptr");
-        ASSERT(s_RendererData, "Renderer data is null");
-        if (s_RendererData->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
+        ASSERT(m_Data, "Renderer data is null");
+        if (m_Data->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
         {
             Flush();
         }
@@ -544,9 +549,9 @@ namespace Panthera
         bool found = false;
         float index = 0;
 
-        for (uint8_t i = 0; i < s_RendererData->TextureIndex; i++)
+        for (uint8_t i = 0; i < m_Data->TextureIndex; i++)
         {
-            if (s_RendererData->Textures[i] == texture)
+            if (m_Data->Textures[i] == texture)
             {
                 found = true;
                 index = i;
@@ -554,7 +559,7 @@ namespace Panthera
             }
         }
 
-        if (s_RendererData->TextureIndex == RendererData::MAX_TEXTURES && !found)
+        if (m_Data->TextureIndex == RendererData::MAX_TEXTURES && !found)
         {
             Flush();
         }
@@ -567,21 +572,21 @@ namespace Panthera
         };
         for (uint32_t i = 0; i < 4; i++)
         {
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].Position
-                    = transform * s_RendererData->QuadPositions[i];
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].Color = color;
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].TexCoord = texCoords[i];
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].Index = found ? index
-                                                                                          : s_RendererData->TextureIndex;
-            s_RendererData->QuadVertices[s_RendererData->QuadVerticesCount].TilingFactor = tiling;
-            s_RendererData->QuadVerticesCount++;
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].Position
+                    = transform * m_Data->QuadPositions[i];
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].Color = color;
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].TexCoord = texCoords[i];
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].Index = found ? index
+                                                                                          : m_Data->TextureIndex;
+            m_Data->QuadVertices[m_Data->QuadVerticesCount].TilingFactor = tiling;
+            m_Data->QuadVerticesCount++;
         }
 
-        s_RendererData->QuadIndicesCount += 6;
+        m_Data->QuadIndicesCount += 6;
         if (!found)
         {
-            s_RendererData->Textures[s_RendererData->TextureIndex] = texture;
-            s_RendererData->TextureIndex++;
+            m_Data->Textures[m_Data->TextureIndex] = texture;
+            m_Data->TextureIndex++;
         }
     }
 
@@ -649,8 +654,8 @@ namespace Panthera
 
     void OpenGLRenderer::DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color)
     {
-        ASSERT(s_RendererData, "Renderer data is null");
-        if (s_RendererData->TriangleVerticesCount + 3 > RendererData::MAX_QUAD_INDICES)
+        ASSERT(m_Data, "Renderer data is null");
+        if (m_Data->TriangleVerticesCount + 3 > RendererData::MAX_QUAD_INDICES)
         {
             Flush();
         }
@@ -662,23 +667,23 @@ namespace Panthera
 
         for (uint32_t i = 0; i < 3; i++)
         {
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].Position
-                    = transform * s_RendererData->TrianglePositions[i];
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].Color = color;
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].TexCoord = texCoords[i];
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].Index = 0;
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].TilingFactor = 1.f;
-            s_RendererData->TriangleVerticesCount++;
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].Position
+                    = transform * m_Data->TrianglePositions[i];
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].Color = color;
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].TexCoord = texCoords[i];
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].Index = 0;
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].TilingFactor = 1.f;
+            m_Data->TriangleVerticesCount++;
         }
 
-        s_RendererData->TriangleIndicesCount += 3;
+        m_Data->TriangleIndicesCount += 3;
     }
 
     void OpenGLRenderer::DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color, float tiling,
                                       Ref <Texture2D> &texture)
     {
 
-        if (s_RendererData->TriangleVerticesCount + 3 > RendererData::MAX_QUAD_INDICES)
+        if (m_Data->TriangleVerticesCount + 3 > RendererData::MAX_QUAD_INDICES)
         {
             Flush();
         }
@@ -691,9 +696,9 @@ namespace Panthera
         bool found = false;
         float index = 0;
 
-        for (uint8_t i = 0; i < s_RendererData->TextureIndex; i++)
+        for (uint8_t i = 0; i < m_Data->TextureIndex; i++)
         {
-            if (s_RendererData->Textures[i] == texture)
+            if (m_Data->Textures[i] == texture)
             {
                 found = true;
                 index = i;
@@ -701,29 +706,29 @@ namespace Panthera
             }
         }
 
-        if (s_RendererData->TextureIndex == RendererData::MAX_TEXTURES && !found)
+        if (m_Data->TextureIndex == RendererData::MAX_TEXTURES && !found)
         {
             Flush();
         }
 
         for (uint32_t i = 0; i < 3; i++)
         {
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].Position
-                    = transform * s_RendererData->TrianglePositions[i];
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].Color = color;
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].TexCoord = texCoords[i];
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].Index = found ? index
-                                                                                                  : s_RendererData->TextureIndex;
-            s_RendererData->TriangleVertices[s_RendererData->TriangleVerticesCount].TilingFactor = 1.f;
-            s_RendererData->TriangleVerticesCount++;
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].Position
+                    = transform * m_Data->TrianglePositions[i];
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].Color = color;
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].TexCoord = texCoords[i];
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].Index = found ? index
+                                                                                                  : m_Data->TextureIndex;
+            m_Data->TriangleVertices[m_Data->TriangleVerticesCount].TilingFactor = 1.f;
+            m_Data->TriangleVerticesCount++;
         }
 
-        s_RendererData->TriangleIndicesCount += 3;
+        m_Data->TriangleIndicesCount += 3;
 
         if (!found)
         {
-            s_RendererData->Textures[s_RendererData->TextureIndex] = texture;
-            s_RendererData->TextureIndex++;
+            m_Data->Textures[m_Data->TextureIndex] = texture;
+            m_Data->TextureIndex++;
         }
     }
 
@@ -735,7 +740,7 @@ namespace Panthera
     {
         ASSERT(radius > 0.f, "Radius must be greater than 0")
         ASSERT(borderThickness >= 0.f, "Border thickness must be greater than or equal to 0")
-        ASSERT(s_RendererData, "Renderer data is null")
+        ASSERT(m_Data, "Renderer data is null")
         glm::mat4 transform =
                 glm::translate(glm::mat4(1.0f), center) *
                 glm::scale(glm::mat4(1.0f), glm::vec3(radius * 2, radius * 2, 1.0f));
@@ -758,7 +763,7 @@ namespace Panthera
         ASSERT(texture, "Texture is null")
         ASSERT(radius > 0.f, "Radius must be greater than 0")
         ASSERT(borderThickness >= 0.f, "Border thickness must be greater than or equal to 0")
-        ASSERT(s_RendererData, "Renderer data is null")
+        ASSERT(m_Data, "Renderer data is null")
         glm::mat4 transform =
                 glm::translate(glm::mat4(1.0f), center) *
                 glm::scale(glm::mat4(1.0f), glm::vec3(radius * 2, radius * 2, 1.0f));
@@ -778,7 +783,7 @@ namespace Panthera
     OpenGLRenderer::DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness,
                                float fade)
     {
-        if (s_RendererData->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
+        if (m_Data->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
         {
             Flush();
         }
@@ -789,27 +794,27 @@ namespace Panthera
                                         {0, 1}};
         for (uint32_t i = 0; i < 4; i++)
         {
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Position
-                    = transform * s_RendererData->CirclePositions[i];
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].InterpolatingPosition =
-                    s_RendererData->CirclePositions[i] * 2.0f; // position between 0 and 1
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Color = color;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Fade = fade;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Border = borderThickness;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].TexCoord = texCoords[i];
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Index = 0;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].TilingFactor = 1.f;
-            s_RendererData->CircleVerticesCount++;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Position
+                    = transform * m_Data->CirclePositions[i];
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].InterpolatingPosition =
+                    m_Data->CirclePositions[i] * 2.0f; // position between 0 and 1
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Color = color;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Fade = fade;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Border = borderThickness;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].TexCoord = texCoords[i];
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Index = 0;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].TilingFactor = 1.f;
+            m_Data->CircleVerticesCount++;
         }
 
-        s_RendererData->CircleIndicesCount += 6;
+        m_Data->CircleIndicesCount += 6;
     }
 
     void
     OpenGLRenderer::DrawCircle(const glm::mat4 &transform, const glm::vec4 &color, float borderThickness,
                                float fade, float tiling, Ref <Texture2D> &texture)
     {
-        if (s_RendererData->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
+        if (m_Data->QuadIndicesCount + 6 > RendererData::MAX_QUAD_INDICES)
         {
             Flush();
         }
@@ -822,9 +827,9 @@ namespace Panthera
         bool found = false;
         float index = 0;
 
-        for (uint8_t i = 0; i < s_RendererData->TextureIndex; i++)
+        for (uint8_t i = 0; i < m_Data->TextureIndex; i++)
         {
-            if (s_RendererData->Textures[i] == texture)
+            if (m_Data->Textures[i] == texture)
             {
                 found = true;
                 index = i;
@@ -832,32 +837,32 @@ namespace Panthera
             }
         }
 
-        if (s_RendererData->TextureIndex == RendererData::MAX_TEXTURES && !found)
+        if (m_Data->TextureIndex == RendererData::MAX_TEXTURES && !found)
         {
             Flush();
         }
 
         for (uint32_t i = 0; i < 4; i++)
         {
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Position
-                    = transform * s_RendererData->CirclePositions[i];
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].InterpolatingPosition =
-                    s_RendererData->CirclePositions[i] * 2.0f; // position between 0 and 1
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Color = color;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Fade = fade;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Border = borderThickness;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].TexCoord = texCoords[i];
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].Index = found ? index
-                                                                                              : s_RendererData->TextureIndex;
-            s_RendererData->CircleVertices[s_RendererData->CircleVerticesCount].TilingFactor = tiling;
-            s_RendererData->CircleVerticesCount++;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Position
+                    = transform * m_Data->CirclePositions[i];
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].InterpolatingPosition =
+                    m_Data->CirclePositions[i] * 2.0f; // position between 0 and 1
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Color = color;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Fade = fade;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Border = borderThickness;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].TexCoord = texCoords[i];
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].Index = found ? index
+                                                                                              : m_Data->TextureIndex;
+            m_Data->CircleVertices[m_Data->CircleVerticesCount].TilingFactor = tiling;
+            m_Data->CircleVerticesCount++;
         }
 
-        s_RendererData->CircleIndicesCount += 6;
+        m_Data->CircleIndicesCount += 6;
         if (!found)
         {
-            s_RendererData->Textures[s_RendererData->TextureIndex] = texture;
-            s_RendererData->TextureIndex++;
+            m_Data->Textures[m_Data->TextureIndex] = texture;
+            m_Data->TextureIndex++;
         }
     }
 
@@ -873,18 +878,18 @@ namespace Panthera
 
         for (uint32_t i = 0; i < 4; i++)
         {
-            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].Position =
-                    transform * s_RendererData->LinePositions[i];
-            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].InterpolatingPosition =
-                    s_RendererData->LinePositions[i] * 2.0f;
-            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].PosA = start;
-            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].PosB = end;
-            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].Thickness = thickness;
-            s_RendererData->LineVertices[s_RendererData->LineVerticesCount].Color = color;
-            s_RendererData->LineVerticesCount++;
+            m_Data->LineVertices[m_Data->LineVerticesCount].Position =
+                    transform * m_Data->LinePositions[i];
+            m_Data->LineVertices[m_Data->LineVerticesCount].InterpolatingPosition =
+                    m_Data->LinePositions[i] * 2.0f;
+            m_Data->LineVertices[m_Data->LineVerticesCount].PosA = start;
+            m_Data->LineVertices[m_Data->LineVerticesCount].PosB = end;
+            m_Data->LineVertices[m_Data->LineVerticesCount].Thickness = thickness;
+            m_Data->LineVertices[m_Data->LineVerticesCount].Color = color;
+            m_Data->LineVerticesCount++;
         }
 //
-        s_RendererData->LineIndicesCount += 6;
+        m_Data->LineIndicesCount += 6;
     }
 
 }
