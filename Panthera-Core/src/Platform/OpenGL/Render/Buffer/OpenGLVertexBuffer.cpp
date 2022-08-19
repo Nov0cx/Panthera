@@ -49,6 +49,11 @@ namespace Panthera
         glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
     }
 
+    const VertexBufferLayout &OpenGLVertexBuffer::GetLayout() const
+    {
+        return m_Layout;
+    }
+
 
     uint32_t GetDataTypeSizeOpenGL(ShaderDataType type)
     {

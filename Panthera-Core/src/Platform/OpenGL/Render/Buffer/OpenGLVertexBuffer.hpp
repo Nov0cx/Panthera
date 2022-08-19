@@ -22,6 +22,7 @@ namespace Panthera
 
         virtual void SetBufferLayout(VertexBufferLayout layout) override;
         virtual VertexBufferLayout& GetLayout() override;
+        virtual const VertexBufferLayout& GetLayout() const override;
 
         virtual void AddData(void* data, size_t size) override;
 

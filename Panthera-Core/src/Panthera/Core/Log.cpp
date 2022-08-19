@@ -6,16 +6,16 @@
 namespace Panthera
 {
 
-    Ref <spdlog::logger> Log::s_Logger;
+    std::shared_ptr <spdlog::logger> Log::s_Logger;
 
     void Log::Init()
     {
-        auto colorRef = CreateRef<spdlog::sinks::stdout_color_sink_mt>();
+        auto colorRef = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
         colorRef->set_pattern("%^[%T] [%l] %n: %v%$");
 
-        s_Logger = CreateRef<spdlog::logger>("PANTHERA", spdlog::sinks_init_list{
+        s_Logger = std::make_shared<spdlog::logger>("PANTHERA", spdlog::sinks_init_list{
                 colorRef,
-                CreateRef<spdlog::sinks::basic_file_sink_mt>("PANTHERA.log", true)});
+                std::make_shared<spdlog::sinks::basic_file_sink_mt>("PANTHERA.log", true)});
 
         spdlog::register_logger(s_Logger);
 

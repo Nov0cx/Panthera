@@ -125,6 +125,7 @@ namespace Panthera
 
         virtual void SetBufferLayout(VertexBufferLayout layout) = 0;
         virtual VertexBufferLayout& GetLayout() = 0;
+        virtual const VertexBufferLayout& GetLayout() const = 0;
     };
 }
 
