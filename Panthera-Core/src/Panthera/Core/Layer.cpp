@@ -13,7 +13,7 @@ namespace Panthera
         }
     }
 
-    void LayerStack::OnUpdate(Timestep ts) const
+    void LayerStack::OnUpdate(Timestep ts)
     {
         for (auto& layer : m_Layers)
         {
@@ -24,7 +24,7 @@ namespace Panthera
         }
     }
 
-    void LayerStack::OnEvent(Event &event) const
+    void LayerStack::OnEvent(Event &event)
     {
         for (auto& layer : m_Layers)
         {
@@ -35,7 +35,7 @@ namespace Panthera
         }
     }
 
-    void LayerStack::OnImGuiUpdate() const
+    void LayerStack::OnImGuiUpdate()
     {
         for (auto& layer : m_Layers)
         {

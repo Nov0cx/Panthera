@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 #include "Panthera/Render/Texture/Texture.hpp"
 #include <Panthera/Core/Log.hpp>
+#include <Panthera/Core/Application.hpp>
 
 using json = nlohmann::json;
 
@@ -141,7 +142,7 @@ namespace Panthera
         return entityJson;
     }
 
-    void SceneSerializer::Serialize(Scene &scene, std::string filename)
+    void SceneSerializer::Serialize(Scene &scene, const std::string &filename)
     {
         json sceneJson;
         sceneJson["camera"] = {
@@ -175,17 +176,18 @@ namespace Panthera
 
     static void DeserializeEntity(Scene &scene, json entity)
     {
+        entity = entity[entity.begin().key()];
         SceneEntity sceneEntity = scene.CreateEntity(entity["uuid"].get<uint64_t>(),
                                                      entity["components"]["name"].get<std::string>().c_str());
         if (entity["components"].find("transform") != entity["components"].end())
         {
             sceneEntity.CreateComponent<TransformComponent>(
-                    glm::vec3(entity["components"]["position"]["x"], entity["components"]["position"]["y"],
-                              entity["components"]["position"]["z"]),
-                    glm::vec3(entity["components"]["rotation"]["x"], entity["components"]["rotation"]["y"],
-                              entity["components"]["rotation"]["z"]),
-                    glm::vec3(entity["components"]["scale"]["x"], entity["components"]["scale"]["y"],
-                              entity["components"]["scale"]["z"]));
+                    glm::vec3(entity["components"]["transform"]["position"]["x"], entity["components"]["transform"]["position"]["y"],
+                              entity["components"]["transform"]["position"]["z"]),
+                    glm::vec3(entity["components"]["transform"]["rotation"]["x"], entity["components"]["transform"]["rotation"]["y"],
+                              entity["components"]["transform"]["rotation"]["z"]),
+                    glm::vec3(entity["components"]["transform"]["scale"]["x"], entity["components"]["transform"]["scale"]["y"],
+                              entity["components"]["transform"]["scale"]["z"]));
         }
 
         if (entity["components"].find("quad") != entity["components"].end())
@@ -198,7 +200,7 @@ namespace Panthera
                     entity["components"]["quad"]["tiling"],
                     entity["components"]["quad"]["texture"]["path"].get<std::string>() != "" ? Texture2D::Create(
                             Texture2DSpecification{
-                                    .Path = entity["components"]["quad"]["texture"]["path"].get<std::string>().c_str(),
+                                    .Path = Application::GetInstance()->GetAssetPath(entity["components"]["quad"]["texture"]["path"].get<std::string>().c_str()).c_str(),
                             })
                                                                                                : nullptr);
         }
@@ -215,7 +217,7 @@ namespace Panthera
                     entity["components"]["circle"]["tiling"],
                     entity["components"]["circle"]["texture"]["path"].get<std::string>() != "" ? Texture2D::Create(
                             Texture2DSpecification{
-                                    .Path = entity["components"]["circle"]["texture"]["path"].get<std::string>().c_str(),
+                                    .Path = Application::GetInstance()->GetAssetPath(entity["components"]["circle"]["texture"]["path"].get<std::string>().c_str()).c_str(),
                             })
                                                                                                : nullptr);
         }
@@ -230,7 +232,7 @@ namespace Panthera
                     entity["components"]["triangle"]["tiling"],
                     entity["components"]["triangle"]["texture"]["path"].get<std::string>() != "" ? Texture2D::Create(
                             Texture2DSpecification{
-                                    .Path = entity["components"]["triangle"]["texture"]["path"].get<std::string>().c_str(),
+                                    .Path = Application::GetInstance()->GetAssetPath(entity["components"]["triangle"]["texture"]["path"].get<std::string>().c_str()).c_str(),
                             })
                                                                                                : nullptr);
         }
@@ -259,25 +261,20 @@ namespace Panthera
 
     }
 
-    Scene *SceneSerializer::Deserialize(std::string filename)
+    Scene *SceneSerializer::Deserialize(const std::string& filename)
     {
         OrthographicCamera *camera = new OrthographicCamera();
         Scene *scene = new Scene(camera);
 
-        std::fstream file(filename);
+        std::ifstream file(filename);
         ASSERT(file.is_open(), "Could not open file: " + filename);
-        LOG_INFO("Deserializing scene: " + filename);
         json sceneJson = json::parse(file);
-        LOG_INFO("sceneJson: " + sceneJson.dump(4));
         file.close();
         camera->SetPosition(glm::vec3(sceneJson["camera"]["position"]["x"], sceneJson["camera"]["position"]["y"],
                                       sceneJson["camera"]["position"]["z"]));
         camera->SetRotation(sceneJson["camera"]["rotation"]["rot"]);
 
-        LOG_DEBUG("Camera position: " + std::to_string(camera->GetPosition().x) + " " + std::to_string(camera->GetPosition().y) + " " + std::to_string(camera->GetPosition().z));
-        LOG_DEBUG("Camera rotation: " + std::to_string(camera->GetRotation()));
-
-        for (json entity: sceneJson["entities"])
+        for (json entity : sceneJson["entities"])
         {
             DeserializeEntity(*scene, entity);
         }

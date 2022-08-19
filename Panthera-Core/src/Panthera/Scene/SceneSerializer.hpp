@@ -8,8 +8,8 @@ namespace Panthera
     class SceneSerializer
     {
     public:
-        static void Serialize(Scene& scene, std::string filename);
-        static Scene* Deserialize(std::string filename);
+        static void Serialize(Scene& scene, const std::string &filename);
+        static Scene* Deserialize(const std::string& filename);
     private:
     };
 }

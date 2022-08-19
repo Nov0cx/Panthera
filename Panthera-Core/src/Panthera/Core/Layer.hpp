@@ -53,11 +53,11 @@ namespace Panthera
 
         ~LayerStack();
 
-        void OnUpdate(Timestep ts) const;
+        void OnUpdate(Timestep ts);
 
-        void OnEvent(Event &event) const;
+        void OnEvent(Event &event);
 
-        void OnImGuiUpdate() const;
+        void OnImGuiUpdate();
 
         uint16_t PushLayer(Ref <Layer> layer);
 
@@ -65,7 +65,7 @@ namespace Panthera
 
         Ref <Layer> GetLayer(uint16_t id);
 
-        inline const std::vector <Ref<Layer>> &GetStack() const
+        inline std::vector <Ref<Layer>> &GetStack()
         {
             return m_Layers;
         }

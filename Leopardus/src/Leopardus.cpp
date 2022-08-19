@@ -15,8 +15,7 @@ public:
             m_Scene = Panthera::SceneSerializer::Deserialize("scene.json");
             loadedScene = true;
             LOG_INFO("Scene loaded!");
-        }
-        else
+        } else
         {
             m_Scene = new Panthera::Scene(&m_CameraController.GetCamera());
         }
@@ -47,7 +46,8 @@ public:
             };
             m_FlowerTexture = Panthera::Texture2D::Create(spec2);
             Panthera::Texture2DSpecification spec3{
-                    .Path = Panthera::Application::GetInstance()->GetAssetPath("Panthera/Assets/Textures/form.jpg").c_str(),
+                    .Path = Panthera::Application::GetInstance()->GetAssetPath(
+                            "Panthera/Assets/Textures/form.jpg").c_str(),
                     .InternalFormat = Panthera::Texture2DInternalFormat::RGB8,
                     .DataFormat = Panthera::Texture2DDataFormat::RGB,
             };
@@ -102,7 +102,7 @@ public:
 private:
     Panthera::Ref <Panthera::Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
     Panthera::OrthographicCameraController m_CameraController;
-    Panthera::Scene* m_Scene;
+    Panthera::Scene *m_Scene;
     bool loadedScene = false;
 };
 
