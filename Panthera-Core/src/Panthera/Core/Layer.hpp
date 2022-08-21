@@ -25,6 +25,8 @@ namespace Panthera
 
         inline virtual void SetActive(bool active)
         {
+            if (m_IsActive == active) return;
+
             if (active) OnStart();
             else OnEnd();
 
@@ -43,7 +45,7 @@ namespace Panthera
     private:
         friend class LayerStack;
         uint16_t m_ID = 0;
-        bool m_IsActive = true;
+        bool m_IsActive = false;
     };
 
     class LayerStack

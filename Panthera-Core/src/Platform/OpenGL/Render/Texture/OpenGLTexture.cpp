@@ -105,6 +105,9 @@ namespace Panthera
 
             ASSERT(data, "Failed to load texture: '{}'", spec.Path);
 
+            m_Path = new char[strlen(spec.Path) + 1];
+            strcpy(const_cast<char*>(m_Path), spec.Path);
+
             m_Width = width;
             m_Height = height;
 
@@ -154,7 +157,6 @@ namespace Panthera
             stbi_image_free(data);
 
             m_IsLoaded = true;
-            m_Path = spec.Path;
         }
     }
 

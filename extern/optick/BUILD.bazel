@@ -1,0 +1,6 @@
+cc_library(
+    name = "optick",
+    srcs = ["emty.cpp"],
+    deps = ["@optick_lib//:optick"],
+    visibility = ["//visibility:public"],
+)

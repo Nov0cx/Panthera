@@ -23,8 +23,7 @@ public:
 
     ~LeopardusLayer()
     {
-        Panthera::SceneSerializer::Serialize(*m_Scene, "scene.json");
-        delete m_Scene;
+
     }
 
     virtual void OnStart() override
@@ -86,6 +85,9 @@ public:
 
     virtual void OnEnd() override
     {
+        LOG_INFO("Scene destroyed!");
+        Panthera::SceneSerializer::Serialize(*m_Scene, "scene.json");
+        delete m_Scene;
     }
 
     virtual void OnUpdate(Panthera::Timestep ts) override
@@ -112,7 +114,7 @@ public:
     Leopardus(const Panthera::AppProps &props) : Panthera::Application(props)
     {
         auto layer = Panthera::CreateRef<LeopardusLayer>();
-        GetLayerStack()->PushLayer(layer);
+        GetLayerStack()->PushLayout(layer);
     }
 };
 

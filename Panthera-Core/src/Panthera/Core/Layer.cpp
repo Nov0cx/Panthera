@@ -9,7 +9,7 @@ namespace Panthera
     {
         for (auto& layer : m_Layers)
         {
-            layer->OnEnd();
+            layer->SetActive(false);
         }
     }
 
@@ -53,7 +53,7 @@ namespace Panthera
 
         layer->m_ID = m_NextLayerID++;
 
-        layer->OnStart();
+        layer->SetActive(true);
 
         return layer->GetID();
     }
@@ -63,6 +63,7 @@ namespace Panthera
         m_Layers.push_back(layout);
 
         layout->m_ID = m_NextLayerID++;
+        layout->SetActive(true);
 
         return layout->GetID();
     }

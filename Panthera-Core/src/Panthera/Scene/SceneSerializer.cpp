@@ -174,7 +174,7 @@ namespace Panthera
         }
     }
 
-    static void DeserializeEntity(Scene &scene, json entity)
+    static SceneEntity DeserializeEntity(Scene &scene, json entity)
     {
         entity = entity[entity.begin().key()];
         SceneEntity sceneEntity = scene.CreateEntity(entity["uuid"].get<uint64_t>(),
@@ -203,6 +203,7 @@ namespace Panthera
                                     .Path = Application::GetInstance()->GetAssetPath(entity["components"]["quad"]["texture"]["path"].get<std::string>().c_str()).c_str(),
                             })
                                                                                                : nullptr);
+            LOG_INFO("has quad texture ? {}", sceneEntity.GetComponent<QuadComponent>().Texture != nullptr)
         }
 
         if (entity["components"].find("circle") != entity["components"].end())
@@ -220,6 +221,7 @@ namespace Panthera
                                     .Path = Application::GetInstance()->GetAssetPath(entity["components"]["circle"]["texture"]["path"].get<std::string>().c_str()).c_str(),
                             })
                                                                                                : nullptr);
+            LOG_INFO("has circle texture ? {}", sceneEntity.GetComponent<CircleComponent>().Texture != nullptr)
         }
 
         if (entity["components"].find("triangle") != entity["components"].end())
@@ -235,6 +237,7 @@ namespace Panthera
                                     .Path = Application::GetInstance()->GetAssetPath(entity["components"]["triangle"]["texture"]["path"].get<std::string>().c_str()).c_str(),
                             })
                                                                                                : nullptr);
+            LOG_INFO("has triangle texture ? {}", sceneEntity.GetComponent<TriangleComponent>().Texture != nullptr)
         }
 
         if (entity["components"].find("lineTransform") != entity["components"].end())
@@ -258,7 +261,7 @@ namespace Panthera
                     entity["components"]["line"]["thickness"]);
         }
 
-
+        return sceneEntity;
     }
 
     Scene *SceneSerializer::Deserialize(const std::string& filename)
@@ -276,7 +279,14 @@ namespace Panthera
 
         for (json entity : sceneJson["entities"])
         {
-            DeserializeEntity(*scene, entity);
+            auto sceneEntity = DeserializeEntity(*scene, entity);
+            /*LOG_INFO("Scene entity created: " + sceneEntity.GetComponent<NameComponent>().Name);
+            LOG_INFO("Has transform component: " + std::to_string(sceneEntity.HasComponent<TransformComponent>()));
+            LOG_INFO("Has quad component: " + std::to_string(sceneEntity.HasComponent<QuadComponent>()));
+            LOG_INFO("Has circle component: " + std::to_string(sceneEntity.HasComponent<CircleComponent>()));
+            LOG_INFO("Has triangle component: " + std::to_string(sceneEntity.HasComponent<TriangleComponent>()));
+            LOG_INFO("Has line transform component: " + std::to_string(sceneEntity.HasComponent<LineTransformComponent>()));
+            LOG_INFO("Has line component: " + std::to_string(sceneEntity.HasComponent<LineComponent>()));*/
         }
 
         return scene;

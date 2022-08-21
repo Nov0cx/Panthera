@@ -45,6 +45,7 @@ cc_library(
       "@com_github_ocornut_imgui//:imgui",
       "@com_github_skypjack_entt//:entt",
       "@com_github_nlohmann_json//:json",
+      "//extern/optick:optick",
     ],
     defines = select({
         ":debug": [

@@ -69,3 +69,6 @@ http_archive(
     strip_prefix = "json-3.11.2",
     urls = ["https://github.com/nlohmann/json/archive/v3.11.2.zip"],
 )
+
+load("//extern/optick:optick.bzl", "load_optick_lib")
+load_optick_lib()
