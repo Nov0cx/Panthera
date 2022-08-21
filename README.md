@@ -20,13 +20,13 @@ The script will open the Vulkan Installer there you have to download core and al
 <br/>
 Run:
 ```bash
-bazel run //vulkan:VulkanPackages
+bazel run //vulkan:Packages
 bazel run //vulkan:VulkanDownload
 ```
 
 Oneliner:
 ```bash
-git clone https://github.com/Nov0cx/Panthera.git && cd Panthera && bazel run //vulkan:VulkanPackages && bazel run //vulkan:VulkanDownload
+git clone https://github.com/Nov0cx/Panthera.git && cd Panthera && bazel run //vulkan:Packages && bazel run //vulkan:VulkanDownload && bazel run //extern:Optick
 ```
 
 # Build

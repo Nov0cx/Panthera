@@ -1,6 +1,6 @@
 py_binary(
-    name = "VulkanPackages",
-    srcs = ["VulkanPackages.py"]
+    name = "Packages",
+    srcs = ["Packages.py"]
 )
 
 py_library(
