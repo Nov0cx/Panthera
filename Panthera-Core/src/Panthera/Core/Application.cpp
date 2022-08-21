@@ -3,6 +3,7 @@
 #include "Log.hpp"
 #include <string>
 #include "Panthera/Render/Shader/Shader.hpp"
+#include "Profile.hpp"
 
 namespace Panthera
 {
@@ -55,7 +56,7 @@ namespace Panthera
     {
         while (p_Running)
         {
-
+            //PANTHERA_PROFILE_FRAME("Application::Run");
             float now = Time::GetSeconds();
             float delta = now - m_LastFrameTime;
             m_LastFrameTime = now;

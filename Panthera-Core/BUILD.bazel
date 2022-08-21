@@ -23,6 +23,7 @@ cc_library(
         "src/Platform/**/**/*.cpp",
         "src/Platform/**/**/**/*.cpp",
         "src/Vendor/stb/*.cpp",
+
     ]),
     hdrs = glob([
         "src/Panthera/*.hpp",
@@ -45,19 +46,16 @@ cc_library(
       "@com_github_ocornut_imgui//:imgui",
       "@com_github_skypjack_entt//:entt",
       "@com_github_nlohmann_json//:json",
-      "//extern/optick:optick",
+      #"//extern/optick:Optick",
     ],
-    defines = select({
-        ":debug": [
-            "PANTHERA_DEBUG",
-        ],
-        ":release": [
-            "PANTHERA_RELEASE",
-        ],
-        "//conditions:default": [
-            "PANTHERA_DEFAULT",
-        ],
-    }),
+    defines = [ "USE_OPTICK=1" ] + select({
+                                           ":debug":
+                                               ["PANTHERA_DEBUG"],
+                                           ":release":
+                                               ["PANTHERA_RELEASE"],
+                                           "//conditions:default":
+                                               ["PANTHERA_DEFAULT"],
+                                       }),
     visibility = ["//visibility:public"],
-    strip_include_prefix = "src"
+    strip_include_prefix = "src",
 )

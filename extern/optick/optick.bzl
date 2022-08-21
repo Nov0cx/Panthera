@@ -7,15 +7,32 @@ def _impl(ctx):
 
     buildfile = """
 cc_library(
-    name = "optick",
-    srcs = glob(["optick_path/src/*.cpp"]),
+    name = "optick_hdrs",
     hdrs = glob(["optick_path/src/*.h"]),
     defines = [
-        "OPTICK_ENABLE_GPU_VULKAN=0",
-        "OPTICK_ENABLE_GPU_D3D12=0",
+            "OPTICK_ENABLE_GPU_VULKAN=0",
+            "OPTICK_ENABLE_GPU_D3D12=0",
+            "OPTICK_LIB=1",
+            "OPTICK_EXPORTS",
     ],
     visibility = ["//visibility:public"],
     strip_include_prefix = "optick_path/src/",
+)
+
+cc_binary(
+    name =  "optick",
+    srcs = glob(["optick_path/src/*.cpp"]),
+
+    defines = [
+        "OPTICK_ENABLE_GPU_VULKAN=0",
+        "OPTICK_ENABLE_GPU_D3D12=0",
+        "OPTICK_LIB=1",
+        "OPTICK_EXPORTS",
+    ],
+    visibility = ["//visibility:public"],
+    linkshared = True,
+    deps = [":optick_hdrs"],
+    #strip_include_prefix = "optick_path/src/",
 )
     """
 

@@ -6,5 +6,6 @@ cc_binary(
     ],
     data = [
         "//Assets:Assets"
-    ]
+    ],
+    defines = [ "USE_OPTICK=1" ],
 )
