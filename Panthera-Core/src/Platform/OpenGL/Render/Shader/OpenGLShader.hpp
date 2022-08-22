@@ -32,9 +32,10 @@ namespace Panthera
 
         std::unordered_map<uint32_t, std::string> m_OpenGLSrc;
     private:
-        void CompileOrGetVulkanBinaryForOpenGL(std::vector<ShaderSrc>& srcs);
-        void CompileOrGetShaders();
+        void CompileVulkanShader(std::vector<ShaderSrc>& srcs);
+        void CompileShader();
         void CreateProgram();
+        void LoadShader(const std::string& path, uint32_t type, const std::string &src);
     };
 }
 

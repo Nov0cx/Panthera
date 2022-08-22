@@ -11,7 +11,6 @@
 
 #include <vector>
 #include <filesystem>
-//#include <istream>
 #include <sstream>
 #include <fstream>
 #include <string>
@@ -19,6 +18,80 @@
 
 namespace Panthera
 {
+
+    static const char *HASH_CACHE_FILE_NAME = "shader_cache.txt";
+
+    struct HashGroup
+    {
+        std::unordered_map <std::string, uint64_t> HashMap;
+
+
+
+        void Load()
+        {
+            std::ifstream file(HASH_CACHE_FILE_NAME);
+            if (file.is_open())
+            {
+                std::string line;
+                while (std::getline(file, line))
+                {
+                    std::stringstream ss(line);
+                    std::string key;
+                    uint64_t value;
+                    ss >> key >> value;
+                    HashMap[key] = value;
+                }
+                file.close();
+            }
+        }
+
+        void Save()
+        {
+            std::ofstream file(HASH_CACHE_FILE_NAME);
+            if (file.is_open())
+            {
+                for (auto&[key, value]: HashMap)
+                {
+                    file << key << " " << value << std::endl;
+                }
+                file.close();
+            }
+        }
+
+        bool HasHash(const std::string &name)
+        {
+            return HashMap.find(name) != HashMap.end();
+        }
+
+        uint64_t GetHash(const std::string &name)
+        {
+            return HashMap[name];
+        }
+
+        uint64_t InsertHash(const std::string &name, uint64_t hash)
+        {
+            HashMap[name] = hash;
+            return hash;
+        }
+
+        bool IsUpToDate(const std::string &name, const std::string &src)
+        {
+            if (!HasHash(name))
+            {
+                return false;
+            }
+
+            uint64_t hash = GetHash(name);
+            uint64_t newHash = std::hash < std::string > {}(src);
+
+            return hash == newHash;
+        }
+
+        static uint64_t CreateHash(const std::string &src)
+        {
+            return std::hash < std::string > {}(src);
+        }
+    };
 
     static const char *GLShaderTypeToString(GLenum type)
     {
@@ -116,9 +189,9 @@ namespace Panthera
         srcs.push_back({vertexSrc, GL_VERTEX_SHADER});
         srcs.push_back({fragmentSrc, GL_FRAGMENT_SHADER});
 
-        CompileOrGetVulkanBinaryForOpenGL(srcs);
+        CompileVulkanShader(srcs);
 
-        CompileOrGetShaders();
+        CompileShader();
 
         CreateProgram();
     }
@@ -209,6 +282,45 @@ namespace Panthera
         return srcs;
     }
 
+    std::vector<GLenum> GetShaderTypes(const std::string &src)
+    {
+        std::vector<GLenum> types = {};
+
+        std::stringstream ss(src);
+        std::string line;
+
+        while (std::getline(ss, line))
+        {
+            std::string lower = line;
+            std::transform(lower.begin(), lower.end(), lower.begin(),
+                           [](unsigned char c)
+                           { return std::tolower(c); });
+
+            if (lower.find("vertex") != std::string::npos && lower.find("shader") != std::string::npos)
+            {
+                types.push_back(GL_VERTEX_SHADER);
+            } else if ((lower.find("fragment") != std::string::npos && lower.find("shader") != std::string::npos) ||
+                       (lower.find("pixel") != std::string::npos && lower.find("shader") != std::string::npos))
+            {
+                types.push_back(GL_FRAGMENT_SHADER);
+            } else if (lower.find("geometry") != std::string::npos && lower.find("shader") != std::string::npos)
+            {
+                types.push_back(GL_GEOMETRY_SHADER);
+            } else if (lower.find("tess control") != std::string::npos && lower.find("shader") != std::string::npos)
+            {
+                types.push_back(GL_TESS_CONTROL_SHADER);
+            } else if (lower.find("tess evaluation") != std::string::npos && lower.find("shader") != std::string::npos)
+            {
+                types.push_back(GL_TESS_EVALUATION_SHADER);
+            } else if (lower.find("compute") != std::string::npos && lower.find("shader") != std::string::npos)
+            {
+                types.push_back(GL_COMPUTE_SHADER);
+            }
+        }
+
+        return types;
+    }
+
     OpenGLShader::OpenGLShader(const std::string &path)
     {
         std::filesystem::path filePath = path;
@@ -224,13 +336,36 @@ namespace Panthera
         std::stringstream buffer;
         buffer << file.rdbuf();
         file.close();
+        std::string src = buffer.str();
 
-        auto srcs = GetShaders(buffer.str());
+        HashGroup hashGroup;
+        hashGroup.Load();
 
-        CompileOrGetVulkanBinaryForOpenGL(srcs);
-        CompileOrGetShaders();
+        if (hashGroup.IsUpToDate(filePath.string(), src))
+        {
+            LOG_DEBUG("Shader is up to date, loading from cache")
+            auto shader = GetShaderTypes(src);
+            for (auto type : shader)
+            {
+                LOG_DEBUG("Loading shader: {}, type: {}", m_Name, GLShaderTypeToString(type))
+                LoadShader(filePath.string(), type, src);
+            }
+            CreateProgram();
+            hashGroup.Save();
+            return;
+        } else
+        {
+            LOG_DEBUG("Shader is out of date, recompiling")
+        }
+
+        auto srcs = GetShaders(src);
+
+        CompileVulkanShader(srcs);
+        CompileShader();
         CreateProgram();
 
+        hashGroup.InsertHash(filePath.string(), HashGroup::CreateHash(src));
+        hashGroup.Save();
     }
 
     void OpenGLShader::Bind() const
@@ -248,7 +383,7 @@ namespace Panthera
         return m_RendererID;
     }
 
-    void OpenGLShader::CompileOrGetVulkanBinaryForOpenGL(std::vector <ShaderSrc> &srcs)
+    void OpenGLShader::CompileVulkanShader(std::vector <ShaderSrc> &srcs)
     {
         std::filesystem::path cachePath = GetShaderCache();
 
@@ -263,46 +398,34 @@ namespace Panthera
         {
             std::filesystem::path cachedFilePath = cachePath / (m_Name + ".vulk" + GetCachedShaderExtension(src.type));
 
-            std::ifstream in(cachedFilePath, std::ios::binary | std::ios::in);
-            if (in.is_open())
+            shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv(src.src.c_str(),
+                                                                             GLShaderTypeToShaderC(src.type),
+                                                                             m_Name.c_str(), options);
+            if (result.GetCompilationStatus() != shaderc_compilation_status_success)
             {
-                in.seekg(0, std::ios::end);
-                auto length = in.tellg();
-                in.seekg(0, std::ios::beg);
+                LOG_ERROR("Failed to compile shader: {}, error: {}", m_Name, result.GetErrorMessage())
+                ASSERT(false, "Failed to compile shader: {}, error: {}", m_Name, result.GetErrorMessage())
+            }
 
+            m_VulkanBinary[src.type] = std::vector<uint32_t>(result.cbegin(), result.cend());
+
+            std::ofstream out(cachedFilePath, std::ios::binary | std::ios::out);
+            if (out.is_open())
+            {
                 auto &binary = m_VulkanBinary[src.type];
-                binary.resize(length / sizeof(uint32_t));
-                in.read(reinterpret_cast<char *>(binary.data()), length);
+                out.write(reinterpret_cast<char *>(binary.data()), binary.size() * sizeof(uint32_t));
+                out.flush();
+                out.close();
             } else
             {
-                shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv(src.src.c_str(),
-                                                                                 GLShaderTypeToShaderC(src.type),
-                                                                                 m_Name.c_str(), options);
-                if (result.GetCompilationStatus() != shaderc_compilation_status_success)
-                {
-                    LOG_ERROR("Failed to compile shader: {}, error: {}", m_Name, result.GetErrorMessage())
-                    ASSERT(false, "Failed to compile shader: {}, error: {}", m_Name, result.GetErrorMessage())
-                }
-
-                m_VulkanBinary[src.type] = std::vector<uint32_t>(result.cbegin(), result.cend());
-
-                std::ofstream out(cachedFilePath, std::ios::binary | std::ios::out);
-                if (out.is_open())
-                {
-                    auto &binary = m_VulkanBinary[src.type];
-                    out.write(reinterpret_cast<char *>(binary.data()), binary.size() * sizeof(uint32_t));
-                    out.flush();
-                    out.close();
-                } else
-                {
-                    ASSERT(false, "Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
-                           m_Name)
-                }
+                ASSERT(false, "Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
+                       m_Name)
             }
+
         }
     }
 
-    void OpenGLShader::CompileOrGetShaders()
+    void OpenGLShader::CompileShader()
     {
         shaderc::Compiler compiler;
         shaderc::CompileOptions options;
@@ -317,42 +440,30 @@ namespace Panthera
         {
             std::filesystem::path cachedFilePath = cachePath / (m_Name + GetCachedShaderExtension(type));
 
-            std::ifstream in(cachedFilePath, std::ios::binary | std::ios::in);
-            if (in.is_open())
-            {
-                in.seekg(0, std::ios::end);
-                auto length = in.tellg();
-                in.seekg(0, std::ios::beg);
+            spirv_cross::CompilerGLSL glslCompiler(spirvBinary);
+            m_OpenGLSrc[type] = glslCompiler.compile();
 
+            shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv(m_OpenGLSrc[type].c_str(),
+                                                                             GLShaderTypeToShaderC(type),
+                                                                             m_Name.c_str(), options);
+            ASSERT(result.GetCompilationStatus() == shaderc_compilation_status_success,
+                   "Failed to compile shader: {}", result.GetErrorMessage())
+
+            m_OpenGLBinary[type] = std::vector<uint32_t>(result.cbegin(), result.cend());
+
+            std::ofstream out(cachedFilePath, std::ios::binary | std::ios::out);
+            if (out.is_open())
+            {
                 auto &binary = m_OpenGLBinary[type];
-                binary.resize(length / sizeof(uint32_t));
-                in.read(reinterpret_cast<char *>(binary.data()), length);
+                out.write(reinterpret_cast<char *>(binary.data()), binary.size() * sizeof(uint32_t));
+                out.flush();
+                out.close();
             } else
             {
-                spirv_cross::CompilerGLSL glslCompiler(spirvBinary);
-                m_OpenGLSrc[type] = glslCompiler.compile();
-
-                shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv(m_OpenGLSrc[type].c_str(),
-                                                                                 GLShaderTypeToShaderC(type),
-                                                                                 m_Name.c_str(), options);
-                ASSERT(result.GetCompilationStatus() == shaderc_compilation_status_success,
-                       "Failed to compile shader: {}", result.GetErrorMessage())
-
-                m_OpenGLBinary[type] = std::vector<uint32_t>(result.cbegin(), result.cend());
-
-                std::ofstream out(cachedFilePath, std::ios::binary | std::ios::out);
-                if (out.is_open())
-                {
-                    auto &binary = m_OpenGLBinary[type];
-                    out.write(reinterpret_cast<char *>(binary.data()), binary.size() * sizeof(uint32_t));
-                    out.flush();
-                    out.close();
-                } else
-                {
-                    ASSERT(false, "Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
-                           m_Name)
-                }
+                ASSERT(false, "Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
+                       m_Name)
             }
+
         }
     }
 
@@ -387,8 +498,15 @@ namespace Panthera
             {
                 glDeleteShader(shader);
             }
-            LOG_ERROR("Failed to link shader: {}", infoLog.data())
-            ASSERT(false, "Failed to link shader program")
+            if (infoLog.size() > 0)
+            {
+                LOG_ERROR("Failed to link shader: {}, error: {}", m_Name, infoLog.data())
+                ASSERT(false, "Failed to link shader: {}, error: {}", m_Name, infoLog.data())
+            } else
+            {
+                LOG_ERROR("Failed to link shader: {}, error: {}", m_Name, "Unknown")
+                ASSERT(false, "Failed to link shader: {}, error: {}", m_Name, "Unknown")
+            }
         }
 
         for (auto shader: shaders)
@@ -398,5 +516,30 @@ namespace Panthera
         }
 
         m_RendererID = program;
+    }
+
+    void OpenGLShader::LoadShader(const std::string &path, uint32_t type, const std::string &src)
+    {
+
+        std::filesystem::path cachePath = GetShaderCache();
+        std::filesystem::path cachedFilePath = cachePath / (m_Name + GetCachedShaderExtension(type));
+
+        std::ifstream in(cachedFilePath, std::ios::binary | std::ios::in);
+        if (in.is_open())
+        {
+            in.seekg(0, std::ios::end);
+            auto length = in.tellg();
+            in.seekg(0, std::ios::beg);
+
+            auto &binary = m_OpenGLBinary[type];
+            binary.resize(length / sizeof(uint32_t));
+            in.read(reinterpret_cast<char *>(binary.data()), length);
+        }
+        else
+        {
+            LOG_ERROR("Failed to open file: '{}'. Cannot load shader '{}'. Recompiling...", cachedFilePath.string(), m_Name)
+            auto srcs = GetShaders(src);
+            CompileVulkanShader(srcs);
+        }
     }
 }
