@@ -47,7 +47,6 @@ cc_library(
       "@com_github_skypjack_entt//:entt",
       "@com_github_nlohmann_json//:json",
       #"//extern/optick:Optick",
-      "@com_github_bshoshany_thread_pool//:bs_thread_pool",
     ],
     defines = [ "USE_OPTICK=1", "GLM_ENABLE_EXPERIMENTAL" ] + select({
                                            ":debug":
