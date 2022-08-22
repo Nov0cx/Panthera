@@ -31,4 +31,9 @@ namespace Panthera
     {
         return GetComponent<IDComponent>().ID;
     }
+
+    std::string &SceneEntity::GetName()
+    {
+        return GetComponent<NameComponent>().Name;
+    }
 }

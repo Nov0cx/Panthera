@@ -7,14 +7,16 @@ class LeopardusLayer : public Panthera::Layer
 public:
     LeopardusLayer() : Panthera::Layer()
     {
-        m_CameraController = Panthera::OrthographicCameraController(1.33);
+        auto app = Panthera::Application::GetInstance();
+        float aspectRatio = (float)app->GetWindow()->GetWidth() / (float)app->GetWindow()->GetHeight();
+        m_CameraController = Panthera::OrthographicCameraController(aspectRatio);
         std::fstream scene = std::fstream("scene.json", std::ios::in);
         if (scene.is_open())
         {
-            LOG_INFO("Scene file found!");
+            LOG_DEBUG("Scene file found!")
             m_Scene = Panthera::SceneSerializer::Deserialize("scene.json");
             loadedScene = true;
-            LOG_INFO("Scene loaded!");
+            LOG_DEBUG("Scene loaded!")
         } else
         {
             m_Scene = new Panthera::Scene(&m_CameraController.GetCamera());
@@ -85,7 +87,7 @@ public:
 
     virtual void OnEnd() override
     {
-        LOG_INFO("Scene destroyed!");
+        LOG_DEBUG("Scene destroyed!")
         Panthera::SceneSerializer::Serialize(*m_Scene, "scene.json");
         delete m_Scene;
     }

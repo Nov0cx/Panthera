@@ -39,7 +39,7 @@ namespace Panthera
 
         struct WindowInfo
         {
-            uint32_t Height, Width;
+            uint32_t Width, Height;
             std::string Name;
             bool VSync;
         } m_Info;

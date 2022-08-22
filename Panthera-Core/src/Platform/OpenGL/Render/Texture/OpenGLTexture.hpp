@@ -24,6 +24,11 @@ namespace Panthera
 
         bool operator==(const Texture2D& other) const override;
 
+        virtual Texture2DFilter GetFilter() const override;
+        virtual Texture2DInternalFormat GetInternalFormat() const override;
+        virtual Texture2DDataFormat GetDataFormat() const override;
+        virtual Texture2DWrapping GetWrapping() const override;
+
         const char* GetPath() const override;
     private:
         RendererID m_RendererID;
@@ -32,6 +37,10 @@ namespace Panthera
         uint32_t m_CurrentSlot = 0;
         uint32_t m_Format, m_DataFormat;
         const char* m_Path;
+        Texture2DFilter m_Filter;
+        Texture2DInternalFormat m_InternalFormatEnum;
+        Texture2DDataFormat m_DataFormatEnum;
+        Texture2DWrapping m_Wrapping;
     };
 }
 

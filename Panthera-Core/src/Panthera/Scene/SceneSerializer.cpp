@@ -52,6 +52,16 @@ namespace Panthera
             };
         }
 
+#define SERIALIZE_TEXTURE(component) \
+        {"texture", {                \
+        {"path", component.Texture ? component.Texture->GetPath() : ""}, \
+        {"internalformat", component.Texture ? Texture2DInternalFormatToString(component.Texture->GetInternalFormat()) : ""},\
+        {"dataformat", component.Texture ? Texture2DDataFormatToString(component.Texture->GetDataFormat()) : ""}, \
+        {"filter", component.Texture ? Texture2DFilterToString(component.Texture->GetFilter()) : ""}, \
+        {"wrapping", component.Texture ? Texture2DWrappingToString(component.Texture->GetWrapping()) : ""}                             \
+        }                            \
+        }
+
         if (entity.HasComponent<QuadComponent>())
         {
             QuadComponent quad = entity.GetComponent<QuadComponent>();
@@ -63,10 +73,7 @@ namespace Panthera
                                         {"a", quad.Color.a}
                                 }},
                     {"tiling",  quad.Tiling},
-                    {"texture", {
-                                        {"path", quad.Texture ? quad.Texture->GetPath() : ""},
-                                }
-                    }
+                    SERIALIZE_TEXTURE(quad)
             };
         }
 
@@ -83,10 +90,7 @@ namespace Panthera
                     {"borderThickness", circle.BorderThickness},
                     {"fade",            circle.Fade},
                     {"tiling",          circle.Tiling},
-                    {"texture",         {
-                                                {"path", circle.Texture ? circle.Texture->GetPath() : ""},
-                                        }
-                    }
+                    SERIALIZE_TEXTURE(circle)
             };
         }
 
@@ -101,10 +105,7 @@ namespace Panthera
                                         {"a", triangle.Color.a}
                                 }},
                     {"tiling",  triangle.Tiling},
-                    {"texture", {
-                                        {"path", triangle.Texture ? triangle.Texture->GetPath() : ""},
-                                }
-                    }
+                    SERIALIZE_TEXTURE(triangle)
             };
         }
 
@@ -165,7 +166,7 @@ namespace Panthera
         std::ofstream o(filename);
         if (o.is_open())
         {
-            o << sceneJson.dump(4);
+            o << sceneJson.dump();
             o.close();
         }
         else
@@ -190,54 +191,43 @@ namespace Panthera
                               entity["components"]["transform"]["scale"]["z"]));
         }
 
+#define DESERIALIZE_TEXTURE(component, json_) \
+        Texture2DSpecification {       \
+        .Path = json_["components"][component]["texture"]["path"].get<std::string>().c_str(), \
+        .InternalFormat = StringToTexture2DInternalFormat(json_["components"][component]["texture"]["internalformat"].get<std::string>()), \
+        .DataFormat = \
+                StringToTexture2DDataFormat(json_["components"][component]["texture"]["dataformat"].get<std::string>()), \
+        .Filter = StringToTexture2DFilter(json_["components"][component]["texture"]["filter"].get<std::string>()), \
+        .Wrapping = Texture2DWrappingFromString(json_["components"][component]["texture"]["wrapping"].get<std::string>()) \
+        }
+
         if (entity["components"].find("quad") != entity["components"].end())
         {
             sceneEntity.CreateComponent<QuadComponent>(
-                    glm::vec4(entity["components"]["quad"]["color"]["r"],
-                              entity["components"]["quad"]["color"]["g"],
-                              entity["components"]["quad"]["color"]["b"],
-                              entity["components"]["quad"]["color"]["a"]),
-                    entity["components"]["quad"]["tiling"],
-                    entity["components"]["quad"]["texture"]["path"].get<std::string>() != "" ? Texture2D::Create(
-                            Texture2DSpecification{
-                                    .Path = Application::GetInstance()->GetAssetPath(entity["components"]["quad"]["texture"]["path"].get<std::string>().c_str()).c_str(),
-                            })
-                                                                                               : nullptr);
-            LOG_INFO("has quad texture ? {}", sceneEntity.GetComponent<QuadComponent>().Texture != nullptr)
+                    glm::vec4(entity["components"]["quad"]["color"]["r"], entity["components"]["quad"]["color"]["g"],
+                              entity["components"]["quad"]["color"]["b"], entity["components"]["quad"]["color"]["a"]),
+                    entity["components"]["quad"]["tiling"].get<float>(),
+                    Texture2D::Create(DESERIALIZE_TEXTURE("quad", entity)));
         }
 
         if (entity["components"].find("circle") != entity["components"].end())
         {
             sceneEntity.CreateComponent<CircleComponent>(
-                    glm::vec4(entity["components"]["circle"]["color"]["r"],
-                              entity["components"]["circle"]["color"]["g"],
-                              entity["components"]["circle"]["color"]["b"],
-                              entity["components"]["circle"]["color"]["a"]),
-                    entity["components"]["circle"]["borderThickness"],
-                    entity["components"]["circle"]["fade"],
-                    entity["components"]["circle"]["tiling"],
-                    entity["components"]["circle"]["texture"]["path"].get<std::string>() != "" ? Texture2D::Create(
-                            Texture2DSpecification{
-                                    .Path = Application::GetInstance()->GetAssetPath(entity["components"]["circle"]["texture"]["path"].get<std::string>().c_str()).c_str(),
-                            })
-                                                                                               : nullptr);
-            LOG_INFO("has circle texture ? {}", sceneEntity.GetComponent<CircleComponent>().Texture != nullptr)
+                    glm::vec4(entity["components"]["circle"]["color"]["r"], entity["components"]["circle"]["color"]["g"],
+                              entity["components"]["circle"]["color"]["b"], entity["components"]["circle"]["color"]["a"]),
+                    entity["components"]["circle"]["borderThickness"].get<float>(),
+                    entity["components"]["circle"]["fade"].get<float>(),
+                    entity["components"]["circle"]["tiling"].get<float>(),
+                    Texture2D::Create(DESERIALIZE_TEXTURE("circle", entity)));
         }
 
         if (entity["components"].find("triangle") != entity["components"].end())
         {
             sceneEntity.CreateComponent<TriangleComponent>(
-                    glm::vec4(entity["components"]["triangle"]["color"]["r"],
-                              entity["components"]["triangle"]["color"]["g"],
-                              entity["components"]["triangle"]["color"]["b"],
-                              entity["components"]["triangle"]["color"]["a"]),
-                    entity["components"]["triangle"]["tiling"],
-                    entity["components"]["triangle"]["texture"]["path"].get<std::string>() != "" ? Texture2D::Create(
-                            Texture2DSpecification{
-                                    .Path = Application::GetInstance()->GetAssetPath(entity["components"]["triangle"]["texture"]["path"].get<std::string>().c_str()).c_str(),
-                            })
-                                                                                               : nullptr);
-            LOG_INFO("has triangle texture ? {}", sceneEntity.GetComponent<TriangleComponent>().Texture != nullptr)
+                    glm::vec4(entity["components"]["triangle"]["color"]["r"], entity["components"]["triangle"]["color"]["g"],
+                              entity["components"]["triangle"]["color"]["b"], entity["components"]["triangle"]["color"]["a"]),
+                    entity["components"]["triangle"]["tiling"].get<float>(),
+                    Texture2D::Create(DESERIALIZE_TEXTURE("triangle", entity)));
         }
 
         if (entity["components"].find("lineTransform") != entity["components"].end())
@@ -266,7 +256,9 @@ namespace Panthera
 
     Scene *SceneSerializer::Deserialize(const std::string& filename)
     {
-        OrthographicCamera *camera = new OrthographicCamera();
+        auto app = Application::GetInstance();
+        float aspectRatio = (float)app->GetWindowWidth() / (float)app->GetWindowHeight();
+        OrthographicCamera *camera = new OrthographicCamera(-aspectRatio, aspectRatio, -1.0f, 1.0f);
         Scene *scene = new Scene(camera);
 
         std::ifstream file(filename);

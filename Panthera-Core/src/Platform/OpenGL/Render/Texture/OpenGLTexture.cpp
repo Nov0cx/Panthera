@@ -158,6 +158,10 @@ namespace Panthera
 
             m_IsLoaded = true;
         }
+        m_Filter = spec.Filter;
+        m_Wrapping = spec.Wrapping;
+        m_InternalFormatEnum = spec.InternalFormat;
+        m_DataFormatEnum = spec.DataFormat;
     }
 
     OpenGLTexture2D::~OpenGLTexture2D()
@@ -228,5 +232,25 @@ namespace Panthera
     const char *OpenGLTexture2D::GetPath() const
     {
         return m_Path;
+    }
+
+    Texture2DFilter OpenGLTexture2D::GetFilter() const
+    {
+        return m_Filter;
+    }
+
+    Texture2DInternalFormat OpenGLTexture2D::GetInternalFormat() const
+    {
+        return m_InternalFormatEnum;
+    }
+
+    Texture2DDataFormat OpenGLTexture2D::GetDataFormat() const
+    {
+        return m_DataFormatEnum;
+    }
+
+    Texture2DWrapping OpenGLTexture2D::GetWrapping() const
+    {
+        return m_Wrapping;
     }
 }

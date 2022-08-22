@@ -4,6 +4,7 @@
 #include "Components.hpp"
 #include "SceneSerializer.hpp"
 #include "Panthera/Core/Log.hpp"
+#include <glm/gtx/string_cast.hpp>
 
 namespace Panthera
 {

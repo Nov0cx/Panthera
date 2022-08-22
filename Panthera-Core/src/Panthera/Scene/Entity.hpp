@@ -5,6 +5,7 @@
 #include "Scene.hpp"
 #include "Panthera/Core/Log.hpp"
 #include "UUID.hpp"
+#include <string>
 
 namespace Panthera
 {
@@ -69,6 +70,7 @@ namespace Panthera
         entt::entity GetEntity();
         operator entt::entity();
 
+        std::string& GetName();
         UUID GetUUID();
     private:
         entt::entity m_Entity;
