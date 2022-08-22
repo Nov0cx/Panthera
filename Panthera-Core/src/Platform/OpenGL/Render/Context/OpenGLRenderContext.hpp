@@ -1,7 +1,7 @@
 #ifndef PANTHERA_OPENGLRENDERCONTEXT_HPP
 #define PANTHERA_OPENGLRENDERCONTEXT_HPP
 
-#include "Panthera/Window/RenderContext.hpp"
+#include "Panthera/Render/Context/RenderContext.hpp"
 #include "Panthera/Window/Window.hpp"
 #include "Panthera/Core/Pointer.hpp"
 

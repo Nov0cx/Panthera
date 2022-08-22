@@ -1,6 +1,6 @@
 #include "RenderContext.hpp"
 
-#include "Platform/OpenGL/Window/OpenGLRenderContext.hpp"
+#include "Platform/OpenGL/Render/Context/OpenGLRenderContext.hpp"
 
 #include "Panthera/Render/Renderer.hpp"
 #include "Panthera/Core/Log.hpp"

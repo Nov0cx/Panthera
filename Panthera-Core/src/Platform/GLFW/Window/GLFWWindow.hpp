@@ -4,7 +4,7 @@
 #include "Panthera/Window/Window.hpp"
 #include "Panthera/Render/Renderer.hpp"
 
-#include "Panthera/Window/RenderContext.hpp"
+#include "Panthera/Render/Context/RenderContext.hpp"
 
 // fwd
 typedef struct GLFWwindow GLFWwindow;
