@@ -44,12 +44,16 @@ namespace Panthera
             _LOG_CRITICAL(__VA_ARGS__);\
             exit(-1);                        \
         }
+#define FAIL(...) \
+        _LOG_CRITICAL("Fatal error at line {} in file {}.", __LINE__, __FILE__); \
+        exit(-1);
 #else
 #define LOG_TRACE(...) ;
 #define LOG_INFO(...) ;
 #define LOG_WARN(...) ;
 #define LOG_ERROR(...) ;
 #define ASSERT(condition, ...) condition;
+#define FAIL(...) LOG_ERROR(__VA_ARGS__);
 #endif
 
 #endif
