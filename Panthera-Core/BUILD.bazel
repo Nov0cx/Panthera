@@ -48,7 +48,7 @@ cc_library(
       "@com_github_nlohmann_json//:json",
       #"//extern/optick:Optick",
     ],
-    defines = [ "USE_OPTICK=1" ] + select({
+    defines = [ "USE_OPTICK=1", "GLM_ENABLE_EXPERIMENTAL" ] + select({
                                            ":debug":
                                                ["PANTHERA_DEBUG"],
                                            ":release":
