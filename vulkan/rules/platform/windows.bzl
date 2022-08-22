@@ -17,11 +17,11 @@ def _impl(repository_ctx):
 cc_library(
     name = "vulkan_cc_library",
     srcs = ["vulkan_sdk_windows/Lib/vulkan-1.lib",
-            "vulkan_sdk_windows/Lib/VkLayer_utils.lib",
-            "vulkan_sdk_windows/Lib/shaderc_shared.lib",
-            "vulkan_sdk_windows/Lib/spirv-cross-core.lib",
-            "vulkan_sdk_windows/Lib/spirv-cross-glsl.lib",
-            ],
+                    "vulkan_sdk_windows/Lib/VkLayer_utils.lib",
+                    "vulkan_sdk_windows/Lib/shaderc_shared.lib",
+                    "vulkan_sdk_windows/Lib/spirv-cross-core.lib",
+                    "vulkan_sdk_windows/Lib/spirv-cross-glsl.lib",
+           ],
     hdrs = glob([
         "vulkan_sdk_windows/Include/**/*.h",
         "vulkan_sdk_windows/Include/**/*.hpp",
