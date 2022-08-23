@@ -27,7 +27,10 @@ namespace Panthera
         p_WindowCount++;
 
         m_Window = glfwCreateWindow(width, height, title, nullptr, nullptr);
-        ASSERT(m_Window, "Failed to create GLFW window!")
+        if (!m_Window)
+        {
+            FAIL("Failed to create GLFW window!")
+        }
 
         m_Context = RenderContext::Create(m_Window);
         m_Context->MakeContext();

@@ -110,6 +110,7 @@ namespace Panthera
             case GL_COMPUTE_SHADER:
                 return "GL_COMPUTE_SHADER";
             default:
+                FAIL("Unknown shader type!");
                 return "Unknown";
         }
     }
@@ -151,8 +152,10 @@ namespace Panthera
             case GL_COMPUTE_SHADER:
                 return ".cached.comp";
             default:
-                ASSERT(false, "Unknown Shader Type! {}", (int) type)
+                FAIL("Unknown Shader Type! {}", (int) type)
         }
+
+        return 0;
     }
 
     static shaderc_shader_kind GLShaderTypeToShaderC(GLenum type)
@@ -174,7 +177,8 @@ namespace Panthera
             default:
                 ASSERT(false, "Unknown Shader Type! {}", (int) type)
         }
-        ASSERT(false, "Unknown Shader Stage! {}", (int) type)
+        FAIL("Unknown Shader Stage! {}", (int) type)
+        return shaderc_glsl_vertex_shader;
     }
 
 
@@ -404,7 +408,7 @@ namespace Panthera
             if (result.GetCompilationStatus() != shaderc_compilation_status_success)
             {
                 LOG_ERROR("Failed to compile shader: {}, error: {}", m_Name, result.GetErrorMessage())
-                ASSERT(false, "Failed to compile shader: {}, error: {}", m_Name, result.GetErrorMessage())
+                FAIL("")
             }
 
             m_VulkanBinary[src.type] = std::vector<uint32_t>(result.cbegin(), result.cend());
@@ -418,7 +422,7 @@ namespace Panthera
                 out.close();
             } else
             {
-                ASSERT(false, "Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
+                FAIL("Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
                        m_Name)
             }
 
@@ -460,7 +464,7 @@ namespace Panthera
                 out.close();
             } else
             {
-                ASSERT(false, "Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
+                FAIL("Failed to open file: '{}'. Cannot create shader '{}'", cachedFilePath.string(),
                        m_Name)
             }
 
@@ -501,11 +505,11 @@ namespace Panthera
             if (infoLog.size() > 0)
             {
                 LOG_ERROR("Failed to link shader: {}, error: {}", m_Name, infoLog.data())
-                ASSERT(false, "Failed to link shader: {}, error: {}", m_Name, infoLog.data())
+                FAIL("")
             } else
             {
                 LOG_ERROR("Failed to link shader: {}, error: {}", m_Name, "Unknown")
-                ASSERT(false, "Failed to link shader: {}, error: {}", m_Name, "Unknown")
+                FAIL("")
             }
         }
 

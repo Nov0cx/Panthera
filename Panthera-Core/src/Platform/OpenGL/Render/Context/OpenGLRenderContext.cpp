@@ -26,7 +26,7 @@ namespace Panthera
             if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
             {
                 glfwTerminate();
-                ASSERT(false, "Failed to initialize GLAD!");
+                FAIL("Failed to initialize GLAD!");
             }
             s_GladInitialized = true;
             if (GLAD_GL_VERSION_4_6)
@@ -35,7 +35,7 @@ namespace Panthera
             }
             else
             {
-                ASSERT(false, "OpenGL 4.6 is not supported!")
+                FAIL("OpenGL 4.6 is not supported!")
             }
 
             LOG_DEBUG("OpenGL Version: {}", (char *) glGetString(GL_VERSION));

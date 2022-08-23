@@ -72,11 +72,3 @@ http_archive(
 
 load("//extern/optick:optick.bzl", "load_optick_lib")
 load_optick_lib()
-
-http_archive(
-    name = "com_github_bshoshany_thread_pool",
-    build_file = "//extern:bsthreadpool.BUILD",
-    sha256 = "23b603b38aa4b4dbb0baafde2c1ef16a2ac16a7a105efdd10ecb8db1e89f0555",
-    strip_prefix = "thread-pool-3.3.0",
-    urls = ["https://github.com/bshoshany/thread-pool/archive/v3.3.0.zip"],
-)
