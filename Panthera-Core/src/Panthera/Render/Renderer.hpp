@@ -7,6 +7,7 @@
 #include "Texture/Texture.hpp"
 #include "Shader/Shader.hpp"
 #include "Camera/OrthographicCamera.hpp"
+#include "Framebuffer/Framebuffer.hpp"
 
 namespace Panthera
 {
@@ -72,6 +73,7 @@ namespace Panthera
         virtual void BeginScene(OrthographicCamera &camera) = 0;
         virtual void EndScene() = 0;
         virtual void Flush() = 0;
+        virtual Ref<Framebuffer> GetFramebuffer() = 0;
 
     };
 }

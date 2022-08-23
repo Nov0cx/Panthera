@@ -55,6 +55,7 @@ namespace Panthera
         virtual void BeginScene(OrthographicCamera &camera) override;
         virtual void EndScene() override;
         virtual void Flush() override;
+        virtual Ref<Framebuffer> GetFramebuffer() override;
 
     private:
         RendererData *m_Data = nullptr;

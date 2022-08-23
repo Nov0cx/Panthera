@@ -24,6 +24,7 @@ namespace Panthera
 
         void OnUpdate(Timestep ts);
         void OnEvent(Event& e);
+        void OnImGuiRender();
 
         SceneEntity CreateEntity(const char* name);
         SceneEntity CreateEntity(UUID uuid, const char* name);

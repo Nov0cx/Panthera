@@ -407,34 +407,32 @@ namespace Panthera
         m_Data->TextureIndex = 1;
     }
 
-    void OpenGLRenderer::BeginScene()
+    static void sBeginScene(RendererData *data, const glm::mat4& projectionMatrix)
     {
-        m_Data->QuadIndicesCount = 0;
-        m_Data->QuadVerticesCount = 0;
-        m_Data->TextureIndex = 1;
-
-        glm::mat4 identity = glm::mat4(1.0f);
-        s_CameraUniformBuffer->SetData(&identity, sizeof(glm::mat4));
-
+        data->QuadIndicesCount = 0;
+        data->QuadVerticesCount = 0;
+        data->TextureIndex = 1;
+        s_CameraUniformBuffer->SetData(&projectionMatrix, sizeof(glm::mat4));
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        data->Framebuffer->Bind();
+    }
+
+    void OpenGLRenderer::BeginScene()
+    {
+        static glm::mat4 identity = glm::mat4(1.0f);
+        sBeginScene(m_Data, identity);
     }
 
     void OpenGLRenderer::BeginScene(OrthographicCamera &camera)
     {
-        m_Data->QuadIndicesCount = 0;
-        m_Data->QuadVerticesCount = 0;
-        m_Data->TextureIndex = 1;
-
-        s_CameraUniformBuffer->SetData(&camera.GetViewProjectionMatrix(), sizeof(glm::mat4));
-
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        sBeginScene(m_Data, camera.GetProjectionMatrix());
     }
 
     void OpenGLRenderer::EndScene()
     {
         Flush();
+        m_Data->Framebuffer->Unbind();
     }
 
     void OpenGLRenderer::Clear(glm::vec4 color)
@@ -890,6 +888,11 @@ namespace Panthera
         }
 //
         m_Data->LineIndicesCount += 6;
+    }
+
+    Ref <Framebuffer> OpenGLRenderer::GetFramebuffer()
+    {
+        return m_Data->Framebuffer;
     }
 
 }
