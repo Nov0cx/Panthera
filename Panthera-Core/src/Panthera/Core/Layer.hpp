@@ -11,7 +11,6 @@ namespace Panthera
 {
     class LayerStack;
 
-    // from my old engine
     class Layer
     {
     public:
