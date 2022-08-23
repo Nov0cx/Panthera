@@ -1,8 +1,17 @@
+cc_library(
+    name = "LeopardusSrc",
+    srcs = ["src/LeopardusLayer.cpp"],
+    hdrs = ["src/LeopardusLayer.hpp"],
+    deps = ["//Panthera-Core:Panthera-Core",],
+    strip_include_prefix = "src",
+)
+
 cc_binary(
     name = "Leopardus",
     srcs = ["src/Leopardus.cpp"],
     deps = [
-        "//Panthera-Core:Panthera-Core"
+        "//Panthera-Core:Panthera-Core",
+        ":LeopardusSrc"
     ],
     data = [
         "//Assets:Assets"

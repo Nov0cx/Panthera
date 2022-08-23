@@ -5,10 +5,11 @@
 
 namespace Panthera
 {
-    class Leoparuds : public Layer
+    class LeoparudsLayer : public Layer
     {
     public:
-        Leoparuds() : Layer();
+        LeoparudsLayer();
+        ~LeoparudsLayer();
 
         virtual void OnStart() override;
 
@@ -19,9 +20,9 @@ namespace Panthera
         virtual void OnEvent(Panthera::Event &e) override;
 
     private:
-        Panthera::Ref <Panthera::Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
-        Panthera::OrthographicCameraController m_CameraController;
-        Panthera::Scene *m_Scene;
+        Ref <Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
+        OrthographicCameraController m_CameraController;
+        Scene *m_Scene;
         bool loadedScene = false;
     };
 }
