@@ -19,6 +19,8 @@ namespace Panthera
 
         virtual void OnEvent(Panthera::Event &e) override;
 
+        virtual void OnImGuiRender() override;
+
     private:
         Ref <Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
         OrthographicCameraController m_CameraController;

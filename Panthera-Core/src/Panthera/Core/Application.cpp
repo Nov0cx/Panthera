@@ -32,6 +32,7 @@ namespace Panthera
         {
             layer->SetActive(false);
         }
+        m_ImGuiLayer->OnEnd();
     }
 
     void Application::Init(const AppProps &props)
@@ -50,6 +51,8 @@ namespace Panthera
         std::string error;
         m_Runfiles = Runfiles::Create(props.Args[0], &error);
         ASSERT(m_Runfiles != nullptr, "Failed to create runfiles: {}", error)
+        m_ImGuiLayer = new ImGuiLayer();
+        m_ImGuiLayer->OnStart();
     }
 
     void Application::Run()
@@ -67,9 +70,10 @@ namespace Panthera
             if (!m_Minimized)
                 m_LayerStack.OnUpdate(m_Timestep);
 
-            /*
-            m_LayerStack.OnImGuiUpdate()
-             */
+            m_ImGuiLayer->Begin();
+            m_LayerStack.OnImGuiUpdate();
+            m_ImGuiLayer->End();
+
             if (!m_Minimized)
                 m_Window->OnUpdate();
         }

@@ -19,7 +19,7 @@ namespace Panthera
         virtual void OnUpdate(Timestep ts) = 0;
 
         virtual void OnEvent(Event& event) = 0;
-        //virtual void OnImGuiRender() = 0;
+        virtual void OnImGuiRender() {};
         virtual void OnEnd() = 0;
 
         inline virtual void SetActive(bool active)

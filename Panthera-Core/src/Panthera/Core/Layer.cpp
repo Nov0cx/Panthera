@@ -41,7 +41,7 @@ namespace Panthera
         {
             if (layer->IsActive())
             {
-                //layer->OnImGuiRender();
+                layer->OnImGuiRender();
             }
         }
     }

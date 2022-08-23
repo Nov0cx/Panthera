@@ -37,6 +37,8 @@
 #include "Scene/Components.hpp"
 #include "Scene/UUID.hpp"
 
+#include "GUI/ImGuiLayer.hpp"
+
 #include <glm/glm.hpp>
 
 #endif //PANTHERA_PANTHERA_HPP

@@ -9,6 +9,7 @@
 #include "Timestep.hpp"
 #include "Panthera/Utils/Time.hpp"
 #include "Panthera/Events/WindowEvents.hpp"
+#include "Panthera/GUI/ImGuiLayer.hpp"
 
 #include "tools/cpp/runfiles/runfiles.h"
 using bazel::tools::cpp::runfiles::Runfiles;
@@ -89,6 +90,7 @@ namespace Panthera
         Timestep m_Timestep;
         float m_LastFrameTime;
         bool m_Minimized = false;
+        ImGuiLayer *m_ImGuiLayer;
     };
 }
 
