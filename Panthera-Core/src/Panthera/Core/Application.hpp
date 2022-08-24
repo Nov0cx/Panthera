@@ -66,6 +66,10 @@ namespace Panthera
         // yeah a little mess because of Bazel
         std::string GetAssetPath(const char* filepath);
 
+        std::string &GetExePath();
+        void SetExePath(const std::string &path);
+        void SetIniPath(const std::string &path);
+
         LayerStack *GetLayerStack();
 
         uint32_t GetWindowWidth();
@@ -91,6 +95,7 @@ namespace Panthera
         float m_LastFrameTime;
         bool m_Minimized = false;
         ImGuiLayer *m_ImGuiLayer;
+        std::string m_ExePath;
     };
 }
 

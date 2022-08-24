@@ -4,6 +4,7 @@
 #include <string>
 #include "Panthera/Render/Shader/Shader.hpp"
 #include "Profile.hpp"
+#include <filesystem>
 
 namespace Panthera
 {
@@ -48,9 +49,15 @@ namespace Panthera
         );
         m_Window = Window::Create(windowProps);
 
+        LOG_DEBUG("Arg 0 = {}", m_Args[0]);
+        m_ExePath = std::filesystem::path(m_Args[0]).parent_path().string();
+        LOG_DEBUG("Exe path: {}", m_ExePath)
+
         std::string error;
         m_Runfiles = Runfiles::Create(props.Args[0], &error);
         ASSERT(m_Runfiles != nullptr, "Failed to create runfiles: {}", error)
+
+
         m_ImGuiLayer = new ImGuiLayer();
         m_ImGuiLayer->OnStart();
     }
@@ -121,6 +128,21 @@ namespace Panthera
     Ref<Window> &Application::GetWindow()
     {
         return m_Window;
+    }
+
+    std::string &Application::GetExePath()
+    {
+        return m_ExePath;
+    }
+
+    void Application::SetExePath(const std::string &path)
+    {
+        m_ExePath = path;
+    }
+
+    void Application::SetIniPath(const std::string &path)
+    {
+        m_ImGuiLayer->SetIniPath(path);
     }
 
 

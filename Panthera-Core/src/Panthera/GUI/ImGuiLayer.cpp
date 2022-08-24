@@ -2,8 +2,10 @@
 
 #include "Panthera/Render/Renderer.hpp"
 #include "Panthera/Core/Log.hpp"
+#include "Panthera/Core/Application.hpp"
 
 #include "Platform/OpenGL/GUI/OpenGLImGui.hpp"
+#include <cstring>
 
 namespace Panthera
 {
@@ -36,7 +38,13 @@ namespace Panthera
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();
-        (void) io;
+
+        const char* path = (Application::GetInstance()->GetAssetPath("Panthera/Assets/GUI/imgui.ini")).c_str();;
+        char* heapPath = new char[strlen(path) + 1];
+        strcpy(heapPath, path);
+        io.IniFilename =  heapPath;
+        LOG_INFO("ImGui IniFilename: {}", io.IniFilename);
+
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -61,6 +69,7 @@ namespace Panthera
     void ImGuiLayer::OnEnd()
     {
         m_ImGuiHelper->OnEnd();
+        ImGuiIO &io = ImGui::GetIO();
         ImGui::DestroyContext();
     }
 
@@ -84,5 +93,10 @@ namespace Panthera
     {
         ImGui::Render();
         m_ImGuiHelper->End();
+    }
+
+    void ImGuiLayer::SetIniPath(const std::string &path)
+    {
+        ImGui::GetIO().IniFilename = (path + "/imgui.ini").c_str();
     }
 }

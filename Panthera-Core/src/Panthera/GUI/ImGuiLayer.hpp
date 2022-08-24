@@ -22,6 +22,7 @@ namespace Panthera
         void Begin();
         void End();
 
+        void SetIniPath(const std::string& path);
     private:
         ImGuiHelper *m_ImGuiHelper;
     };
