@@ -39,7 +39,8 @@ namespace Panthera
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();
 
-        const char* path = (Application::GetInstance()->GetAssetPath("Panthera/Assets/GUI/imgui.ini")).c_str();;
+        const char* path = (Application::GetInstance()->GetAssetPath("Panthera/Assets/GUI/imgui.ini")).c_str();
+        LOG_INFO("Loading ImGui settings from {}", path);
         char* heapPath = new char[strlen(path) + 1];
         strcpy(heapPath, path);
         io.IniFilename =  heapPath;

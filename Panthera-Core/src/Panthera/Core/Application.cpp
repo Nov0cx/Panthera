@@ -49,9 +49,7 @@ namespace Panthera
         );
         m_Window = Window::Create(windowProps);
 
-        LOG_DEBUG("Arg 0 = {}", m_Args[0]);
         m_ExePath = std::filesystem::path(m_Args[0]).parent_path().string();
-        LOG_DEBUG("Exe path: {}", m_ExePath)
 
         std::string error;
         m_Runfiles = Runfiles::Create(props.Args[0], &error);
