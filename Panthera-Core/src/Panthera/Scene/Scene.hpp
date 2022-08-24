@@ -7,8 +7,7 @@
 #include "Panthera/Render/Renderer.hpp"
 #include "Panthera/Render/Camera/OrthographicCameraController.hpp"
 #include "UUID.hpp"
-
-
+#include <imgui.h>
 
 namespace Panthera
 {
@@ -33,6 +32,8 @@ namespace Panthera
         entt::registry m_Registry;
         Renderer* m_Renderer;
         OrthographicCameraController m_Camera;
+        ImVec2 m_ViewportSize;
+        ImVec2 m_LastViewportSize;
 
         friend class SceneEntity;
         friend class SceneSerializer;

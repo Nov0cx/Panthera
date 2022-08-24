@@ -26,6 +26,8 @@ namespace Panthera
         float GetZoom() const;
         float GetAspectRatio() const;
 
+        void Resize(float width, float height);
+
     private:
         OrthographicCamera m_Camera;
         float m_AspectRatio, m_Zoom;

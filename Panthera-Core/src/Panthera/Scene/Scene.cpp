@@ -26,6 +26,18 @@ namespace Panthera
 
     void Scene::OnUpdate(Timestep ts)
     {
+        if (m_ViewportSize.x > 0 || m_ViewportSize.y > 0)
+        {
+            if (m_ViewportSize.x != m_LastViewportSize.x || m_ViewportSize.y != m_LastViewportSize.y)
+            {
+                m_Renderer->GetFramebuffer()->ResizeAttachments(m_ViewportSize.x, m_ViewportSize.y);
+                m_Renderer->GetFramebuffer()->SetViewport(0, 0, m_ViewportSize.x, m_ViewportSize.y);
+                m_Camera.Resize(m_ViewportSize.x, m_ViewportSize.y);
+
+                m_ViewportSize = m_LastViewportSize;
+            }
+        }
+
         m_Camera.OnUpdate(ts);
         m_Renderer->Clear();
         m_Renderer->BeginScene(m_Camera.GetCamera());
@@ -87,12 +99,12 @@ namespace Panthera
 
     void Scene::OnEvent(Event &e)
     {
-        static Event::Listener<WindowResizeEvent> windowResizeEventListener([this] (auto&& e) {
+        /*static Event::Listener<WindowResizeEvent> windowResizeEventListener([this] (auto&& e) {
             WindowResizeEvent& windowResizeEvent = dynamic_cast<WindowResizeEvent&>(e);
             m_Renderer->GetFramebuffer()->ResizeAttachments(windowResizeEvent.Width, windowResizeEvent.Height);
             m_Renderer->GetFramebuffer()->SetViewport(0, 0, windowResizeEvent.Width, windowResizeEvent.Height);
         });
-        windowResizeEventListener.Run(e, EventSubType::WindowResizeEvent);
+        windowResizeEventListener.Run(e, EventSubType::WindowResizeEvent);*/
         m_Camera.OnEvent(e);
     }
 
@@ -165,12 +177,20 @@ namespace Panthera
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
-        ImGui::SetNextWindowSize(ImVec2(600, 450));
-        ImGui::Begin("Viewport");
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+        ImGui::Begin("Scene Viewport");
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-        ImGui::Image(reinterpret_cast<void*>(m_Renderer->GetFramebuffer()->GetColorAttachment(0).Texture->GetRendererID()), ImVec2(viewportPanelSize.x, viewportPanelSize.y), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-        ImGui::End();
+        m_LastViewportSize = ImVec2{ viewportPanelSize.x, viewportPanelSize.y };
+        if (m_ViewportSize.x == 0 || m_ViewportSize.y == 0) m_ViewportSize = ImVec2{ viewportPanelSize.x, viewportPanelSize.y };
 
+        if (m_ViewportSize.x > 0 && m_ViewportSize.y > 0)
+        {
+            ImGui::Image(reinterpret_cast<void*>(m_Renderer->GetFramebuffer()->GetColorAttachment(0).Texture->GetRendererID()),
+                         ImVec2 { m_LastViewportSize.x, m_LastViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        }
+
+        ImGui::End();
+        ImGui::PopStyleVar();
         ImGui::End();
     }
 }

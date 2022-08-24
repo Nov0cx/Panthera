@@ -235,22 +235,31 @@ namespace Panthera
 
     void OpenGLFramebuffer::ResizeAttachment(uint32_t width, uint32_t height, uint32_t index)
     {
+        glCreateFramebuffers(1, &m_RendererID);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
         FramebufferAttachment &attachment = m_ColorAttachments[index];
         attachment.Texture->Resize(width, height);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, GL_TEXTURE_2D, attachment.Texture->GetRendererID(), 0);
     }
 
     void OpenGLFramebuffer::ResizeAttachments(uint32_t width, uint32_t height)
     {
+        glCreateFramebuffers(1, &m_RendererID);
+        glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
         for (uint32_t i = 0; i < m_ColorAttachments.size(); i++)
         {
-            ResizeAttachment(width, height, i);
+            FramebufferAttachment &attachment = m_ColorAttachments[i];
+            attachment.Texture->Resize(width, height);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, attachment.Texture->GetRendererID(), 0);
         }
 
         m_DepthAttachment.Texture->Resize(width, height);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment.Texture->GetRendererID(), 0);
     }
 
     void OpenGLFramebuffer::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
     {
+        glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
         glViewport(x, y, width, height);
     }
 

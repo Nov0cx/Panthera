@@ -74,17 +74,16 @@ namespace Panthera
 
     OpenGLTexture2D::OpenGLTexture2D(const Texture2DSpecification& spec)
     {
+        m_Spec = spec;
         if (strcmp(spec.Path, "") == 0)
         {
             m_Path = "";
-            m_Width = spec.Width;
-            m_Height = spec.Height;
 
             m_Format = InternalFormatToOpenGL(spec.InternalFormat);
             m_DataFormat = DataFormatToOpenGL(spec.DataFormat);
 
             glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-            glTextureStorage2D(m_RendererID, 1, m_Format, m_Width, m_Height);
+            glTextureStorage2D(m_RendererID, 1, m_Format, m_Spec.Width, m_Spec.Height);
 
             glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, FilterToOpenGL(spec.Filter));
             glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, FilterToOpenGL(spec.Filter));
@@ -108,26 +107,34 @@ namespace Panthera
             m_Path = new char[strlen(spec.Path) + 1];
             strcpy(const_cast<char*>(m_Path), spec.Path);
 
-            m_Width = width;
-            m_Height = height;
+            m_Spec.Width = width;
+            m_Spec.Height = height;
 
             switch (nrChannels)
             {
                 case 1:
                     m_Format = GL_R8;
                     m_DataFormat = GL_RED;
+                    m_Spec.DataFormat = Texture2DDataFormat::Red;
+                    m_Spec.InternalFormat = Texture2DInternalFormat::R8;
                     break;
                 case 2:
                     m_Format = GL_RG8;
                     m_DataFormat = GL_RG;
+                    m_Spec.DataFormat = Texture2DDataFormat::RG;
+                    m_Spec.InternalFormat = Texture2DInternalFormat::RG8;
                     break;
                 case 3:
                     m_Format = GL_RGB8;
                     m_DataFormat = GL_RGB;
+                    m_Spec.DataFormat = Texture2DDataFormat::RGB;
+                    m_Spec.InternalFormat = Texture2DInternalFormat::RGB8;
                     break;
                 case 4:
                     m_Format = GL_RGBA8;
                     m_DataFormat = GL_RGBA;
+                    m_Spec.DataFormat = Texture2DDataFormat::RGBA;
+                    m_Spec.InternalFormat = Texture2DInternalFormat::RGBA8;
                     break;
                 default:
                     ASSERT(false, "Unsupported texture format")
@@ -143,7 +150,7 @@ namespace Panthera
             }
 
             glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-            glTextureStorage2D(m_RendererID, 1, m_Format, m_Width, m_Height);
+            glTextureStorage2D(m_RendererID, 1, m_Format, m_Spec.Width, m_Spec.Height);
 
             glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, FilterToOpenGL(spec.Filter));
             glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, FilterToOpenGL(spec.Filter));
@@ -152,16 +159,12 @@ namespace Panthera
             glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, WrappingToOpenGL(spec.Wrapping));
             glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, WrappingToOpenGL(spec.Wrapping));
 
-            glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+            glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Spec.Width, m_Spec.Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 
             stbi_image_free(data);
 
             m_IsLoaded = true;
         }
-        m_Filter = spec.Filter;
-        m_Wrapping = spec.Wrapping;
-        m_InternalFormatEnum = spec.InternalFormat;
-        m_DataFormatEnum = spec.DataFormat;
     }
 
     OpenGLTexture2D::~OpenGLTexture2D()
@@ -200,18 +203,18 @@ namespace Panthera
             default:
                 ASSERT(false, "Unknown Texture2DDataFormat");
         }
-        ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!")
-        glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+        ASSERT(size == m_Spec.Width * m_Spec.Height * bpp, "Data must be entire texture!")
+        glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Spec.Width, m_Spec.Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
     }
 
     uint32_t OpenGLTexture2D::GetWidth() const
     {
-        return m_Width;
+        return m_Spec.Width;
     }
 
     uint32_t OpenGLTexture2D::GetHeight() const
     {
-        return m_Height;
+        return m_Spec.Height;
     }
 
     RendererID OpenGLTexture2D::GetRendererID() const
@@ -236,22 +239,22 @@ namespace Panthera
 
     Texture2DFilter OpenGLTexture2D::GetFilter() const
     {
-        return m_Filter;
+        return m_Spec.Filter;
     }
 
     Texture2DInternalFormat OpenGLTexture2D::GetInternalFormat() const
     {
-        return m_InternalFormatEnum;
+        return m_Spec.InternalFormat;
     }
 
     Texture2DDataFormat OpenGLTexture2D::GetDataFormat() const
     {
-        return m_DataFormatEnum;
+        return m_Spec.DataFormat;
     }
 
     Texture2DWrapping OpenGLTexture2D::GetWrapping() const
     {
-        return m_Wrapping;
+        return m_Spec.Wrapping;
     }
 
     void OpenGLTexture2D::Clear(int value)
@@ -261,8 +264,17 @@ namespace Panthera
 
     void OpenGLTexture2D::Resize(uint32_t width, uint32_t height)
     {
-        glTextureStorage2D(m_RendererID, 1, m_Format, width, height);
-        m_Width = width;
-        m_Height = height;
+        m_Spec.Width = width;
+        m_Spec.Height = height;
+
+        glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+        glTextureStorage2D(m_RendererID, 1, m_Format, m_Spec.Width, m_Spec.Height);
+
+        glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, FilterToOpenGL(m_Spec.Filter));
+        glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, FilterToOpenGL(m_Spec.Filter));
+
+        glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, WrappingToOpenGL(m_Spec.Wrapping));
+        glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_R, WrappingToOpenGL(m_Spec.Wrapping));
+        glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, WrappingToOpenGL(m_Spec.Wrapping));
     }
 }

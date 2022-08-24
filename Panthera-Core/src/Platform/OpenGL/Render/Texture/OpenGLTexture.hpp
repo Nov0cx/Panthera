@@ -35,15 +35,11 @@ namespace Panthera
         void Resize(uint32_t width, uint32_t height) override;
     private:
         RendererID m_RendererID;
-        uint32_t m_Width, m_Height;
         bool m_IsLoaded;
         uint32_t m_CurrentSlot = 0;
         uint32_t m_Format, m_DataFormat;
         const char* m_Path;
-        Texture2DFilter m_Filter;
-        Texture2DInternalFormat m_InternalFormatEnum;
-        Texture2DDataFormat m_DataFormatEnum;
-        Texture2DWrapping m_Wrapping;
+        Texture2DSpecification m_Spec;
     };
 }
 
