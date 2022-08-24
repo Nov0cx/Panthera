@@ -416,6 +416,7 @@ namespace Panthera
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         data->Framebuffer->Bind();
+        data->Framebuffer->ClearAttachment(0);
     }
 
     void OpenGLRenderer::BeginScene()

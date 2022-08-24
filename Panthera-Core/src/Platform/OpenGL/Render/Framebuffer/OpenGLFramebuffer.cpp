@@ -73,14 +73,14 @@ namespace Panthera
                 {
                     Ref<Texture2D> tex = CreateTextureAttachment(attachment);
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_ColorAttachments.size(), GL_TEXTURE_2D, tex->GetRendererID(), 0);
-                    m_ColorAttachments.push_back({attachment.AttachmentType, tex});
+                    m_ColorAttachments.push_back({attachment.AttachmentType, tex, attachment.ClearValue});
                     break;
                 }
                 case FramebufferAttachmentType::Depth:
                 {
                     Ref<Texture2D> tex = CreateDepthBufferAttachment(attachment);
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->GetRendererID(), 0);
-                    m_DepthAttachment = {attachment.AttachmentType, tex};
+                    m_DepthAttachment = {attachment.AttachmentType, tex, attachment.ClearValue};
                     break;
                 }
             }
@@ -215,6 +215,22 @@ namespace Panthera
             };
             return Texture2D::Create(spec);
         }
+    }
+
+    void OpenGLFramebuffer::ClearAttachments()
+    {
+        for (uint32_t i = 0; i < m_ColorAttachments.size(); i++)
+        {
+            ClearAttachment(i);
+        }
+
+        m_DepthAttachment.Texture->Clear(m_DepthAttachment.ClearValue);
+    }
+
+    void OpenGLFramebuffer::ClearAttachment(uint32_t index)
+    {
+        FramebufferAttachment &attachment = m_ColorAttachments[index];
+        attachment.Texture->Clear(attachment.ClearValue);
     }
 
 

@@ -18,12 +18,14 @@ namespace Panthera
     {
         FramebufferAttachmentType AttachmentType;
         Texture2DSpecification TextureSpecification;
+        int ClearValue = 0;
     };
 
     struct FramebufferAttachment
     {
         FramebufferAttachmentType AttachmentType;
         Ref<Texture2D> Texture;
+        int ClearValue = 0;
     };
 
     class Framebuffer
@@ -40,6 +42,9 @@ namespace Panthera
         virtual Ref<std::vector<FramebufferAttachment>> GetAttachments(const std::initializer_list<FramebufferAttachmentType>& types) = 0;
 
         virtual FramebufferAttachment &GetDepthAttachment() = 0;
+
+        virtual void ClearAttachments() = 0;
+        virtual void ClearAttachment(uint32_t index) = 0;
 
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;

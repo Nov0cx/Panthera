@@ -253,4 +253,9 @@ namespace Panthera
     {
         return m_Wrapping;
     }
+
+    void OpenGLTexture2D::Clear(int value)
+    {
+        glClearTexImage(m_RendererID, 0, m_DataFormat, GL_INT, &value);
+    }
 }

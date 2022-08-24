@@ -23,6 +23,9 @@ namespace Panthera
 
         virtual FramebufferAttachment &GetDepthAttachment() override;
 
+        virtual void ClearAttachments() override;
+        virtual void ClearAttachment(uint32_t index) override;
+
         virtual void Bind() const override;
         virtual void Unbind() const override;
     private:

@@ -186,6 +186,8 @@ namespace Panthera
         virtual bool IsLoaded() const = 0;
 
         virtual const char *GetPath() const = 0;
+
+        virtual void Clear(int value = 0) = 0;
     };
 
     struct Texture2DSpecification

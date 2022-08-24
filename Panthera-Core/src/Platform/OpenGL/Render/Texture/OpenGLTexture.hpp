@@ -30,6 +30,8 @@ namespace Panthera
         virtual Texture2DWrapping GetWrapping() const override;
 
         const char* GetPath() const override;
+
+        void Clear(int value = 0) override;
     private:
         RendererID m_RendererID;
         uint32_t m_Width, m_Height;
