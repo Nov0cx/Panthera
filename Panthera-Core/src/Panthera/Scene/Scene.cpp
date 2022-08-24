@@ -6,11 +6,13 @@
 #include "Panthera/Core/Log.hpp"
 #include <glm/gtx/string_cast.hpp>
 #include <imgui.h>
+#include "Panthera/Core/Event.hpp"
+#include "Panthera/Events/WindowEvents.hpp"
 
 namespace Panthera
 {
 
-    Scene::Scene(OrthographicCamera* camera)
+    Scene::Scene(OrthographicCameraController camera)
         : m_Renderer(Renderer::Create())
     {
         m_Camera = camera;
@@ -24,8 +26,9 @@ namespace Panthera
 
     void Scene::OnUpdate(Timestep ts)
     {
+        m_Camera.OnUpdate(ts);
         m_Renderer->Clear();
-        m_Renderer->BeginScene(*m_Camera);
+        m_Renderer->BeginScene(m_Camera.GetCamera());
 
         auto quadView = m_Registry.view<TransformComponent, QuadComponent>();
         for (auto entity : quadView)
@@ -84,6 +87,13 @@ namespace Panthera
 
     void Scene::OnEvent(Event &e)
     {
+        static Event::Listener<WindowResizeEvent> windowResizeEventListener([this] (auto&& e) {
+            WindowResizeEvent& windowResizeEvent = dynamic_cast<WindowResizeEvent&>(e);
+            m_Renderer->GetFramebuffer()->ResizeAttachments(windowResizeEvent.Width, windowResizeEvent.Height);
+            m_Renderer->GetFramebuffer()->SetViewport(0, 0, windowResizeEvent.Width, windowResizeEvent.Height);
+        });
+        windowResizeEventListener.Run(e, EventSubType::WindowResizeEvent);
+        m_Camera.OnEvent(e);
     }
 
     SceneEntity Scene::CreateEntity(const char* name)

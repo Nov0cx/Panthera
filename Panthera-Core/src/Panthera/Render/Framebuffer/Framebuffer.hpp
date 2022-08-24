@@ -26,6 +26,7 @@ namespace Panthera
         FramebufferAttachmentType AttachmentType;
         Ref<Texture2D> Texture;
         int ClearValue = 0;
+        uint32_t Width, Height;
     };
 
     class Framebuffer
@@ -45,6 +46,10 @@ namespace Panthera
 
         virtual void ClearAttachments() = 0;
         virtual void ClearAttachment(uint32_t index) = 0;
+
+        virtual void ResizeAttachment(uint32_t width, uint32_t height, uint32_t index) = 0;
+        virtual void ResizeAttachments(uint32_t width, uint32_t height) = 0;
+        virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;

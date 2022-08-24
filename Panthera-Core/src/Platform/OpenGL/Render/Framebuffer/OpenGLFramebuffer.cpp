@@ -73,14 +73,14 @@ namespace Panthera
                 {
                     Ref<Texture2D> tex = CreateTextureAttachment(attachment);
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_ColorAttachments.size(), GL_TEXTURE_2D, tex->GetRendererID(), 0);
-                    m_ColorAttachments.push_back({attachment.AttachmentType, tex, attachment.ClearValue});
+                    m_ColorAttachments.push_back({attachment.AttachmentType, tex, attachment.ClearValue, tex->GetWidth(), tex->GetHeight()});
                     break;
                 }
                 case FramebufferAttachmentType::Depth:
                 {
                     Ref<Texture2D> tex = CreateDepthBufferAttachment(attachment);
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex->GetRendererID(), 0);
-                    m_DepthAttachment = {attachment.AttachmentType, tex, attachment.ClearValue};
+                    m_DepthAttachment = {attachment.AttachmentType, tex, attachment.ClearValue, tex->GetWidth(), tex->GetHeight()};
                     break;
                 }
             }
@@ -231,6 +231,27 @@ namespace Panthera
     {
         FramebufferAttachment &attachment = m_ColorAttachments[index];
         attachment.Texture->Clear(attachment.ClearValue);
+    }
+
+    void OpenGLFramebuffer::ResizeAttachment(uint32_t width, uint32_t height, uint32_t index)
+    {
+        FramebufferAttachment &attachment = m_ColorAttachments[index];
+        attachment.Texture->Resize(width, height);
+    }
+
+    void OpenGLFramebuffer::ResizeAttachments(uint32_t width, uint32_t height)
+    {
+        for (uint32_t i = 0; i < m_ColorAttachments.size(); i++)
+        {
+            ResizeAttachment(width, height, i);
+        }
+
+        m_DepthAttachment.Texture->Resize(width, height);
+    }
+
+    void OpenGLFramebuffer::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+    {
+        glViewport(x, y, width, height);
     }
 
 

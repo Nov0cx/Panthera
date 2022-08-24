@@ -32,6 +32,7 @@ namespace Panthera
         const char* GetPath() const override;
 
         void Clear(int value = 0) override;
+        void Resize(uint32_t width, uint32_t height) override;
     private:
         RendererID m_RendererID;
         uint32_t m_Width, m_Height;

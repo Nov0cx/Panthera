@@ -258,4 +258,11 @@ namespace Panthera
     {
         glClearTexImage(m_RendererID, 0, m_DataFormat, GL_INT, &value);
     }
+
+    void OpenGLTexture2D::Resize(uint32_t width, uint32_t height)
+    {
+        glTextureStorage2D(m_RendererID, 1, m_Format, width, height);
+        m_Width = width;
+        m_Height = height;
+    }
 }

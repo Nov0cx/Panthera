@@ -66,13 +66,13 @@ namespace Panthera
         {
             QuadComponent quad = entity.GetComponent<QuadComponent>();
             entityJson[entityID]["components"]["quad"] = {
-                    {"color",   {
-                                        {"r",    quad.Color.r},
-                                        {"g",     quad.Color.g},
-                                        {"b",      quad.Color.b},
-                                        {"a", quad.Color.a}
-                                }},
-                    {"tiling",  quad.Tiling},
+                    {"color", {
+                            {"r", quad.Color.r},
+                            {"g", quad.Color.g},
+                            {"b", quad.Color.b},
+                            {"a", quad.Color.a}
+                    }},
+                    {"tiling", quad.Tiling},
                     SERIALIZE_TEXTURE(quad)
             };
         }
@@ -81,15 +81,15 @@ namespace Panthera
         {
             CircleComponent circle = entity.GetComponent<CircleComponent>();
             entityJson[entityID]["components"]["circle"] = {
-                    {"color",           {
-                                                {"r",    circle.Color.r},
-                                                {"g",     circle.Color.g},
-                                                {"b",      circle.Color.b},
-                                                {"a", circle.Color.a}
-                                        }},
+                    {"color", {
+                            {"r", circle.Color.r},
+                            {"g", circle.Color.g},
+                            {"b", circle.Color.b},
+                            {"a", circle.Color.a}
+                    }},
                     {"borderThickness", circle.BorderThickness},
-                    {"fade",            circle.Fade},
-                    {"tiling",          circle.Tiling},
+                    {"fade", circle.Fade},
+                    {"tiling", circle.Tiling},
                     SERIALIZE_TEXTURE(circle)
             };
         }
@@ -98,13 +98,13 @@ namespace Panthera
         {
             TriangleComponent triangle = entity.GetComponent<TriangleComponent>();
             entityJson[entityID]["components"]["triangle"] = {
-                    {"color",   {
-                                        {"r",    triangle.Color.r},
-                                        {"g",     triangle.Color.g},
-                                        {"b",      triangle.Color.b},
-                                        {"a", triangle.Color.a}
-                                }},
-                    {"tiling",  triangle.Tiling},
+                    {"color", {
+                            {"r", triangle.Color.r},
+                            {"g", triangle.Color.g},
+                            {"b", triangle.Color.b},
+                            {"a", triangle.Color.a}
+                    }},
+                    {"tiling", triangle.Tiling},
                     SERIALIZE_TEXTURE(triangle)
             };
         }
@@ -148,14 +148,17 @@ namespace Panthera
         json sceneJson;
         sceneJson["camera"] = {
                 {"position", {
-                                     {"x",   scene.m_Camera->GetPosition().x},
-                                     {"y", scene.m_Camera->GetPosition().y},
-                                     {"z", scene.m_Camera->GetPosition().z}
+                                     {"x",   scene.m_Camera.GetCamera().GetPosition().x},
+                                     {"y", scene.m_Camera.GetCamera().GetPosition().y},
+                                     {"z", scene.m_Camera.GetCamera().GetPosition().z}
                              }},
                 {"rotation", {
-                                     {"rot", scene.m_Camera->GetRotation()},
+                                     {"rot", scene.m_Camera.GetCamera().GetRotation()},
 
-                             }}
+                             }
+                },
+                {"aspect", scene.m_Camera.GetAspectRatio()},
+                {"zoom", scene.m_Camera.GetZoom()}
         };
         sceneJson["entities"] = {};
         scene.m_Registry.each([&](entt::entity entity)
@@ -168,8 +171,7 @@ namespace Panthera
         {
             o << sceneJson.dump();
             o.close();
-        }
-        else
+        } else
         {
             LOG_ERROR("Could not open file: " + filename);
         }
@@ -183,11 +185,14 @@ namespace Panthera
         if (entity["components"].find("transform") != entity["components"].end())
         {
             sceneEntity.CreateComponent<TransformComponent>(
-                    glm::vec3(entity["components"]["transform"]["position"]["x"], entity["components"]["transform"]["position"]["y"],
+                    glm::vec3(entity["components"]["transform"]["position"]["x"],
+                              entity["components"]["transform"]["position"]["y"],
                               entity["components"]["transform"]["position"]["z"]),
-                    glm::vec3(entity["components"]["transform"]["rotation"]["x"], entity["components"]["transform"]["rotation"]["y"],
+                    glm::vec3(entity["components"]["transform"]["rotation"]["x"],
+                              entity["components"]["transform"]["rotation"]["y"],
                               entity["components"]["transform"]["rotation"]["z"]),
-                    glm::vec3(entity["components"]["transform"]["scale"]["x"], entity["components"]["transform"]["scale"]["y"],
+                    glm::vec3(entity["components"]["transform"]["scale"]["x"],
+                              entity["components"]["transform"]["scale"]["y"],
                               entity["components"]["transform"]["scale"]["z"]));
         }
 
@@ -204,8 +209,10 @@ namespace Panthera
         if (entity["components"].find("quad") != entity["components"].end())
         {
             sceneEntity.CreateComponent<QuadComponent>(
-                    glm::vec4(entity["components"]["quad"]["color"]["r"], entity["components"]["quad"]["color"]["g"],
-                              entity["components"]["quad"]["color"]["b"], entity["components"]["quad"]["color"]["a"]),
+                    glm::vec4(entity["components"]["quad"]["color"]["r"],
+                              entity["components"]["quad"]["color"]["g"],
+                              entity["components"]["quad"]["color"]["b"],
+                              entity["components"]["quad"]["color"]["a"]),
                     entity["components"]["quad"]["tiling"].get<float>(),
                     Texture2D::Create(DESERIALIZE_TEXTURE("quad", entity)));
         }
@@ -213,8 +220,10 @@ namespace Panthera
         if (entity["components"].find("circle") != entity["components"].end())
         {
             sceneEntity.CreateComponent<CircleComponent>(
-                    glm::vec4(entity["components"]["circle"]["color"]["r"], entity["components"]["circle"]["color"]["g"],
-                              entity["components"]["circle"]["color"]["b"], entity["components"]["circle"]["color"]["a"]),
+                    glm::vec4(entity["components"]["circle"]["color"]["r"],
+                              entity["components"]["circle"]["color"]["g"],
+                              entity["components"]["circle"]["color"]["b"],
+                              entity["components"]["circle"]["color"]["a"]),
                     entity["components"]["circle"]["borderThickness"].get<float>(),
                     entity["components"]["circle"]["fade"].get<float>(),
                     entity["components"]["circle"]["tiling"].get<float>(),
@@ -224,8 +233,10 @@ namespace Panthera
         if (entity["components"].find("triangle") != entity["components"].end())
         {
             sceneEntity.CreateComponent<TriangleComponent>(
-                    glm::vec4(entity["components"]["triangle"]["color"]["r"], entity["components"]["triangle"]["color"]["g"],
-                              entity["components"]["triangle"]["color"]["b"], entity["components"]["triangle"]["color"]["a"]),
+                    glm::vec4(entity["components"]["triangle"]["color"]["r"],
+                              entity["components"]["triangle"]["color"]["g"],
+                              entity["components"]["triangle"]["color"]["b"],
+                              entity["components"]["triangle"]["color"]["a"]),
                     entity["components"]["triangle"]["tiling"].get<float>(),
                     Texture2D::Create(DESERIALIZE_TEXTURE("triangle", entity)));
         }
@@ -254,22 +265,22 @@ namespace Panthera
         return sceneEntity;
     }
 
-    Scene *SceneSerializer::Deserialize(const std::string& filename)
+    Scene *SceneSerializer::Deserialize(const std::string &filename)
     {
-        auto app = Application::GetInstance();
-        float aspectRatio = (float)app->GetWindowWidth() / (float)app->GetWindowHeight();
-        OrthographicCamera *camera = new OrthographicCamera(-aspectRatio, aspectRatio, -1.0f, 1.0f);
-        Scene *scene = new Scene(camera);
+
 
         std::ifstream file(filename);
         ASSERT(file.is_open(), "Could not open file: " + filename);
         json sceneJson = json::parse(file);
         file.close();
-        camera->SetPosition(glm::vec3(sceneJson["camera"]["position"]["x"], sceneJson["camera"]["position"]["y"],
-                                      sceneJson["camera"]["position"]["z"]));
-        camera->SetRotation(sceneJson["camera"]["rotation"]["rot"]);
+        OrthographicCameraController camera(sceneJson["camera"]["aspect"],
+                                            glm::vec3(sceneJson["camera"]["position"]["x"],
+                                                      sceneJson["camera"]["position"]["y"],
+                                                      sceneJson["camera"]["position"]["z"]),
+                                            sceneJson["camera"]["rotation"]["rot"], sceneJson["camera"]["zoom"]);
+        Scene *scene = new Scene(camera);
 
-        for (json entity : sceneJson["entities"])
+        for (json entity: sceneJson["entities"])
         {
             auto sceneEntity = DeserializeEntity(*scene, entity);
             /*LOG_INFO("Scene entity created: " + sceneEntity.GetComponent<NameComponent>().Name);

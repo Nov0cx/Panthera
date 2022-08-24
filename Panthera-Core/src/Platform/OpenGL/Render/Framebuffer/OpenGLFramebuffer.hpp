@@ -26,6 +26,10 @@ namespace Panthera
         virtual void ClearAttachments() override;
         virtual void ClearAttachment(uint32_t index) override;
 
+        virtual void ResizeAttachment(uint32_t width, uint32_t height, uint32_t index) override;
+        virtual void ResizeAttachments(uint32_t width, uint32_t height) override;
+        virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
+
         virtual void Bind() const override;
         virtual void Unbind() const override;
     private:

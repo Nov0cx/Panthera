@@ -8,7 +8,6 @@ namespace Panthera
     {
         auto app = Application::GetInstance();
         float aspectRatio = (float) app->GetWindow()->GetWidth() / (float) app->GetWindow()->GetHeight();
-        m_CameraController = OrthographicCameraController(aspectRatio);
         std::fstream scene = std::fstream("scene.json", std::ios::in);
         if (scene.is_open())
         {
@@ -18,7 +17,7 @@ namespace Panthera
             LOG_DEBUG("Scene loaded!")
         } else
         {
-            m_Scene = new Scene(&m_CameraController.GetCamera());
+            m_Scene = new Scene(OrthographicCameraController(aspectRatio));
         }
     }
 
@@ -88,13 +87,12 @@ namespace Panthera
 
     void LeoparudsLayer::OnUpdate(Timestep ts)
     {
-        m_CameraController.OnUpdate(ts);
         m_Scene->OnUpdate(ts);
     }
 
     void LeoparudsLayer::OnEvent(Event &e)
     {
-        m_CameraController.OnEvent(e);
+        m_Scene->OnEvent(e);
     }
 
     LeoparudsLayer::~LeoparudsLayer()

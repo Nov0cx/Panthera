@@ -2,6 +2,7 @@
 
 #include "Panthera/Core/Input.hpp"
 #include "Panthera/Events/MouseEvents.hpp"
+#include "Panthera/Events/WindowEvents.hpp"
 
 namespace Panthera
 {
@@ -10,6 +11,15 @@ namespace Panthera
         : m_AspectRatio(aspectRatio), m_Zoom(zoom)
     {
         m_Camera = OrthographicCamera(-aspectRatio * zoom, aspectRatio * zoom, -zoom, zoom);
+    }
+
+    OrthographicCameraController::OrthographicCameraController(float aspectRatio, const glm::vec3 &pos, float rotation,
+                                                               float zoom)
+            : m_AspectRatio(aspectRatio), m_Zoom(zoom)
+    {
+        m_Camera = OrthographicCamera(-aspectRatio * zoom, aspectRatio * zoom, -zoom, zoom);
+        m_Camera.SetPosition(pos);
+        m_Camera.SetRotation(rotation);
     }
 
     void OrthographicCameraController::OnUpdate(Timestep ts)
@@ -52,6 +62,12 @@ namespace Panthera
     {
         static Event::Listener<MouseScrollEvent> scrollListener([this](auto &&e){ SetZoom(m_Zoom + e.PosY * 0.1f); });
         scrollListener.Run(event, EventSubType::MouseScrollEvent);
+        static Event::Listener<WindowResizeEvent> windowResizeEventListener([this] (auto&& e) {
+            WindowResizeEvent& windowResizeEvent = dynamic_cast<WindowResizeEvent&>(e);
+            m_AspectRatio = static_cast<float>(windowResizeEvent.Width) / static_cast<float>(windowResizeEvent.Height);
+            m_Camera.SetProjection(-m_AspectRatio * m_Zoom, m_AspectRatio * m_Zoom, -m_Zoom, m_Zoom);
+        });
+        windowResizeEventListener.Run(event, EventSubType::WindowResizeEvent);
     }
 
     void OrthographicCameraController::SetZoom(float zoom)
@@ -69,5 +85,15 @@ namespace Panthera
     OrthographicCamera &OrthographicCameraController::GetCamera()
     {
         return m_Camera;
+    }
+
+    float OrthographicCameraController::GetZoom() const
+    {
+        return m_Zoom;
+    }
+
+    float OrthographicCameraController::GetAspectRatio() const
+    {
+        return m_AspectRatio;
     }
 }

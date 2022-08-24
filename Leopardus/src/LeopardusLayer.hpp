@@ -23,7 +23,6 @@ namespace Panthera
 
     private:
         Ref <Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
-        OrthographicCameraController m_CameraController;
         Scene *m_Scene;
         bool loadedScene = false;
     };

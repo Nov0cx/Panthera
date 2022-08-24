@@ -5,7 +5,7 @@
 #include "Panthera/Core/Timestep.hpp"
 #include "Panthera/Core/Event.hpp"
 #include "Panthera/Render/Renderer.hpp"
-#include "Panthera/Render/Camera/OrthographicCamera.hpp"
+#include "Panthera/Render/Camera/OrthographicCameraController.hpp"
 #include "UUID.hpp"
 
 
@@ -19,7 +19,7 @@ namespace Panthera
     class Scene
     {
     public:
-        Scene(OrthographicCamera* camera);
+        Scene(OrthographicCameraController camera);
         ~Scene();
 
         void OnUpdate(Timestep ts);
@@ -32,7 +32,7 @@ namespace Panthera
     private:
         entt::registry m_Registry;
         Renderer* m_Renderer;
-        OrthographicCamera* m_Camera;
+        OrthographicCameraController m_Camera;
 
         friend class SceneEntity;
         friend class SceneSerializer;
