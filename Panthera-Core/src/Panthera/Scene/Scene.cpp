@@ -30,9 +30,9 @@ namespace Panthera
         {
             if (m_ViewportSize.x != m_LastViewportSize.x || m_ViewportSize.y != m_LastViewportSize.y)
             {
-                m_Renderer->GetFramebuffer()->ResizeAttachments(m_ViewportSize.x, m_ViewportSize.y);
-                m_Renderer->GetFramebuffer()->SetViewport(0, 0, m_ViewportSize.x, m_ViewportSize.y);
-                m_Camera.Resize(m_ViewportSize.x, m_ViewportSize.y);
+                m_Renderer->GetFramebuffer()->ResizeAttachments(m_LastViewportSize.x, m_LastViewportSize.y);
+                m_Renderer->GetFramebuffer()->SetViewport(0, 0, m_LastViewportSize.x, m_LastViewportSize.y);
+                m_Camera.Resize(m_LastViewportSize.x, m_LastViewportSize.y);
 
                 m_ViewportSize = m_LastViewportSize;
             }
