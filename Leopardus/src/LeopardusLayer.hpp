@@ -23,6 +23,8 @@ namespace Panthera
         virtual void OnImGuiRender() override;
 
     private:
+        void RenderMenu();
+    private:
         Ref <Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
         Scene *m_Scene;
         bool loadedScene = false;

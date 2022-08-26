@@ -6,14 +6,15 @@
 #include "Panthera/Core/Log.hpp"
 #include <glm/gtx/string_cast.hpp>
 #include <imgui.h>
+#include <imgui_internal.h>
 #include "Panthera/Core/Event.hpp"
 #include "Panthera/Events/WindowEvents.hpp"
 
 namespace Panthera
 {
 
-    Scene::Scene(OrthographicCameraController camera, const std::string &name)
-            : m_Renderer(Renderer::Create()), m_Name(name), m_Camera(camera)
+    Scene::Scene(OrthographicCameraController camera, const std::string &name, const std::string &path)
+            : m_Renderer(Renderer::Create()), m_Name(name), m_Camera(camera), m_Path(std::move(path))
     {
         m_Renderer->Init();
     }

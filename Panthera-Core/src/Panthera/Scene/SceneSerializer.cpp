@@ -277,7 +277,7 @@ namespace Panthera
                                                       sceneJson["camera"]["position"]["y"],
                                                       sceneJson["camera"]["position"]["z"]),
                                             sceneJson["camera"]["rotation"]["rot"], sceneJson["camera"]["zoom"]);
-        Scene *scene = new Scene(camera, sceneJson["name"].get<std::string>());
+        Scene *scene = new Scene(camera, sceneJson["name"].get<std::string>(), filename);
 
         for (json entity: sceneJson["entities"])
         {

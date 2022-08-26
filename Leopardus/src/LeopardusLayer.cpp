@@ -1,5 +1,6 @@
 #include "LeopardusLayer.hpp"
 #include <fstream>
+#include <portable-file-dialogs.h>
 
 namespace Panthera
 {
@@ -81,7 +82,7 @@ namespace Panthera
     void LeoparudsLayer::OnEnd()
     {
         LOG_DEBUG("Scene destroyed!")
-        SceneSerializer::Serialize(*m_Scene, "Test.pscene");
+        SceneSerializer::Serialize(*m_Scene, m_Scene->GetPath() == "" ? "Test.pscene" : m_Scene->GetPath());
         delete m_Scene;
         delete m_SceneHierarchyPanel;
     }
@@ -103,7 +104,40 @@ namespace Panthera
 
     void LeoparudsLayer::OnImGuiRender()
     {
+        RenderMenu();
         m_Scene->OnImGuiRender();
         m_SceneHierarchyPanel->Render();
+    }
+
+    void LeoparudsLayer::RenderMenu()
+    {
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("Save Scene"))
+                {
+                    SceneSerializer::Serialize(*m_Scene, "Test.pscene");
+                }
+                if (ImGui::MenuItem("Reload Scene"))
+                {
+                    m_Scene = SceneSerializer::Deserialize("Test.pscene");
+                    LOG_DEBUG("Scene loaded!")
+                }
+                if (ImGui::MenuItem("Open Scene"))
+                {
+                    auto selection = pfd::open_file("Open Scene", Application::GetInstance()->GetExePath(), {"Panthera Scenes (*.pscene)", "*.pscene"}).result();
+                    for (auto& file : selection)
+                    {
+                        m_Scene = SceneSerializer::Deserialize(file);
+                        LOG_DEBUG("Scene loaded!")
+                        break;
+                    }
+                    Application::GetInstance()->GetWindow()->SetTitle(("Leopardus - " + m_Scene->GetName()).c_str());
+                }
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
     }
 }

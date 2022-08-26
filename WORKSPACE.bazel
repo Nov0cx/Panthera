@@ -72,3 +72,11 @@ http_archive(
 
 load("//extern/optick:optick.bzl", "load_optick_lib")
 load_optick_lib()
+
+http_archive(
+    name = "com_github_samhocevar_pfd",
+    build_file = "//extern:pfd.BUILD",
+    sha256 = "2ff03df5569ccb4ba77681f1095650e6be5a6983c2a57a190e5a661ec8e50b32",
+    strip_prefix = "portable-file-dialogs-main",
+    urls = ["https://github.com/samhocevar/portable-file-dialogs/archive/main.zip"],
+)

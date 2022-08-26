@@ -1,8 +1,9 @@
 cc_library(
     name = "LeopardusSrc",
-    srcs = glob(["src/*.cpp"], exclude=["src/Leopardus.cpp"]),
+    srcs = glob(["src/*.cpp", "Vendor/pfd/*.cpp"], exclude=["src/Leopardus.cpp"]),
     hdrs = glob(["src/*.hpp"]),
-    deps = ["//Panthera-Core:Panthera-Core",],
+    deps = ["//Panthera-Core:Panthera-Core",
+            "@com_github_samhocevar_pfd//:pfd",],
     strip_include_prefix = "src",
 )
 
