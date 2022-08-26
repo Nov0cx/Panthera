@@ -1,5 +1,4 @@
 #include "LeopardusLayer.hpp"
-
 #include <fstream>
 
 namespace Panthera
@@ -19,6 +18,7 @@ namespace Panthera
         {
             m_Scene = new Scene(OrthographicCameraController(aspectRatio));
         }
+        m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
     }
 
     void LeoparudsLayer::OnStart()
@@ -82,6 +82,7 @@ namespace Panthera
         LOG_DEBUG("Scene destroyed!")
         SceneSerializer::Serialize(*m_Scene, "scene.json");
         delete m_Scene;
+        delete m_SceneHierarchyPanel;
     }
 
     void LeoparudsLayer::OnUpdate(Timestep ts)
@@ -102,5 +103,6 @@ namespace Panthera
     void LeoparudsLayer::OnImGuiRender()
     {
         m_Scene->OnImGuiRender();
+        m_SceneHierarchyPanel->Render();
     }
 }

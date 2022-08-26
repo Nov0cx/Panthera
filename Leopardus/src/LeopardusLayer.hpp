@@ -2,6 +2,7 @@
 #define PANTHERA_LEOPARDUSLAYER_HPP
 
 #include "Panthera/Panthera.hpp"
+#include "SceneHierarchyPanel.hpp"
 
 namespace Panthera
 {
@@ -25,6 +26,7 @@ namespace Panthera
         Ref <Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
         Scene *m_Scene;
         bool loadedScene = false;
+        SceneHierarchyPanel *m_SceneHierarchyPanel;
     };
 }
 
