@@ -80,8 +80,8 @@ namespace Panthera
     void ImGuiLayer::OnEvent(Event &event)
     {
         ImGuiIO &io = ImGui::GetIO();
-        event.SetCancelled(event.GetEventType() == EventType::MOUSE && io.WantCaptureMouse);
-        event.SetCancelled(event.GetEventType() == EventType::KEY && io.WantCaptureKeyboard);
+        //event.SetCancelled(event.GetEventType() == EventType::MOUSE && io.WantCaptureMouse);
+        //event.SetCancelled(event.GetEventType() == EventType::KEY && io.WantCaptureKeyboard);
     }
 
     void ImGuiLayer::Begin()

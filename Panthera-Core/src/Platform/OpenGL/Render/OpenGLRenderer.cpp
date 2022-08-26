@@ -427,7 +427,7 @@ namespace Panthera
 
     void OpenGLRenderer::BeginScene(OrthographicCamera &camera)
     {
-        sBeginScene(m_Data, camera.GetProjectionMatrix());
+        sBeginScene(m_Data, camera.GetViewProjectionMatrix());
     }
 
     void OpenGLRenderer::EndScene()

@@ -186,11 +186,16 @@ namespace Panthera
         if (m_ViewportSize.x > 0 && m_ViewportSize.y > 0)
         {
             ImGui::Image(reinterpret_cast<void*>(m_Renderer->GetFramebuffer()->GetColorAttachment(0).Texture->GetRendererID()),
-                         ImVec2 { m_LastViewportSize.x, m_LastViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+                         ImVec2 { m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
         }
 
         ImGui::End();
         ImGui::PopStyleVar();
         ImGui::End();
+    }
+
+    Renderer *Scene::GetRenderer()
+    {
+        return m_Renderer;
     }
 }

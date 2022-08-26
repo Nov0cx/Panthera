@@ -3,6 +3,7 @@
 #include "Panthera/Core/Input.hpp"
 #include "Panthera/Events/MouseEvents.hpp"
 #include "Panthera/Events/WindowEvents.hpp"
+#include "Panthera/Core/Log.hpp"
 
 namespace Panthera
 {
@@ -26,6 +27,7 @@ namespace Panthera
     {
         if (Input::IsKeyPressed(Key::A))
         {
+            
             m_Camera.SetPosition(m_Camera.GetPosition() + glm::vec3(-1.0f, 0.0f, 0.0f) * ts.GetSeconds());
         }
         if (Input::IsKeyPressed(Key::D))

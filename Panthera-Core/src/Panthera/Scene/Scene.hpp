@@ -28,6 +28,8 @@ namespace Panthera
         SceneEntity CreateEntity(const char* name);
         SceneEntity CreateEntity(UUID uuid, const char* name);
 
+        Renderer* GetRenderer();
+
     private:
         entt::registry m_Registry;
         Renderer* m_Renderer;
