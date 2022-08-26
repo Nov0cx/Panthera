@@ -18,6 +18,16 @@ namespace Panthera
         {
             if (ImGui::TreeNode(entity.GetName().c_str()))
             {
+                ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+                float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+                ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.35f);
+                if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+                {
+                    ImGui::OpenPopup("ComponentSettings");
+                }
+                ImGui::PopStyleVar();
+                ImGui::Separator();
                 if (entity.HasComponent<TransformComponent>())
                 {
                     TransformComponent& transform = entity.GetComponent<TransformComponent>();

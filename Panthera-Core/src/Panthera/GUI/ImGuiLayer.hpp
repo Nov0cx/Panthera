@@ -3,6 +3,7 @@
 
 #include "Panthera/Core/Layer.hpp"
 #include <imgui.h>
+#include <imgui_internal.h>
 
 namespace Panthera
 {

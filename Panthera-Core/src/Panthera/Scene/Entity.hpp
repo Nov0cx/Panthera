@@ -47,6 +47,12 @@ namespace Panthera
             return m_Scene->m_Registry.all_of<T>(m_Entity);
         }
 
+        template<typename... Components>
+        inline bool HasAnyOf()
+        {
+            return m_Scene->m_Registry.any_of<Components...>(m_Entity);
+        }
+
         template<typename T, typename... Args>
         inline void CreateOrReplaceComponent(Args &&... args)
         {
