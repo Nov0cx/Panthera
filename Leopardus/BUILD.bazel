@@ -1,7 +1,7 @@
 cc_library(
     name = "LeopardusSrc",
-    srcs = ["src/LeopardusLayer.cpp"],
-    hdrs = ["src/LeopardusLayer.hpp"],
+    srcs = glob(["src/*.cpp"], exclude=["src/Leopardus.cpp"]),
+    hdrs = glob(["src/*.hpp"]),
     deps = ["//Panthera-Core:Panthera-Core",],
     strip_include_prefix = "src",
 )

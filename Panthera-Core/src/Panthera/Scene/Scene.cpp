@@ -196,4 +196,13 @@ namespace Panthera
     {
         return m_Renderer;
     }
+
+    void Scene::ForAllEntities(std::function<void(SceneEntity&)> func)
+    {
+        for (auto entity : m_Registry.view<NameComponent, IDComponent>())
+        {
+            SceneEntity sceneEntity(entity, this);
+            func(sceneEntity);
+        }
+    }
 }

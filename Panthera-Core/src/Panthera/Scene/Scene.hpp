@@ -37,6 +37,8 @@ namespace Panthera
             return m_Registry.view<Components...>();
         }
 
+        void ForAllEntities(std::function<void(SceneEntity&)> func);
+
     private:
         entt::registry m_Registry;
         Renderer* m_Renderer;
