@@ -8,6 +8,7 @@
 #include "Panthera/Render/Camera/OrthographicCameraController.hpp"
 #include "UUID.hpp"
 #include <imgui.h>
+#include "Components.hpp"
 
 namespace Panthera
 {
@@ -29,6 +30,12 @@ namespace Panthera
         SceneEntity CreateEntity(UUID uuid, const char* name);
 
         Renderer* GetRenderer();
+
+        template<class... Components>
+        auto GetEntitiesWith()
+        {
+            return m_Registry.view<Components...>();
+        }
 
     private:
         entt::registry m_Registry;

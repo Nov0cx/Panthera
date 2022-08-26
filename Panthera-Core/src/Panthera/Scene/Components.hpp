@@ -128,6 +128,9 @@ namespace Panthera
         {
         }
     };
+
+    static constexpr ComponentGroup ALL_COMPONENTS = ComponentGroup<TransformComponent, QuadComponent, CircleComponent,
+    TriangleComponent, LineTransformComponent, LineComponent, NameComponent, IDComponent>{};
 }
 
 #endif //PANTHERA_COMPONENTS_HPP
