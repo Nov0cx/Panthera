@@ -40,11 +40,9 @@ namespace Panthera
         ImGuiIO &io = ImGui::GetIO();
 
         const char* path = (Application::GetInstance()->GetAssetPath("Panthera/Assets/GUI/imgui.ini")).c_str();
-        LOG_INFO("Loading ImGui settings from {}", path);
         char* heapPath = new char[strlen(path) + 1];
         strcpy(heapPath, path);
         io.IniFilename =  heapPath;
-        LOG_INFO("ImGui IniFilename: {}", io.IniFilename);
 
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
