@@ -34,6 +34,8 @@ namespace Panthera
         virtual bool IsVSync() const = 0;
 
         virtual bool ShouldBeClosed() const = 0;
+
+        virtual void SetTitle(const char *title) = 0;
     protected:
         uint16_t p_WindowCount = 0;
     };

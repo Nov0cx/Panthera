@@ -11,14 +11,15 @@ namespace Panthera
         if (scene.is_open())
         {
             LOG_DEBUG("Scene file found!")
-            m_Scene = SceneSerializer::Deserialize("scene.json");
+            m_Scene = SceneSerializer::Deserialize("Test.pscene");
             loadedScene = true;
             LOG_DEBUG("Scene loaded!")
         } else
         {
-            m_Scene = new Scene(OrthographicCameraController(aspectRatio));
+            m_Scene = new Scene(OrthographicCameraController(aspectRatio), "Test");
         }
         m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Scene);
+        app->GetWindow()->SetTitle(("Leopardus - " + m_Scene->GetName()).c_str());
     }
 
     void LeoparudsLayer::OnStart()
@@ -80,7 +81,7 @@ namespace Panthera
     void LeoparudsLayer::OnEnd()
     {
         LOG_DEBUG("Scene destroyed!")
-        SceneSerializer::Serialize(*m_Scene, "scene.json");
+        SceneSerializer::Serialize(*m_Scene, "Test.pscene");
         delete m_Scene;
         delete m_SceneHierarchyPanel;
     }

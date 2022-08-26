@@ -12,10 +12,9 @@
 namespace Panthera
 {
 
-    Scene::Scene(OrthographicCameraController camera)
-            : m_Renderer(Renderer::Create())
+    Scene::Scene(OrthographicCameraController camera, const std::string &name)
+            : m_Renderer(Renderer::Create()), m_Name(name), m_Camera(camera)
     {
-        m_Camera = camera;
         m_Renderer->Init();
     }
 

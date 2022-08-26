@@ -34,6 +34,7 @@ namespace Panthera
 
         virtual bool ShouldBeClosed() const override;
 
+        virtual void SetTitle(const char *title) override;
     private:
         void Init(const char *title, uint32_t width, uint32_t height);
 

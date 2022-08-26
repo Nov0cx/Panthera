@@ -19,7 +19,7 @@ namespace Panthera
     class Scene
     {
     public:
-        Scene(OrthographicCameraController camera);
+        Scene(OrthographicCameraController camera, const std::string& name = "Scene");
         ~Scene();
 
         void OnUpdate(Timestep ts);
@@ -39,12 +39,14 @@ namespace Panthera
 
         void ForAllEntities(std::function<void(SceneEntity&)> func);
 
+        inline std::string &GetName() { return m_Name; }
     private:
         entt::registry m_Registry;
         Renderer* m_Renderer;
         OrthographicCameraController m_Camera;
         ImVec2 m_ViewportSize;
         ImVec2 m_LastViewportSize;
+        std::string m_Name;
 
         friend class SceneEntity;
         friend class SceneSerializer;

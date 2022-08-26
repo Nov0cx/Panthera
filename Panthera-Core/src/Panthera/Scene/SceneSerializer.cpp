@@ -146,6 +146,7 @@ namespace Panthera
     void SceneSerializer::Serialize(Scene &scene, const std::string &filename)
     {
         json sceneJson;
+        sceneJson["name"] = scene.GetName();
         sceneJson["camera"] = {
                 {"position", {
                                      {"x",   scene.m_Camera.GetCamera().GetPosition().x},
@@ -161,11 +162,11 @@ namespace Panthera
                 {"zoom", scene.m_Camera.GetZoom()}
         };
         sceneJson["entities"] = {};
-        scene.m_Registry.each([&](entt::entity entity)
-                              {
-                                  sceneJson["entities"].push_back(
-                                          SerializeEntity(scene, SceneEntity(entity, &scene)));
-                              });
+        scene.ForAllEntities([&](SceneEntity entity)
+                             {
+                                 sceneJson["entities"].push_back(
+                                         SerializeEntity(scene, entity));
+                             });
         std::ofstream o(filename);
         if (o.is_open())
         {
@@ -267,8 +268,6 @@ namespace Panthera
 
     Scene *SceneSerializer::Deserialize(const std::string &filename)
     {
-
-
         std::ifstream file(filename);
         ASSERT(file.is_open(), "Could not open file: " + filename);
         json sceneJson = json::parse(file);
@@ -278,18 +277,11 @@ namespace Panthera
                                                       sceneJson["camera"]["position"]["y"],
                                                       sceneJson["camera"]["position"]["z"]),
                                             sceneJson["camera"]["rotation"]["rot"], sceneJson["camera"]["zoom"]);
-        Scene *scene = new Scene(camera);
+        Scene *scene = new Scene(camera, sceneJson["name"].get<std::string>());
 
         for (json entity: sceneJson["entities"])
         {
             auto sceneEntity = DeserializeEntity(*scene, entity);
-            /*LOG_INFO("Scene entity created: " + sceneEntity.GetComponent<NameComponent>().Name);
-            LOG_INFO("Has transform component: " + std::to_string(sceneEntity.HasComponent<TransformComponent>()));
-            LOG_INFO("Has quad component: " + std::to_string(sceneEntity.HasComponent<QuadComponent>()));
-            LOG_INFO("Has circle component: " + std::to_string(sceneEntity.HasComponent<CircleComponent>()));
-            LOG_INFO("Has triangle component: " + std::to_string(sceneEntity.HasComponent<TriangleComponent>()));
-            LOG_INFO("Has line transform component: " + std::to_string(sceneEntity.HasComponent<LineTransformComponent>()));
-            LOG_INFO("Has line component: " + std::to_string(sceneEntity.HasComponent<LineComponent>()));*/
         }
 
         return scene;

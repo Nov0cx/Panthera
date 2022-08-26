@@ -187,4 +187,9 @@ namespace Panthera
     {
         return glfwWindowShouldClose(m_Window);
     }
+
+    void GLFWWindow::SetTitle(const char *title)
+    {
+        glfwSetWindowTitle(m_Window, title);
+    }
 }
