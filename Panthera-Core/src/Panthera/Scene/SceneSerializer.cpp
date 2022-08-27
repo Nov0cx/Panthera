@@ -272,7 +272,7 @@ namespace Panthera
         return sceneEntity;
     }
 
-    Scene* SceneSerializer::Deserialize(const nlohmann::json& sceneJson)
+    Scene* SceneSerializer::DeserializeJson(const nlohmann::json& sceneJson)
     {
         auto application = Application::GetInstance();
         OrthographicCameraController camera(application->GetWindow()->GetWidth() / application->GetWindow()->GetHeight(),
@@ -292,10 +292,13 @@ namespace Panthera
 
     Scene *SceneSerializer::Deserialize(const std::string &filename)
     {
+        LOG_INFO("Deserializing scene: {}", filename);
         std::ifstream file(filename);
         ASSERT(file.is_open(), "Could not open file: " + filename);
+        LOG_INFO("File opened");
         json sceneJson = json::parse(file);
+        LOG_DEBUG("Scene deserialized: {}", sceneJson.dump(4));
         file.close();
-        return Deserialize(sceneJson);
+        return DeserializeJson(sceneJson);
     }
 }

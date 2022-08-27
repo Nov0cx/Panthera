@@ -43,7 +43,7 @@ namespace Panthera
             Project *project = new Project(json["name"], path, json["renderer_api"]);
             for (auto scene : json["scenes"])
             {
-                project->AddScene(SceneSerializer::Deserialize(scene));
+                project->AddScene(SceneSerializer::DeserializeJson(scene));
             }
             return project;
         }

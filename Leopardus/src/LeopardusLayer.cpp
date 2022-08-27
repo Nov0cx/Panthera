@@ -132,6 +132,7 @@ namespace Panthera
                     auto selection = pfd::open_file("Add Scene", Application::GetInstance()->GetExePath(), {"Panthera Scenes (*.pscene)", "*.pscene"}).result();
                     for (auto& file : selection)
                     {
+                        LOG_DEBUG("Scene found: " + file);
                         m_Project->AddScene(SceneSerializer::Deserialize(file));
                         break;
                     }
