@@ -1,6 +1,5 @@
 #include "SceneSerializer.hpp"
 
-#include <nlohmann/json.hpp>
 #include "Entity.hpp"
 #include "Components.hpp"
 #include <string>
@@ -145,6 +144,20 @@ namespace Panthera
 
     void SceneSerializer::Serialize(Scene &scene, const std::string &filename)
     {
+        json sceneJson = Serialize(scene);
+        std::ofstream o(filename);
+        if (o.is_open())
+        {
+            o << sceneJson.dump();
+            o.close();
+        } else
+        {
+            LOG_ERROR("Could not open file: " + filename);
+        }
+    }
+
+    nlohmann::json SceneSerializer::Serialize(Scene &scene)
+    {
         json sceneJson;
         sceneJson["name"] = scene.GetName();
         sceneJson["camera"] = {
@@ -167,15 +180,7 @@ namespace Panthera
                                  sceneJson["entities"].push_back(
                                          SerializeEntity(scene, entity));
                              });
-        std::ofstream o(filename);
-        if (o.is_open())
-        {
-            o << sceneJson.dump();
-            o.close();
-        } else
-        {
-            LOG_ERROR("Could not open file: " + filename);
-        }
+        return sceneJson;
     }
 
     static SceneEntity DeserializeEntity(Scene &scene, json entity)

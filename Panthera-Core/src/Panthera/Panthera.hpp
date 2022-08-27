@@ -37,6 +37,9 @@
 #include "Scene/Components.hpp"
 #include "Scene/UUID.hpp"
 
+#include "Project/Project.hpp"
+#include "Project/ProjectSerializer.hpp"
+
 #include "GUI/ImGuiLayer.hpp"
 
 #include <glm/glm.hpp>

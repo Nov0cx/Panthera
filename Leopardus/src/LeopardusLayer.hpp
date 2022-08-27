@@ -25,8 +25,7 @@ namespace Panthera
     private:
         void RenderMenu();
     private:
-        Ref <Texture2D> m_ColorTexture, m_FlowerTexture, m_FormTexture;
-        Scene *m_Scene;
+        Project* m_Project;
         bool loadedScene = false;
         SceneHierarchyPanel *m_SceneHierarchyPanel;
     };
