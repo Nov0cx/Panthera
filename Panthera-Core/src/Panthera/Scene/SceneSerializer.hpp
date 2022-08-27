@@ -12,6 +12,7 @@ namespace Panthera
         static void Serialize(Scene& scene, const std::string &filename);
         static nlohmann::json Serialize(Scene& scene);
         static Scene* Deserialize(const std::string& filename);
+        static Scene* Deserialize(const nlohmann::json& json);
     private:
     };
 }

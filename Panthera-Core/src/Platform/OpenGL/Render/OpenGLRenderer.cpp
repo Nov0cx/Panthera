@@ -319,6 +319,8 @@ namespace Panthera
         InitCircle();
         InitLine();
 
+        ASSERT(Application::GetInstance() != nullptr, "Application is nullptr");
+        ASSERT(Application::GetInstance()->GetWindow() != nullptr, "Window is nullptr");
         m_Data->Framebuffer = Framebuffer::Create({
             FramebufferAttachmentSpecification {
                 .AttachmentType = FramebufferAttachmentType::Color,
@@ -409,6 +411,7 @@ namespace Panthera
 
     static void sBeginScene(RendererData *data, const glm::mat4& projectionMatrix)
     {
+        ASSERT(projectionMatrix != glm::mat4(0.0f), "Projection matrix is zero!");
         data->QuadIndicesCount = 0;
         data->QuadVerticesCount = 0;
         data->TextureIndex = 1;

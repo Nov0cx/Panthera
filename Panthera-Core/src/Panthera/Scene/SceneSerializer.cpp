@@ -160,6 +160,7 @@ namespace Panthera
     {
         json sceneJson;
         sceneJson["name"] = scene.GetName();
+        sceneJson["path"] = scene.GetPath();
         sceneJson["camera"] = {
                 {"position", {
                                      {"x",   scene.m_Camera.GetCamera().GetPosition().x},
@@ -271,18 +272,15 @@ namespace Panthera
         return sceneEntity;
     }
 
-    Scene *SceneSerializer::Deserialize(const std::string &filename)
+    Scene* SceneSerializer::Deserialize(const nlohmann::json& sceneJson)
     {
-        std::ifstream file(filename);
-        ASSERT(file.is_open(), "Could not open file: " + filename);
-        json sceneJson = json::parse(file);
-        file.close();
-        OrthographicCameraController camera(sceneJson["camera"]["aspect"],
+        auto application = Application::GetInstance();
+        OrthographicCameraController camera(application->GetWindow()->GetWidth() / application->GetWindow()->GetHeight(),
                                             glm::vec3(sceneJson["camera"]["position"]["x"],
                                                       sceneJson["camera"]["position"]["y"],
                                                       sceneJson["camera"]["position"]["z"]),
                                             sceneJson["camera"]["rotation"]["rot"], sceneJson["camera"]["zoom"]);
-        Scene *scene = new Scene(camera, sceneJson["name"].get<std::string>(), filename);
+        Scene *scene = new Scene(camera, sceneJson["name"].get<std::string>(), sceneJson["path"].get<std::string>());
 
         for (json entity: sceneJson["entities"])
         {
@@ -290,5 +288,14 @@ namespace Panthera
         }
 
         return scene;
+    }
+
+    Scene *SceneSerializer::Deserialize(const std::string &filename)
+    {
+        std::ifstream file(filename);
+        ASSERT(file.is_open(), "Could not open file: " + filename);
+        json sceneJson = json::parse(file);
+        file.close();
+        return Deserialize(sceneJson);
     }
 }

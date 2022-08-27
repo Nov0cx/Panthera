@@ -1,9 +1,11 @@
 #include "Project.hpp"
 
+#include <utility>
+
 namespace Panthera
 {
     Project::Project(const std::string &name, const std::string &path, RendererAPI api)
-        : m_Name(name), m_Path(path), m_RendererAPI(api)
+        : m_Name(std::move(name)), m_Path(std::move(path)), m_RendererAPI(api)
     {}
 
     Project::~Project()

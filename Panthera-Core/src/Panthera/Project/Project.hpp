@@ -47,8 +47,8 @@ namespace Panthera
         inline void SetRendererAPI(RendererAPI api)
         { m_RendererAPI = api; }
     private:
-        std::vector<Scene *> m_Scenes;
-        Scene *m_ActiveScene;
+        std::vector<Scene *> m_Scenes = {};
+        Scene *m_ActiveScene = nullptr;
         std::string m_Name;
         std::string m_Path;
         RendererAPI m_RendererAPI;

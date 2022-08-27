@@ -20,7 +20,7 @@ namespace Panthera
             json["scenes"].push_back(SceneSerializer::Serialize(*scene));
         }
 
-        std::ofstream file(project->GetPath());
+        std::ofstream file(project->GetPath(), std::ios::binary);
         if (file.is_open())
         {
             file << json.dump();
@@ -34,6 +34,24 @@ namespace Panthera
 
     Project *ProjectSerializer::Deserialize(const std::string &path)
     {
-        return NULL;
+        std::ifstream file(path, std::ios::binary);
+        if (file.is_open())
+        {
+            nlohmann::json json;
+            file >> json;
+            file.close();
+            Project *project = new Project(json["name"], path, json["renderer_api"]);
+            for (auto scene : json["scenes"])
+            {
+                project->AddScene(SceneSerializer::Deserialize(scene));
+            }
+            return project;
+        }
+        else
+        {
+            file.close();
+            FAIL("Failed to open file: " + path);
+        }
+        return nullptr;
     }
 }

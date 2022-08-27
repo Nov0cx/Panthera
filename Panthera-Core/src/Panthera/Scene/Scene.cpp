@@ -10,11 +10,13 @@
 #include "Panthera/Core/Event.hpp"
 #include "Panthera/Events/WindowEvents.hpp"
 
+#include <utility>
+
 namespace Panthera
 {
 
     Scene::Scene(OrthographicCameraController camera, const std::string &name, const std::string &path)
-            : m_Renderer(Renderer::Create()), m_Name(name), m_Camera(camera), m_Path(std::move(path))
+            : m_Renderer(Renderer::Create()), m_Name(std::move(name)), m_Camera(camera), m_Path(std::move(path))
     {
         m_Renderer->Init();
     }

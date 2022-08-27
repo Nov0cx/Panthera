@@ -24,6 +24,7 @@ namespace Panthera
 
     private:
         void RenderMenu();
+        void SaveProject();
     private:
         Project* m_Project;
         bool loadedScene = false;
