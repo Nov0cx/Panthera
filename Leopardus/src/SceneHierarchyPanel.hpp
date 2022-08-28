@@ -11,10 +11,7 @@ namespace Panthera
         SceneHierarchyPanel(Scene* scene);
         ~SceneHierarchyPanel();
 
-        void Render();
-
-    private:
-        Scene* m_Scene;
+        void Render(Scene* scene);
     };
 }
 

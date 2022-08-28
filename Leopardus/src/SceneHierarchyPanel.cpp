@@ -5,16 +5,16 @@ namespace Panthera
 
     SceneHierarchyPanel::SceneHierarchyPanel(Scene *scene)
     {
-        m_Scene = scene;
+        scene = scene;
     }
 
     SceneHierarchyPanel::~SceneHierarchyPanel()
     {}
 
-    void SceneHierarchyPanel::Render()
+    void SceneHierarchyPanel::Render(Scene* scene)
     {
         ImGui::Begin("Scene Hierarchy");
-        m_Scene->ForAllEntities([this](SceneEntity& entity)
+        scene->ForAllEntities([this](SceneEntity& entity)
         {
             if (ImGui::TreeNode(entity.GetName().c_str()))
             {

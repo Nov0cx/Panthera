@@ -8,7 +8,7 @@ namespace Panthera
     class ProjectSerializer
     {
     public:
-        static void Serialize(const Project* project);
+        static void Serialize(Project* project);
         static Project* Deserialize(const std::string& path);
     };
 }

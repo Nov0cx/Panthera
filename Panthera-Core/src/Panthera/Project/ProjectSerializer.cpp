@@ -9,21 +9,23 @@
 namespace Panthera
 {
 
-    void ProjectSerializer::Serialize(const Project *project)
+    void ProjectSerializer::Serialize(Project *project)
     {
         nlohmann::json json;
         json["name"] = project->GetName();
         json["scenes"] = {};
         json["renderer_api"] = project->GetRendererAPI();
+        json["active_scene"] = project->GetActiveScene()->GetName();
         for (auto scene : project->GetScenes())
         {
-            json["scenes"].push_back(SceneSerializer::Serialize(*scene));
+            if (scene->GetPath() != "")
+                json["scenes"].push_back(scene->GetPath());
         }
 
         std::ofstream file(project->GetPath(), std::ios::binary);
         if (file.is_open())
         {
-            file << json.dump();
+            file << json.dump(4);
             file.close();
         }
         else
@@ -43,8 +45,10 @@ namespace Panthera
             Project *project = new Project(json["name"], path, json["renderer_api"]);
             for (auto scene : json["scenes"])
             {
-                project->AddScene(SceneSerializer::DeserializeJson(scene));
+                if (scene.get<std::string>() != "")
+                    project->AddScene(SceneSerializer::Deserialize(scene));
             }
+            project->SetActiveScene(json["active_scene"].get<std::string>());
             return project;
         }
         else

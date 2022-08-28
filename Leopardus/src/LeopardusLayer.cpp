@@ -56,7 +56,7 @@ namespace Panthera
         ASSERT(m_Project != nullptr, "Project is null!");
         ASSERT(m_Project->GetActiveScene() != nullptr, "Scene is null!");
         m_Project->GetActiveScene()->OnImGuiRender();
-        m_SceneHierarchyPanel->Render();
+        m_SceneHierarchyPanel->Render(m_Project->GetActiveScene());
     }
 
     void LeoparudsLayer::RenderMenu()
