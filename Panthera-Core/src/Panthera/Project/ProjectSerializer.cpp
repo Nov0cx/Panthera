@@ -9,7 +9,7 @@
 namespace Panthera
 {
 
-    void ProjectSerializer::Serialize(Project *project)
+    void ProjectSerializer::Serialize(Ref<Project> project)
     {
         nlohmann::json json;
         json["name"] = project->GetName();
@@ -34,7 +34,7 @@ namespace Panthera
         }
     }
 
-    Project *ProjectSerializer::Deserialize(const std::string &path)
+    Ref<Project> ProjectSerializer::Deserialize(const std::string &path)
     {
         std::ifstream file(path, std::ios::binary);
         if (file.is_open())

@@ -2,14 +2,15 @@
 #define PANTHERA_PROJECTSERIALIZER_HPP
 
 #include "Project.hpp"
+#include "Panthera/Core/Pointer.hpp"
 
 namespace Panthera
 {
     class ProjectSerializer
     {
     public:
-        static void Serialize(Project* project);
-        static Project* Deserialize(const std::string& path);
+        static void Serialize(Ref<Project> project);
+        static Ref<Project> Deserialize(const std::string& path);
     };
 }
 

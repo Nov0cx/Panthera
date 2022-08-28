@@ -10,6 +10,15 @@ namespace Panthera
     // fwd
     class ImGuiHelper;
 
+    enum class ImGuiThemes
+    {
+        Light,
+        Classic,
+        Dark,
+        HazelEngine,
+        Panthera,
+    };
+
     class ImGuiLayer : public Layer
     {
     public:
@@ -24,6 +33,8 @@ namespace Panthera
         void End();
 
         void SetIniPath(const std::string& path);
+
+        void SetTheme(ImGuiThemes theme);
     private:
         ImGuiHelper *m_ImGuiHelper;
     };

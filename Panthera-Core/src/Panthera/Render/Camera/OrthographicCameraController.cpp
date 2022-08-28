@@ -62,7 +62,7 @@ namespace Panthera
 
     void OrthographicCameraController::OnEvent(Event &event)
     {
-        static Event::Listener<MouseScrollEvent> scrollListener([this](auto &&e){ SetZoom(m_Zoom + e.PosY * 0.1f); });
+        static Event::Listener<MouseScrollEvent> scrollListener([this](auto &&e){ SetZoom(GetZoom() - e.PosY * 0.1); });
         scrollListener.Run(event, EventSubType::MouseScrollEvent);
         /*static Event::Listener<WindowResizeEvent> windowResizeEventListener([this] (auto&& e) {
             WindowResizeEvent& windowResizeEvent = dynamic_cast<WindowResizeEvent&>(e);

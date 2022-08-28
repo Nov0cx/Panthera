@@ -77,6 +77,8 @@ namespace Panthera
 
         Ref<Window> &GetWindow();
 
+        inline ImGuiLayer *GetImGuiLayer() { return m_ImGuiLayer; }
+
     private:
         static void SetInstance(void *instance);
 

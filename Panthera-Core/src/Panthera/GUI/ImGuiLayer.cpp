@@ -39,10 +39,10 @@ namespace Panthera
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();
 
-        const char* path = (Application::GetInstance()->GetAssetPath("Panthera/Assets/GUI/imgui.ini")).c_str();
-        char* heapPath = new char[strlen(path) + 1];
+        const char *path = (Application::GetInstance()->GetAssetPath("Panthera/Assets/GUI/imgui.ini")).c_str();
+        char *heapPath = new char[strlen(path) + 1];
         strcpy(heapPath, path);
-        io.IniFilename =  heapPath;
+        io.IniFilename = heapPath;
 
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
         //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -88,11 +88,13 @@ namespace Panthera
         ImGui::NewFrame();
         static bool opt_fullscreen = true;
         static bool opt_padding = false;
-        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton;
+        static ImGuiDockNodeFlags dockspace_flags =
+                ImGuiDockNodeFlags_NoWindowMenuButton | ImGuiDockNodeFlags_NoCloseButton;
 
         // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
         // because it would be confusing to have two docking targets within each others.
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse;
+        ImGuiWindowFlags window_flags =
+                ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse;
         if (opt_fullscreen)
         {
             const ImGuiViewport *viewport = ImGui::GetMainViewport();
@@ -149,5 +151,96 @@ namespace Panthera
     void ImGuiLayer::SetIniPath(const std::string &path)
     {
         ImGui::GetIO().IniFilename = (path + "/imgui.ini").c_str();
+    }
+
+    // https://github.com/TheCherno/Hazel/blob/master/Hazel/src/Hazel/ImGui/ImGuiLayer.cpp#L114
+    static void HazelEngineTheme()
+    {
+        auto &colors = ImGui::GetStyle().Colors;
+        colors[ImGuiCol_WindowBg] = ImVec4{0.1f, 0.105f, 0.11f, 1.0f};
+
+        // Headers
+        colors[ImGuiCol_Header] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+        colors[ImGuiCol_HeaderHovered] = ImVec4{0.3f, 0.305f, 0.31f, 1.0f};
+        colors[ImGuiCol_HeaderActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+
+        // Buttons
+        colors[ImGuiCol_Button] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+        colors[ImGuiCol_ButtonHovered] = ImVec4{0.3f, 0.305f, 0.31f, 1.0f};
+        colors[ImGuiCol_ButtonActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+
+        // Frame BG
+        colors[ImGuiCol_FrameBg] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+        colors[ImGuiCol_FrameBgHovered] = ImVec4{0.3f, 0.305f, 0.31f, 1.0f};
+        colors[ImGuiCol_FrameBgActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+
+        // Tabs
+        colors[ImGuiCol_Tab] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+        colors[ImGuiCol_TabHovered] = ImVec4{0.38f, 0.3805f, 0.381f, 1.0f};
+        colors[ImGuiCol_TabActive] = ImVec4{0.28f, 0.2805f, 0.281f, 1.0f};
+        colors[ImGuiCol_TabUnfocused] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+        colors[ImGuiCol_TabUnfocusedActive] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+
+        // Title
+        colors[ImGuiCol_TitleBg] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+        colors[ImGuiCol_TitleBgActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+        colors[ImGuiCol_TitleBgCollapsed] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+    }
+
+    static void PantheraTheme()
+    {
+        auto &colors = ImGui::GetStyle().Colors;
+
+        // Headers
+        colors[ImGuiCol_Header] = ImVec4{0.21f, 0.21f, 0.28f, 1.0f};
+        colors[ImGuiCol_HeaderHovered] = ImVec4{0.31f, 0.13f, 0.295f, 1.0f};
+        colors[ImGuiCol_HeaderActive] = ImVec4{0.31f, 0.13f, 0.295f, 1.0f};
+
+        // Buttons
+        colors[ImGuiCol_Button] = ImVec4{0.31f, 0.24f, 0.295f, 1.0f};
+        colors[ImGuiCol_ButtonHovered] = ImVec4{0.21f, 0.12f, 0.21f, 1.0f};
+        colors[ImGuiCol_ButtonActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+
+        // Frame BG
+        colors[ImGuiCol_FrameBg] = ImVec4{0.294f, 0.294f, 0.294f, 1.0f};
+        colors[ImGuiCol_FrameBgHovered] = ImVec4{0.194f, 0.194f, 0.194f, 1.0f};
+        colors[ImGuiCol_FrameBgActive] = ImVec4{0.194f, 0.194f, 0.194f, 1.0f};
+
+        // Tabs
+        colors[ImGuiCol_Tab] = ImVec4{0.294f, 0.294f, 0.294f, 1.0f};
+        colors[ImGuiCol_TabHovered] = ImVec4{0.31f, 0.13f, 0.295f, 1.0f};
+        colors[ImGuiCol_TabActive] = ImVec4{0.31f, 0.13f, 0.295f, 1.0f};
+        colors[ImGuiCol_TabUnfocused] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+        colors[ImGuiCol_TabUnfocusedActive] = ImVec4{0.2f, 0.205f, 0.21f, 1.0f};
+
+        // Title
+        colors[ImGuiCol_TitleBg] = ImVec4{0.044f, 0.044f, 0.044f, 1.0f};
+        colors[ImGuiCol_TitleBgActive] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+        colors[ImGuiCol_TitleBgCollapsed] = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
+    }
+
+    void ImGuiLayer::SetTheme(ImGuiThemes theme)
+    {
+        switch (theme)
+        {
+            case ImGuiThemes::Dark:
+                ImGui::StyleColorsDark();
+                break;
+            case ImGuiThemes::Light:
+                ImGui::StyleColorsLight();
+                break;
+            case ImGuiThemes::Classic:
+                ImGui::StyleColorsClassic();
+                break;
+            case ImGuiThemes::HazelEngine:
+                HazelEngineTheme();
+                break;
+            case ImGuiThemes::Panthera:
+                PantheraTheme();
+                break;
+            default:
+                FAIL("Unknown ImGuiTheme!");
+                break;
+        }
     }
 }

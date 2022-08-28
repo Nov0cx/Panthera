@@ -28,14 +28,15 @@ namespace Panthera
 
     void Scene::OnUpdate(Timestep ts)
     {
-        if ((m_ViewportSize.x > 0 || m_ViewportSize.y > 0) &&
-            (m_ViewportSize.x != m_LastViewportSize.x || m_ViewportSize.y != m_LastViewportSize.y))
+        if (((m_ViewportSize.x > 0 || m_ViewportSize.y > 0) &&
+            (m_ViewportSize.x != m_LastViewportSize.x || m_ViewportSize.y != m_LastViewportSize.y)) || !m_HasBeginResized)
         {
             m_Renderer->GetFramebuffer()->ResizeAttachments(m_LastViewportSize.x, m_LastViewportSize.y);
             m_Renderer->GetFramebuffer()->SetViewport(0, 0, m_LastViewportSize.x, m_LastViewportSize.y);
             m_Camera.Resize(m_LastViewportSize.x, m_LastViewportSize.y);
 
             m_ViewportSize = m_LastViewportSize;
+            m_HasBeginResized = true;
         }
 
         m_Camera.OnUpdate(ts);

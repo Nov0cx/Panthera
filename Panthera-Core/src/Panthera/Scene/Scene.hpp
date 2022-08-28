@@ -49,6 +49,7 @@ namespace Panthera
         ImVec2 m_LastViewportSize;
         std::string m_Name;
         std::string m_Path;
+        bool m_HasBeginResized = false;
 
         friend class SceneEntity;
         friend class SceneSerializer;

@@ -16,9 +16,9 @@ namespace Panthera
 
         virtual void OnEnd() override;
 
-        virtual void OnUpdate(Panthera::Timestep ts) override;
+        virtual void OnUpdate(Timestep ts) override;
 
-        virtual void OnEvent(Panthera::Event &e) override;
+        virtual void OnEvent(Event &e) override;
 
         virtual void OnImGuiRender() override;
 
@@ -26,9 +26,8 @@ namespace Panthera
         void RenderMenu();
         void SaveProject();
     private:
-        Project* m_Project;
-        bool loadedScene = false;
-        SceneHierarchyPanel *m_SceneHierarchyPanel;
+        Ref<Project> m_Project = nullptr;
+        Ref<SceneHierarchyPanel> m_SceneHierarchyPanel = nullptr;
     };
 }
 

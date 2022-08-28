@@ -21,10 +21,10 @@ namespace Panthera
         auto app = Application::GetInstance();
         float aspectRatio = (float) app->GetWindow()->GetWidth() / (float) app->GetWindow()->GetHeight();
 
-        m_Project = new Project("Empty Project ", "", RendererAPI::OpenGL);
+        m_Project = CreateRef<Project>("Empty Project ", "", RendererAPI::OpenGL);
         m_Project->AddScene(new Scene(OrthographicCameraController(aspectRatio), "Empty Scene"));
 
-        m_SceneHierarchyPanel = new SceneHierarchyPanel(m_Project->GetActiveScene());
+        m_SceneHierarchyPanel = CreateRef<SceneHierarchyPanel>();
 
         app->GetWindow()->SetTitle(("Leopardus - " + m_Project->GetName() + " - " + m_Project->GetActiveScene()->GetName()).c_str());
     }
@@ -32,7 +32,8 @@ namespace Panthera
     void LeoparudsLayer::OnEnd()
     {
         SaveProject();
-        delete m_SceneHierarchyPanel;
+        m_Project.Reset();
+        m_SceneHierarchyPanel.Reset();
     }
 
     void LeoparudsLayer::OnUpdate(Timestep ts)
@@ -65,26 +66,31 @@ namespace Panthera
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Save Scene"))
+                if (ImGui::BeginMenu("Theme"))
                 {
-                    //SceneSerializer::Serialize(*m_Project->GetActiveScene(), "Test.pscene");
-                }
-                if (ImGui::MenuItem("Reload Scene"))
-                {
-                    //m_Project->GetActiveScene() = SceneSerializer::Deserialize("Test.pscene");
-                    LOG_DEBUG("Scene loaded!")
-                }
-                /*if (ImGui::MenuItem("Open Scene"))
-                {
-                    auto selection = pfd::open_file("Open Scene", Application::GetInstance()->GetExePath(), {"Panthera Scenes (*.pscene)", "*.pscene"}).result();
-                    for (auto& file : selection)
+                    if (ImGui::MenuItem("Dark"))
                     {
-                        m_Scene = SceneSerializer::Deserialize(file);
-                        LOG_DEBUG("Scene loaded!")
-                        break;
+                        Application::GetInstance()->GetImGuiLayer()->SetTheme(ImGuiThemes::Dark);
                     }
-                    Application::GetInstance()->GetWindow()->SetTitle(("Leopardus - " + m_Scene->GetName()).c_str());
-                }*/
+                    if (ImGui::MenuItem("Classic"))
+                    {
+                        Application::GetInstance()->GetImGuiLayer()->SetTheme(ImGuiThemes::Classic);
+                    }
+                    if (ImGui::MenuItem("Light"))
+                    {
+                        Application::GetInstance()->GetImGuiLayer()->SetTheme(ImGuiThemes::Light);
+                    }
+                    if (ImGui::MenuItem("HazelEngine"))
+                    {
+                        Application::GetInstance()->GetImGuiLayer()->SetTheme(ImGuiThemes::HazelEngine);
+                    }
+                    if (ImGui::MenuItem("Panthera"))
+                    {
+                        Application::GetInstance()->GetImGuiLayer()->SetTheme(ImGuiThemes::Panthera);
+                    }
+
+                    ImGui::EndMenu();
+                }
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Project"))
@@ -98,7 +104,7 @@ namespace Panthera
                     {
                         std::string path = selection + "/.pproject";
                         LOG_DEBUG("Path: " + path);
-                        m_Project = new Project("New Project", path, RendererAPI::OpenGL);
+                        m_Project = CreateRef<Project>("New Project", path, RendererAPI::OpenGL);
                         LOG_DEBUG("Project created!");
                         ASSERT(m_Project != nullptr, "Project is null!");
                         if (m_Project->GetActiveScene() == nullptr)
@@ -155,7 +161,6 @@ namespace Panthera
             {
                 ProjectSerializer::Serialize(m_Project);
             }
-            delete m_Project;
         }
     }
 }
