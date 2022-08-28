@@ -19,7 +19,10 @@ namespace Panthera
         for (auto scene : project->GetScenes())
         {
             if (scene->GetPath() != "")
+            {
                 json["scenes"].push_back(scene->GetPath());
+                SceneSerializer::Serialize(*scene, scene->GetPath());
+            }
         }
 
         std::ofstream file(project->GetPath(), std::ios::binary);

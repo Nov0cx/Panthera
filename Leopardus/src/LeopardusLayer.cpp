@@ -157,8 +157,9 @@ namespace Panthera
     {
         if (m_Project != nullptr)
         {
-            if (m_Project->GetScenes().size() > 0 && m_Project->GetPath() != "")
+            if (m_Project->GetPath() != "")
             {
+                LOG_DEBUG("Saving project: " + m_Project->GetPath());
                 ProjectSerializer::Serialize(m_Project);
             }
         }
