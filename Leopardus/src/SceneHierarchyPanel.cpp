@@ -3,9 +3,8 @@
 namespace Panthera
 {
 
-    SceneHierarchyPanel::SceneHierarchyPanel(Scene *scene)
+    SceneHierarchyPanel::SceneHierarchyPanel()
     {
-        scene = scene;
     }
 
     SceneHierarchyPanel::~SceneHierarchyPanel()

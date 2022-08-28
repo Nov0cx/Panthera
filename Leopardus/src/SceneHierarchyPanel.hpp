@@ -8,7 +8,7 @@ namespace Panthera
     class SceneHierarchyPanel
     {
     public:
-        SceneHierarchyPanel(Scene* scene);
+        SceneHierarchyPanel();
         ~SceneHierarchyPanel();
 
         void Render(Scene* scene);
