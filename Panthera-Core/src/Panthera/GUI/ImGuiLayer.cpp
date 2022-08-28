@@ -63,6 +63,7 @@ namespace Panthera
         }
 
         m_ImGuiHelper->OnStart();
+        SetTheme(ImGuiThemes::Panthera);
     }
 
     void ImGuiLayer::OnEnd()
@@ -77,9 +78,14 @@ namespace Panthera
 
     void ImGuiLayer::OnEvent(Event &event)
     {
-        ImGuiIO &io = ImGui::GetIO();
-        //event.SetCancelled(event.GetEventType() == EventType::MOUSE && io.WantCaptureMouse);
-        //event.SetCancelled(event.GetEventType() == EventType::KEY && io.WantCaptureKeyboard);
+        if (!m_BlockEvents)
+            return;
+
+        if (event.GetEventType() == EventType::MOUSE || event.GetEventType() == EventType::KEY)
+        {
+            LOG_DEBUG("ImGuiLayer::OnEvent: {0}", event.GetName());
+            event.SetCancelled(true);
+        }
     }
 
     void ImGuiLayer::Begin()

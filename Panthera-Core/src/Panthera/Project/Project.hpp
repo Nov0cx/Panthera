@@ -5,6 +5,7 @@
 #include <vector>
 #include "Panthera/Scene/Scene.hpp"
 #include "Panthera/Render/RenderAPI.hpp"
+#include "Panthera/Render/Renderer.hpp"
 
 namespace Panthera
 {
@@ -45,7 +46,10 @@ namespace Panthera
         { m_ActiveScene = scene; }
 
         inline void SetRendererAPI(RendererAPI api)
-        { m_RendererAPI = api; }
+        {
+            m_RendererAPI = api;
+            RendererState::SetAPI(api);
+        }
     private:
         std::vector<Scene *> m_Scenes = {};
         Scene *m_ActiveScene = nullptr;

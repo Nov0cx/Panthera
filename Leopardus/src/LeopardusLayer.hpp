@@ -3,6 +3,7 @@
 
 #include "Panthera/Panthera.hpp"
 #include "SceneHierarchyPanel.hpp"
+#include "ProjectPanel.hpp"
 
 namespace Panthera
 {
@@ -28,6 +29,7 @@ namespace Panthera
     private:
         Ref<Project> m_Project = nullptr;
         Ref<SceneHierarchyPanel> m_SceneHierarchyPanel = nullptr;
+        Ref<ProjectPanel> m_ProjectPanel = nullptr;
     };
 }
 

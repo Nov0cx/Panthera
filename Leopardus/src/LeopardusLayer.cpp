@@ -27,12 +27,15 @@ namespace Panthera
         m_SceneHierarchyPanel = CreateRef<SceneHierarchyPanel>();
 
         app->GetWindow()->SetTitle(("Leopardus - " + m_Project->GetName() + " - " + m_Project->GetActiveScene()->GetName()).c_str());
+
+        m_ProjectPanel = CreateRef<ProjectPanel>();
     }
 
     void LeoparudsLayer::OnEnd()
     {
         SaveProject();
         m_Project.Reset();
+        m_ProjectPanel.Reset();
         m_SceneHierarchyPanel.Reset();
     }
 
@@ -58,6 +61,7 @@ namespace Panthera
         ASSERT(m_Project->GetActiveScene() != nullptr, "Scene is null!");
         m_Project->GetActiveScene()->OnImGuiRender();
         m_SceneHierarchyPanel->Render(m_Project->GetActiveScene());
+        m_ProjectPanel->Render(m_Project);
     }
 
     void LeoparudsLayer::RenderMenu()

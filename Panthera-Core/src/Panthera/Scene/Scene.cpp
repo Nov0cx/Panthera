@@ -9,6 +9,7 @@
 #include <imgui_internal.h>
 #include "Panthera/Core/Event.hpp"
 #include "Panthera/Events/WindowEvents.hpp"
+#include "Panthera/Core/Application.hpp"
 
 #include <utility>
 
@@ -29,7 +30,8 @@ namespace Panthera
     void Scene::OnUpdate(Timestep ts)
     {
         if (((m_ViewportSize.x > 0 || m_ViewportSize.y > 0) &&
-            (m_ViewportSize.x != m_LastViewportSize.x || m_ViewportSize.y != m_LastViewportSize.y)) || !m_HasBeginResized)
+             (m_ViewportSize.x != m_LastViewportSize.x || m_ViewportSize.y != m_LastViewportSize.y)) ||
+            !m_HasBeginResized)
         {
             m_Renderer->GetFramebuffer()->ResizeAttachments(m_LastViewportSize.x, m_LastViewportSize.y);
             m_Renderer->GetFramebuffer()->SetViewport(0, 0, m_LastViewportSize.x, m_LastViewportSize.y);
@@ -127,6 +129,9 @@ namespace Panthera
     {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
         ImGui::Begin("Scene Viewport");
+
+        Application::GetInstance()->GetImGuiLayer()->SetBlockEvents(!ImGui::IsWindowFocused() && !ImGui::IsWindowHovered());
+
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         m_LastViewportSize = ImVec2{viewportPanelSize.x, viewportPanelSize.y};
         if (m_ViewportSize.x == 0 || m_ViewportSize.y == 0)
@@ -148,9 +153,9 @@ namespace Panthera
         return m_Renderer;
     }
 
-    void Scene::ForAllEntities(std::function<void(SceneEntity&)> func)
+    void Scene::ForAllEntities(std::function<void(SceneEntity &)> func)
     {
-        for (auto entity : m_Registry.view<NameComponent, IDComponent>())
+        for (auto entity: m_Registry.view<NameComponent, IDComponent>())
         {
             SceneEntity sceneEntity(entity, this);
             func(sceneEntity);

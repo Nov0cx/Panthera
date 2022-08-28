@@ -28,6 +28,7 @@ namespace Panthera
     {
         for (auto& layer : m_Layers)
         {
+            if (event.IsCancelled()) break;
             if (layer->IsActive())
             {
                 layer->OnEvent(event);

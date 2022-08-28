@@ -35,8 +35,11 @@ namespace Panthera
         void SetIniPath(const std::string& path);
 
         void SetTheme(ImGuiThemes theme);
+
+        void SetBlockEvents(bool blockEvents) { m_BlockEvents = blockEvents; }
     private:
         ImGuiHelper *m_ImGuiHelper;
+        bool m_BlockEvents = false;
     };
 
     class ImGuiHelper

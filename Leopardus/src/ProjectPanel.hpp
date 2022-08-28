@@ -11,8 +11,7 @@ namespace Panthera
         ProjectPanel();
         ~ProjectPanel();
 
-    private:
-        Project* m_Project;
+        void Render(Ref<Project>& project);
     };
 }
 
