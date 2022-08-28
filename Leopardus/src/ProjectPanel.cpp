@@ -31,6 +31,29 @@ namespace Panthera
             ImGui::EndCombo();
         }
 
+        auto scenes = project->GetScenes();
+        std::vector<const char *> sceneNames = {};
+        for (auto scene : scenes)
+        {
+            sceneNames.push_back(scene->GetName().c_str());
+        }
+        if (ImGui::BeginCombo("Active Scene", project->GetActiveScene()->GetName().c_str(), ImGuiComboFlags_None))
+        {
+            for (int i = 0; i < sceneNames.size(); i++)
+            {
+                bool is_selected = (project->GetActiveScene() == scenes[i]);
+                if (ImGui::Selectable(sceneNames[i], is_selected))
+                {
+                    project->SetActiveScene(sceneNames[i]);
+                }
+                if (is_selected)
+                {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+            ImGui::EndCombo();
+        }
+
         ImGui::End();
     }
 }

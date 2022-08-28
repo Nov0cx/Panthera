@@ -83,7 +83,6 @@ namespace Panthera
 
         if (event.GetEventType() == EventType::MOUSE || event.GetEventType() == EventType::KEY)
         {
-            LOG_DEBUG("ImGuiLayer::OnEvent: {0}", event.GetName());
             event.SetCancelled(true);
         }
     }

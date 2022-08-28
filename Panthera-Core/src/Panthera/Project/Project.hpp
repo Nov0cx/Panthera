@@ -19,7 +19,7 @@ namespace Panthera
         inline void AddScene(Scene *scene)
         {
             m_Scenes.push_back(scene);
-            //if (m_ActiveScene == nullptr)
+            if (m_ActiveScene == nullptr)
             {
                 m_ActiveScene = scene;
             }
