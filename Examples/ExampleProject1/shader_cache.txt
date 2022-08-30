@@ -1,4 +1,0 @@
-D:/panthera/Assets/Shader/Quad.glsl 16130877243002994055
-D:/panthera/Assets/Shader/Triangle.glsl 1680052017827864640
-D:/panthera/Assets/Shader/FilledCircle.glsl 13321027403976320733
-D:/panthera/Assets/Shader/Line.glsl 11794632509050741098
