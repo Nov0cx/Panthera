@@ -3,26 +3,33 @@
 #include <nlohmann/json.hpp>
 #include "Panthera/Scene/SceneSerializer.hpp"
 #include "Panthera/Core/Log.hpp"
+#include "Panthera/Core/Application.hpp"
 
 #include <fstream>
+#include <filesystem>
 
 namespace Panthera
 {
 
-    void ProjectSerializer::Serialize(Ref<Project> project)
+    void ProjectSerializer::Serialize(Ref <Project> project)
     {
         nlohmann::json json;
         json["name"] = project->GetName();
         json["scenes"] = {};
         json["renderer_api"] = project->GetRendererAPI();
         json["active_scene"] = project->GetActiveScene()->GetName();
-        for (auto scene : project->GetScenes())
+        for (auto scene: project->GetScenes())
         {
-            if (scene->GetPath() != "")
+            if (scene->GetPath() == "")
             {
-                json["scenes"].push_back(scene->GetPath());
-                SceneSerializer::Serialize(*scene, scene->GetPath());
+                std::filesystem::path p = std::filesystem::path(project->GetPath()).parent_path().string() + "/scenes/";
+                std::filesystem::path path = p.string() + scene->GetName() + ".pscene";
+                scene->SetPath(path.string());
             }
+
+            json["scenes"].push_back(scene->GetPath());
+            SceneSerializer::Serialize(*scene, scene->GetPath());
+
         }
 
         std::ofstream file(project->GetPath(), std::ios::binary);
@@ -30,14 +37,13 @@ namespace Panthera
         {
             file << json.dump(4);
             file.close();
-        }
-        else
+        } else
         {
             FAIL("Failed to open file: " + project->GetPath());
         }
     }
 
-    Ref<Project> ProjectSerializer::Deserialize(const std::string &path)
+    Ref <Project> ProjectSerializer::Deserialize(const std::string &path)
     {
         std::ifstream file(path, std::ios::binary);
         if (file.is_open())
@@ -46,15 +52,22 @@ namespace Panthera
             file >> json;
             file.close();
             Project *project = new Project(json["name"], path, json["renderer_api"]);
-            for (auto scene : json["scenes"])
+            for (auto scene: json["scenes"])
             {
                 if (scene.get<std::string>() != "")
                     project->AddScene(SceneSerializer::Deserialize(scene));
             }
-            project->SetActiveScene(json["active_scene"].get<std::string>());
+            std::string activeScene = json["active_scene"];
+            if (activeScene != "")
+            {
+                project->SetActiveScene(activeScene);
+            }
+            else
+            {
+                project->AddScene(new Scene(OrthographicCameraController(Application::GetInstance()->GetWindow()->GetWidth() / (float) Application::GetInstance()->GetWindow()->GetHeight()), "New Scene"));
+            }
             return project;
-        }
-        else
+        } else
         {
             file.close();
             FAIL("Failed to open file: " + path);

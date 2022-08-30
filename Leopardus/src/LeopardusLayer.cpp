@@ -6,14 +6,6 @@ namespace Panthera
 {
     LeoparudsLayer::LeoparudsLayer() : Layer()
     {
-        /*std::fstream scene = std::fstream("scene.json", std::ios::in);
-        if (scene.is_open())
-        {
-            LOG_DEBUG("Scene file found!")
-            m_Scene = SceneSerializer::Deserialize("Test.pscene");
-            loadedScene = true;
-            LOG_DEBUG("Scene loaded!")
-        } else*/
     }
 
     void LeoparudsLayer::OnStart()
@@ -103,22 +95,8 @@ namespace Panthera
                 if (ImGui::MenuItem("New Project"))
                 {
                     SaveProject();
-                    auto selection = pfd::select_folder("New Project", Application::GetInstance()->GetExePath()).result();
-                    LOG_DEBUG("New Project: " + selection);
-                    if (!selection.empty())
-                    {
-                        std::string path = selection + "/.pproject";
-                        LOG_DEBUG("Path: " + path);
-                        m_Project = CreateRef<Project>("New Project", path, RendererAPI::OpenGL);
-                        LOG_DEBUG("Project created!");
-                        ASSERT(m_Project != nullptr, "Project is null!");
-                        if (m_Project->GetActiveScene() == nullptr)
-                        {
-                            LOG_DEBUG("No scene found!");
-                            m_Project->AddScene(new Scene(OrthographicCameraController(Application::GetInstance()->GetWindow()->GetWidth() / (float) Application::GetInstance()->GetWindow()->GetHeight()), "New Scene"));
-                        }
-                        Application::GetInstance()->GetWindow()->SetTitle(("Leopardus - " + m_Project->GetName() + " - "  + m_Project->GetActiveScene()->GetName()).c_str());
-                    }
+                    m_ShowCreateProjectWindow = true;
+                    CreateProjectMenu();
                 }
                 if (ImGui::MenuItem("Open Project"))
                 {
@@ -156,6 +134,11 @@ namespace Panthera
             }
             ImGui::EndMenuBar();
         }
+
+        if (m_ShowCreateProjectWindow)
+        {
+            CreateProjectMenu();
+        }
     }
 
     void LeoparudsLayer::SaveProject()
@@ -168,5 +151,41 @@ namespace Panthera
                 ProjectSerializer::Serialize(m_Project);
             }
         }
+    }
+
+    void LeoparudsLayer::CreateProjectMenu()
+    {
+        ImGui::Begin("Create Project");
+        ImGui::Text("Create New Project");
+        ImGui::Separator();
+        ImGui::InputText("Project Name", m_ProjectName, 256);
+        if (ImGui::Button("Create"))
+        {
+            auto selection = pfd::select_folder("New Project", Application::GetInstance()->GetExePath()).result();
+            LOG_DEBUG("New Project: " + selection);
+            if (selection.empty())
+            {
+                LOG_ERROR("No path selected!");
+                return;
+            }
+            std::string path = selection + "/.pproject";
+            LOG_DEBUG("Creating project: " + std::string(m_ProjectName) + " at " + selection);
+            m_Project = CreateRef<Project>(m_ProjectName, path, RendererAPI::OpenGL);
+            LOG_DEBUG("Project created!");
+            ASSERT(m_Project != nullptr, "Project is null!");
+            if (m_Project->GetActiveScene() == nullptr)
+            {
+                LOG_DEBUG("No scene found!");
+                m_Project->AddScene(new Scene(OrthographicCameraController(Application::GetInstance()->GetWindow()->GetWidth() / (float) Application::GetInstance()->GetWindow()->GetHeight()), "New Scene"));
+            }
+            Application::GetInstance()->GetWindow()->SetTitle(("Leopardus - " + m_Project->GetName() + " - " + m_Project->GetActiveScene()->GetName()).c_str());
+            m_ShowCreateProjectWindow = false;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Cancel"))
+        {
+            m_ShowCreateProjectWindow = false;
+        }
+        ImGui::End();
     }
 }

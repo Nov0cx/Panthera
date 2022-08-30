@@ -41,6 +41,8 @@ namespace Panthera
 
         inline std::string &GetName() { return m_Name; }
         inline std::string &GetPath() { return m_Path; }
+        inline void SetPath(const std::string &path) { m_Path = path; }
+        inline void SetName(const std::string &name) { m_Name = name; }
     private:
         entt::registry m_Registry;
         Renderer* m_Renderer;

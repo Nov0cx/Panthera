@@ -3,7 +3,7 @@
     "name": "New Project",
     "renderer_api": 1,
     "scenes": [
-        "D:/Panthera/Examples/ExampleProject1/scenes/Main.pscene",
-        "D:/Panthera/Examples/ExampleProject1/scenes/Other.pscene"
+        "scenes/Main.pscene",
+        "scenes/Other.pscene"
     ]
 }

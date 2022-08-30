@@ -25,11 +25,14 @@ namespace Panthera
 
     private:
         void RenderMenu();
+        void CreateProjectMenu();
         void SaveProject();
     private:
         Ref<Project> m_Project = nullptr;
         Ref<SceneHierarchyPanel> m_SceneHierarchyPanel = nullptr;
         Ref<ProjectPanel> m_ProjectPanel = nullptr;
+        bool m_ShowCreateProjectWindow = false;
+        char m_ProjectName[256] = "";
     };
 }
 

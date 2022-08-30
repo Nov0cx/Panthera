@@ -56,7 +56,7 @@ namespace Panthera
     struct CircleComponent
     {
         glm::vec4 Color = glm::vec4(1.0f);
-        float BorderThickness = 1.0f;
+        float BorderThickness = 0.0f;
         float Fade = 0.01f;
 
         float Tiling = 1.0f;

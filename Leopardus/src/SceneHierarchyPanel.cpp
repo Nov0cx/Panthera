@@ -23,13 +23,8 @@ namespace Panthera
     {
         ImGui::Begin("Scene Hierarchy");
 
-        /*if (ImGui::BeginPopupContextWindow(0, 1, false))
-        {
-            if (ImGui::MenuItem("Create Empty Entity"))
-                scene->CreateEntity("Empty Entity");
-
-            ImGui::EndPopup();
-        }*/
+        if (ImGui::Button("Add Empty Entity"))
+            scene->CreateEntity("Empty Entity");
 
         scene->ForAllEntities([this](SceneEntity& entity)
         {
