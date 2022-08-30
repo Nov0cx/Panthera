@@ -10,9 +10,27 @@ namespace Panthera
     SceneHierarchyPanel::~SceneHierarchyPanel()
     {}
 
+    template<typename Component>
+    static void RenderComponentAddButton(SceneEntity entity, const std::string& name)
+    {
+        if (ImGui::Button(("Add " + name).c_str()))
+        {
+            entity.CreateComponent<Component>();
+        }
+    }
+
     void SceneHierarchyPanel::Render(Scene* scene)
     {
         ImGui::Begin("Scene Hierarchy");
+
+        /*if (ImGui::BeginPopupContextWindow(0, 1, false))
+        {
+            if (ImGui::MenuItem("Create Empty Entity"))
+                scene->CreateEntity("Empty Entity");
+
+            ImGui::EndPopup();
+        }*/
+
         scene->ForAllEntities([this](SceneEntity& entity)
         {
             if (ImGui::TreeNode(entity.GetName().c_str()))
@@ -23,7 +41,18 @@ namespace Panthera
                 ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.35f);
                 if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
                 {
-                    ImGui::OpenPopup("ComponentSettings");
+                    ImGui::OpenPopup("AddComponent");
+                }
+                if (ImGui::BeginPopup("AddComponent"))
+                {
+                    if (!entity.HasComponent<TransformComponent>() && !entity.HasComponent<LineTransformComponent>()) RenderComponentAddButton<TransformComponent>(entity, "Transform");
+                    if (!entity.HasComponent<QuadComponent>() && !entity.HasComponent<LineTransformComponent>()) RenderComponentAddButton<QuadComponent>(entity, "Quad");
+                    if (!entity.HasComponent<CircleComponent>() && !entity.HasComponent<LineTransformComponent>()) RenderComponentAddButton<CircleComponent>(entity, "Circle");
+                    if (!entity.HasComponent<TriangleComponent>() && !entity.HasComponent<LineTransformComponent>()) RenderComponentAddButton<TriangleComponent>(entity, "Triangle");
+                    if (!entity.HasComponent<LineTransformComponent>() && !entity.HasComponent<TransformComponent>()) RenderComponentAddButton<LineTransformComponent>(entity, "LineTransform");
+                    if (!entity.HasComponent<LineComponent>() && !entity.HasComponent<TransformComponent>()) RenderComponentAddButton<LineComponent>(entity, "Line");
+
+                    ImGui::EndPopup();
                 }
                 ImGui::PopStyleVar();
                 ImGui::Separator();
