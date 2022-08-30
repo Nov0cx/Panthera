@@ -22,9 +22,7 @@ namespace Panthera
         {
             if (scene->GetPath() == "")
             {
-                std::filesystem::path p = std::filesystem::path(project->GetPath()).parent_path().string() + "/scenes/";
-                std::filesystem::path path = p.string() + scene->GetName() + ".pscene";
-                scene->SetPath(path.string());
+                scene->SetPath("scenes/" + scene->GetName() + ".pscene");
             }
 
             json["scenes"].push_back(scene->GetPath());

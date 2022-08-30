@@ -11,8 +11,8 @@ namespace Panthera
 
     void ProjectPanel::Render(Ref <Project> &project)
     {
-        ImGui::Begin(("Project: " + project->GetName()).c_str());
-
+        ImGui::Begin("Project Panel");
+        ImGui::Text("Project: %s", project->GetName().c_str());
         const char* items[] = {"None", "OpenGL", "Vulkan", "Direct X", "Metal", "OpenGL ES"};
         if (ImGui::BeginCombo("Renderer API", items[(int)project->GetRendererAPI()], ImGuiComboFlags_None))
         {

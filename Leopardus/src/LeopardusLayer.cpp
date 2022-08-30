@@ -13,7 +13,9 @@ namespace Panthera
         auto app = Application::GetInstance();
         float aspectRatio = (float) app->GetWindow()->GetWidth() / (float) app->GetWindow()->GetHeight();
 
+        LOG_DEBUG("Before creating Project");
         m_Project = CreateRef<Project>("Empty Project ", "", RendererAPI::OpenGL);
+        LOG_DEBUG("After creating Project");
         m_Project->AddScene(new Scene(OrthographicCameraController(aspectRatio), "Empty Scene"));
 
         m_SceneHierarchyPanel = CreateRef<SceneHierarchyPanel>();
@@ -21,11 +23,13 @@ namespace Panthera
         app->GetWindow()->SetTitle(("Leopardus - " + m_Project->GetName() + " - " + m_Project->GetActiveScene()->GetName()).c_str());
 
         m_ProjectPanel = CreateRef<ProjectPanel>();
+        m_ScenePanel = CreateRef<ScenePanel>();
     }
 
     void LeoparudsLayer::OnEnd()
     {
         SaveProject();
+        m_ScenePanel.Reset();
         m_Project.Reset();
         m_ProjectPanel.Reset();
         m_SceneHierarchyPanel.Reset();
@@ -52,7 +56,7 @@ namespace Panthera
         ASSERT(m_Project != nullptr, "Project is null!");
         ASSERT(m_Project->GetActiveScene() != nullptr, "Scene is null!");
         m_ProjectPanel->Render(m_Project);
-       // LOG_DEBUG("Active scene: " + m_Project->GetActiveScene()->GetName());
+        m_ScenePanel->Render(m_Project->GetActiveScene());
         m_Project->GetActiveScene()->OnImGuiRender();
         m_SceneHierarchyPanel->Render(m_Project->GetActiveScene());
     }

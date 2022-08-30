@@ -216,10 +216,10 @@ namespace Panthera
         if (entity["components"].find("quad") != entity["components"].end())
         {
             sceneEntity.CreateComponent<QuadComponent>(
-                    glm::vec4(entity["components"]["quad"]["color"]["r"],
-                              entity["components"]["quad"]["color"]["g"],
-                              entity["components"]["quad"]["color"]["b"],
-                              entity["components"]["quad"]["color"]["a"]),
+                    glm::vec4(entity["components"]["quad"]["color"]["r"].get<float>(),
+                              entity["components"]["quad"]["color"]["g"].get<float>(),
+                              entity["components"]["quad"]["color"]["b"].get<float>(),
+                              entity["components"]["quad"]["color"]["a"].get<float>()),
                     entity["components"]["quad"]["tiling"].get<float>(),
                     Texture2D::Create(DESERIALIZE_TEXTURE("quad", entity)));
         }
@@ -227,10 +227,10 @@ namespace Panthera
         if (entity["components"].find("circle") != entity["components"].end())
         {
             sceneEntity.CreateComponent<CircleComponent>(
-                    glm::vec4(entity["components"]["circle"]["color"]["r"],
-                              entity["components"]["circle"]["color"]["g"],
-                              entity["components"]["circle"]["color"]["b"],
-                              entity["components"]["circle"]["color"]["a"]),
+                    glm::vec4(entity["components"]["circle"]["color"]["r"].get<float>(),
+                              entity["components"]["circle"]["color"]["g"].get<float>(),
+                              entity["components"]["circle"]["color"]["b"].get<float>(),
+                              entity["components"]["circle"]["color"]["a"].get<float>()),
                     entity["components"]["circle"]["borderThickness"].get<float>(),
                     entity["components"]["circle"]["fade"].get<float>(),
                     entity["components"]["circle"]["tiling"].get<float>(),
@@ -240,10 +240,10 @@ namespace Panthera
         if (entity["components"].find("triangle") != entity["components"].end())
         {
             sceneEntity.CreateComponent<TriangleComponent>(
-                    glm::vec4(entity["components"]["triangle"]["color"]["r"],
-                              entity["components"]["triangle"]["color"]["g"],
-                              entity["components"]["triangle"]["color"]["b"],
-                              entity["components"]["triangle"]["color"]["a"]),
+                    glm::vec4(entity["components"]["triangle"]["color"]["r"].get<float>(),
+                              entity["components"]["triangle"]["color"]["g"].get<float>(),
+                              entity["components"]["triangle"]["color"]["b"].get<float>(),
+                              entity["components"]["triangle"]["color"]["a"].get<float>()),
                     entity["components"]["triangle"]["tiling"].get<float>(),
                     Texture2D::Create(DESERIALIZE_TEXTURE("triangle", entity)));
         }
@@ -262,10 +262,10 @@ namespace Panthera
         if (entity["components"].find("line") != entity["components"].end())
         {
             sceneEntity.CreateComponent<LineComponent>(
-                    glm::vec4(entity["components"]["line"]["color"]["r"],
-                              entity["components"]["line"]["color"]["g"],
-                              entity["components"]["line"]["color"]["b"],
-                              entity["components"]["line"]["color"]["a"]),
+                    glm::vec4(entity["components"]["line"]["color"]["r"].get<float>(),
+                              entity["components"]["line"]["color"]["g"].get<float>(),
+                              entity["components"]["line"]["color"]["b"].get<float>(),
+                              entity["components"]["line"]["color"]["a"].get<float>()),
                     entity["components"]["line"]["thickness"]);
         }
 
