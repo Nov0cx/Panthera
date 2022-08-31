@@ -31,8 +31,14 @@ namespace Panthera
         inline const std::string &GetName() const
         { return m_Name; }
 
+        inline void SetName(const std::string &name)
+        { m_Name = name; }
+
         inline const std::string &GetPath() const
         { return m_Path; }
+
+        inline void SetPath(const std::string &path)
+        { m_Path = path; }
 
         inline RendererAPI GetRendererAPI() const
         { return m_RendererAPI; }
