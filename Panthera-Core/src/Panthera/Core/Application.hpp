@@ -67,6 +67,7 @@ namespace Panthera
         std::string GetAssetPath(const char* filepath);
 
         std::string &GetExePath();
+        std::string GetCurrentPath();
         void SetExePath(const std::string &path);
         void SetIniPath(const std::string &path);
 

@@ -144,6 +144,11 @@ namespace Panthera
         m_ImGuiLayer->SetIniPath(path);
     }
 
+    std::string Application::GetCurrentPath()
+    {
+        return std::filesystem::current_path().string();
+    }
+
 
     AppProps::AppProps(ProgramArgs args, const char *name, unsigned int width, unsigned int height, bool vSync) : Args(args), Name(name),
                                                                                                 Width(width),
