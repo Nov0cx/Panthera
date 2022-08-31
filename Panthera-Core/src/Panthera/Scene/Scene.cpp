@@ -161,4 +161,26 @@ namespace Panthera
             func(sceneEntity);
         }
     }
+
+    void Scene::DestroyEntity(SceneEntity &entity)
+    {
+        m_Registry.destroy(entity.GetEntity());
+    }
+
+    void Scene::DestroyEntity(UUID uuid)
+    {
+        for (auto entity: m_Registry.view<IDComponent>())
+        {
+            if (m_Registry.get<IDComponent>(entity).ID == uuid)
+            {
+                m_Registry.destroy(entity);
+                return;
+            }
+        }
+    }
+
+    void Scene::DestroyEntity(entt::entity entity)
+    {
+        m_Registry.destroy(entity);
+    }
 }

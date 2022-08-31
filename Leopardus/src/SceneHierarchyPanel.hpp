@@ -12,6 +12,11 @@ namespace Panthera
         ~SceneHierarchyPanel();
 
         void Render(Scene* scene);
+
+    private:
+        void DrawSelectedEntityProperties(Scene* scene);
+    private:
+        SceneEntity m_SelectedEntity;
     };
 }
 

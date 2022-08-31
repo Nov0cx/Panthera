@@ -14,6 +14,8 @@ namespace Panthera
     public:
         SceneEntity(entt::entity entity, Scene *scene);
 
+        SceneEntity() = default;
+
         ~SceneEntity();
 
         template<typename T, typename... Args>
@@ -67,20 +69,40 @@ namespace Panthera
         }
 
         template<typename... Classes>
-        bool HasComponents()
+        inline bool HasComponents()
         {
             entt::registry &registry = m_Scene->m_Registry;
             return registry.all_of<Classes...>(m_Entity);
         }
 
+        inline void Destroy()
+        {
+            m_Scene->DestroyEntity(*this);
+        }
+
         entt::entity GetEntity();
         operator entt::entity();
+
+        inline operator bool()
+        {
+            return m_Entity != entt::null && m_Scene != nullptr;
+        }
+
+        inline bool operator ==(const SceneEntity &other)
+        {
+            return m_Entity == other.m_Entity && m_Scene == other.m_Scene;
+        }
+
+        inline bool operator !=(const SceneEntity &other)
+        {
+            return m_Entity != other.m_Entity || m_Scene != other.m_Scene;
+        }
 
         std::string& GetName();
         UUID GetUUID();
     private:
-        entt::entity m_Entity;
-        Scene *m_Scene;
+        entt::entity m_Entity{ entt::null };
+        Scene *m_Scene = nullptr;
     };
 
 

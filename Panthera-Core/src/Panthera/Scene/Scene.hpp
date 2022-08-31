@@ -39,10 +39,18 @@ namespace Panthera
 
         void ForAllEntities(std::function<void(SceneEntity&)> func);
 
+        void DestroyEntity(SceneEntity& entity);
+        void DestroyEntity(UUID uuid);
+        void DestroyEntity(entt::entity entity);
+
         inline std::string &GetName() { return m_Name; }
         inline std::string &GetPath() { return m_Path; }
         inline void SetPath(const std::string &path) { m_Path = path; }
         inline void SetName(const std::string &name) { m_Name = name; }
+
+        inline bool operator==(const Scene& other) const { return m_Name == other.m_Name; }
+        inline bool operator!=(const Scene& other) const { return m_Name != other.m_Name; }
+
     private:
         entt::registry m_Registry;
         Renderer* m_Renderer;

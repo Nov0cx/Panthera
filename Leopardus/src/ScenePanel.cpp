@@ -7,7 +7,7 @@ namespace Panthera
     {
        ImGui::Begin("Scene Panel");
        ImGui::Text("Scene: %s", scene->GetName().c_str());
-
+       ImGui::Separator();
        ImGui::End();
     }
 }
