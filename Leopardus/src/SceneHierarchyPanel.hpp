@@ -17,6 +17,7 @@ namespace Panthera
         void DrawSelectedEntityProperties(Scene* scene);
     private:
         SceneEntity m_SelectedEntity;
+        bool m_AddComponentPopup = false;
     };
 }
 

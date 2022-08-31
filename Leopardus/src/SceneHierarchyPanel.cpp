@@ -28,84 +28,63 @@ namespace Panthera
 
         scene->ForAllEntities([this](SceneEntity &entity)
                               {
-                                  /*bool opened = ImGui::TreeNodeEx((void *) (uint64_t)(uint32_t)(entt::entity)
-                                  entity.GetEntity(), ImGuiTreeNodeFlags_SpanAvailWidth |
-                                                      ((m_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected
-                                                                                    : 0) | ImGuiTreeNodeFlags_OpenOnArrow, entity.GetName().c_str());*/
-
                                   bool selected = (m_SelectedEntity == entity);
                                   ImVec2 region = ImGui::GetContentRegionAvail();
-
                                   if (ImGui::Selectable(entity.GetName().c_str(), &selected)) {
+
+                                      if (m_SelectedEntity != entity)
+                                          m_AddComponentPopup = false;
 
                                       m_SelectedEntity = entity;
 
                                       region = ImGui::GetContentRegionAvail();
                                   }
 
+                                  if (ImGui::IsItemHovered()) {
+                                      if (ImGui::IsMouseDoubleClicked(0)) {
+                                          selected = false;
+                                          m_SelectedEntity = {};
+                                          m_AddComponentPopup = false;
+                                      }
+                                      if (ImGui::IsMouseClicked(1)) {
+                                          selected = true;
+                                          m_AddComponentPopup = true;
+                                      }
+                                  }
+
                                   if (selected)
                                   {
-                                      ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{4, 5});
-
-                                      float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-                                      ImGui::SameLine(region.x - lineHeight * 1.35f);
-
-                                      if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+                                      if (m_AddComponentPopup)
                                       {
                                           ImGui::OpenPopup("Add Component");
+                                          if (ImGui::BeginPopup("Add Component"))
+                                          {
+                                              if (!entity.HasComponent<TransformComponent>() &&
+                                                  !entity.HasComponent<LineTransformComponent>())
+                                                  RenderComponentAddButton<TransformComponent>(entity, "Transform");
+                                              if (!entity.HasComponent<QuadComponent>() &&
+                                                  !entity.HasComponent<LineTransformComponent>())
+                                                  RenderComponentAddButton<QuadComponent>(entity, "Quad");
+                                              if (!entity.HasComponent<CircleComponent>() &&
+                                                  !entity.HasComponent<LineTransformComponent>())
+                                                  RenderComponentAddButton<CircleComponent>(entity, "Circle");
+                                              if (!entity.HasComponent<TriangleComponent>() &&
+                                                  !entity.HasComponent<LineTransformComponent>())
+                                                  RenderComponentAddButton<TriangleComponent>(entity, "Triangle");
+                                              if (!entity.HasComponent<LineTransformComponent>() &&
+                                                  !entity.HasComponent<TransformComponent>())
+                                                  RenderComponentAddButton<LineTransformComponent>(entity, "LineTransform");
+                                              if (!entity.HasComponent<LineComponent>() &&
+                                                  !entity.HasComponent<TransformComponent>())
+                                                  RenderComponentAddButton<LineComponent>(entity, "Line");
+
+                                              ImGui::EndPopup();
+                                          }
+
+                                          if (!ImGui::IsItemHovered() && (ImGui::IsMouseClicked(1)))
+                                              m_AddComponentPopup = false;
                                       }
-
-                                      if (ImGui::BeginPopup("AddComponent"))
-                                      {
-                                          if (!entity.HasComponent<TransformComponent>() &&
-                                              !entity.HasComponent<LineTransformComponent>())
-                                              RenderComponentAddButton<TransformComponent>(entity, "Transform");
-                                          if (!entity.HasComponent<QuadComponent>() &&
-                                              !entity.HasComponent<LineTransformComponent>())
-                                              RenderComponentAddButton<QuadComponent>(entity, "Quad");
-                                          if (!entity.HasComponent<CircleComponent>() &&
-                                              !entity.HasComponent<LineTransformComponent>())
-                                              RenderComponentAddButton<CircleComponent>(entity, "Circle");
-                                          if (!entity.HasComponent<TriangleComponent>() &&
-                                              !entity.HasComponent<LineTransformComponent>())
-                                              RenderComponentAddButton<TriangleComponent>(entity, "Triangle");
-                                          if (!entity.HasComponent<LineTransformComponent>() &&
-                                              !entity.HasComponent<TransformComponent>())
-                                              RenderComponentAddButton<LineTransformComponent>(entity, "LineTransform");
-                                          if (!entity.HasComponent<LineComponent>() &&
-                                              !entity.HasComponent<TransformComponent>())
-                                              RenderComponentAddButton<LineComponent>(entity, "Line");
-
-                                          ImGui::EndPopup();
-                                      }
-                                      ImGui::PopStyleVar();
-
-                                      ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{9, 5});
-
-                                      ImGui::SameLine(region.x - lineHeight * 0.35f);
-                                      lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-
-                                      if (ImGui::Button("-", ImVec2{lineHeight, lineHeight}))
-                                      {
-                                          entity.Destroy();
-                                      }
-
-                                      ImGui::PopStyleVar();
                                   }
-                                  /*if (ImGui::IsItemClicked())
-                                      m_SelectedEntity = entity;*/
-
-
-                                  /*if (opened)
-                                  {
-                                      ImGuiTreeNodeFlags flags =
-                                              ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-                                      bool opened = ImGui::TreeNodeEx((void *) 9817239, flags,
-                                                                      entity.GetName().c_str());
-                                      if (opened)
-                                          ImGui::TreePop();
-                                      ImGui::TreePop();
-                                  }*/
                               });
         ImGui::End();
         DrawSelectedEntityProperties(scene);
