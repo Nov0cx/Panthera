@@ -30,7 +30,8 @@ namespace Panthera
                               {
                                   bool selected = (m_SelectedEntity == entity);
                                   ImVec2 region = ImGui::GetContentRegionAvail();
-                                  if (ImGui::Selectable(entity.GetName().c_str(), &selected)) {
+                                  if (ImGui::Selectable(entity.GetName().c_str(), &selected))
+                                  {
 
                                       if (m_SelectedEntity != entity)
                                           m_AddComponentPopup = false;
@@ -40,13 +41,16 @@ namespace Panthera
                                       region = ImGui::GetContentRegionAvail();
                                   }
 
-                                  if (ImGui::IsItemHovered()) {
-                                      if (ImGui::IsMouseDoubleClicked(0)) {
+                                  if (ImGui::IsItemHovered())
+                                  {
+                                      if (ImGui::IsMouseDoubleClicked(0))
+                                      {
                                           selected = false;
                                           m_SelectedEntity = {};
                                           m_AddComponentPopup = false;
                                       }
-                                      if (ImGui::IsMouseClicked(1)) {
+                                      if (ImGui::IsMouseClicked(1))
+                                      {
                                           selected = true;
                                           m_AddComponentPopup = true;
                                       }
@@ -73,7 +77,8 @@ namespace Panthera
                                                   RenderComponentAddButton<TriangleComponent>(entity, "Triangle");
                                               if (!entity.HasComponent<LineTransformComponent>() &&
                                                   !entity.HasComponent<TransformComponent>())
-                                                  RenderComponentAddButton<LineTransformComponent>(entity, "LineTransform");
+                                                  RenderComponentAddButton<LineTransformComponent>(entity,
+                                                                                                   "LineTransform");
                                               if (!entity.HasComponent<LineComponent>() &&
                                                   !entity.HasComponent<TransformComponent>())
                                                   RenderComponentAddButton<LineComponent>(entity, "Line");
@@ -113,76 +118,105 @@ namespace Panthera
                 if (strlen(buffer) > 0)
                     name = std::string(buffer);
             }
+            ImGui::Separator();
         }
 
         if (entity.HasComponent<TransformComponent>())
         {
-            if (ImGui::TreeNodeEx((void *) (uint64_t)(uint32_t)(entt::entity)
-                entity.GetEntity(), ImGuiTreeNodeFlags_SpanAvailWidth, "Transform")) {
+            if (ImGui::TreeNodeEx((void *) (uint64_t)
+                    (((uint32_t)(entt::entity)
+                entity.GetEntity()) +0), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow,
+                    "Transform"))
+            {
                 TransformComponent &transform = entity.GetComponent<TransformComponent>();
                 ImGui::DragFloat3("Transform", &transform.Translation.x);
                 glm::vec3 rotation = glm::degrees(transform.Rotation);
                 ImGui::DragFloat3("Rotation", &rotation.x);
                 transform.Rotation = glm::radians(rotation);
                 ImGui::DragFloat3("Scale", &transform.Scale.x);
-                ImGui::Separator();
                 ImGui::TreePop();
             }
+            ImGui::Separator();
         }
+
         if (entity.HasComponent<QuadComponent>())
         {
-            if (ImGui::TreeNodeEx((void *) (uint64_t)(uint32_t)(entt::entity)
-                entity.GetEntity(), ImGuiTreeNodeFlags_SpanAvailWidth, "Quad")) {
+            if (ImGui::TreeNodeEx((void *) (uint64_t)(((uint32_t)(entt::entity)entity.GetEntity()) +1),
+            ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow,
+                    "Quad"))
+            {
                 QuadComponent &quad = entity.GetComponent<QuadComponent>();
                 ImGui::ColorEdit4("Color", &quad.Color.x);
-                ImGui::Separator();
                 ImGui::TreePop();
             }
+            ImGui::Separator();
         }
+
         if (entity.HasComponent<CircleComponent>())
         {
-            if (ImGui::TreeNodeEx((void *) (uint64_t)(uint32_t)(entt::entity)
-                entity.GetEntity(), ImGuiTreeNodeFlags_SpanAvailWidth, "Circle")) {
+            if (ImGui::TreeNodeEx((void *) (uint64_t)(((uint32_t)(entt::entity)entity.GetEntity()) +2),
+            ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow,
+                    "Circle"))
+            {
                 CircleComponent &circle = entity.GetComponent<CircleComponent>();
                 ImGui::ColorEdit4("Color", &circle.Color.x);
                 ImGui::DragFloat("Border Thickness", &circle.BorderThickness);
                 ImGui::DragFloat("Fade", &circle.Fade);
-                ImGui::Separator();
                 ImGui::TreePop();
             }
+            ImGui::Separator();
         }
+
         if (entity.HasComponent<TriangleComponent>())
         {
-            if (ImGui::TreeNodeEx((void *) (uint64_t)(uint32_t)(entt::entity)
-                entity.GetEntity(), ImGuiTreeNodeFlags_SpanAvailWidth, "Triangle")) {
+            if (ImGui::TreeNodeEx((void *) (uint64_t)(((uint32_t)(entt::entity)entity.GetEntity()) +3),
+            ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow,
+                    "Triangle"))
+            {
                 TriangleComponent &triangle = entity.GetComponent<TriangleComponent>();
                 ImGui::ColorEdit4("Color", &triangle.Color.x);
-                ImGui::Separator();
                 ImGui::TreePop();
             }
+            ImGui::Separator();
         }
+
         if (entity.HasComponent<LineTransformComponent>())
         {
-            if (ImGui::TreeNodeEx((void *) (uint64_t)(uint32_t)(entt::entity)
-                entity.GetEntity(), ImGuiTreeNodeFlags_SpanAvailWidth, "Line Transform")) {
+            if (ImGui::TreeNodeEx((void *) (uint64_t)(((uint32_t)(entt::entity)entity.GetEntity()) +4),
+            ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow,
+                    "Line Transform"))
+            {
                 LineTransformComponent &lineTransformComponent = entity.GetComponent<LineTransformComponent>();
                 ImGui::DragFloat3("Start", &lineTransformComponent.Start.x);
                 ImGui::DragFloat3("End", &lineTransformComponent.End.x);
-                ImGui::Separator();
                 ImGui::TreePop();
             }
+            ImGui::Separator();
         }
+
         if (entity.HasComponent<LineComponent>())
         {
-            if (ImGui::TreeNodeEx((void *) (uint64_t)(uint32_t)(entt::entity)
-                entity.GetEntity(), ImGuiTreeNodeFlags_SpanAvailWidth, "Line ")) {
+            if (ImGui::TreeNodeEx((void *) (uint64_t)(((uint32_t)(entt::entity)entity.GetEntity()) +5),
+            ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_OpenOnArrow,
+                    "Line "))
+            {
                 LineComponent &line = entity.GetComponent<LineComponent>();
                 ImGui::ColorEdit4("Color", &line.Color.x);
                 ImGui::DragFloat("Thickness", &line.Thickness);
-                ImGui::Separator();
                 ImGui::TreePop();
             }
+            ImGui::Separator();
         }
+
+        bool selected = false;
+        ImGui::Selectable("Add Component", &selected);
+        if (selected)
+        {
+            m_AddComponentPopup = true;
+            selected = false;
+        }
+        ImGui::Separator();
+
 
         ImGui::End();
     }
