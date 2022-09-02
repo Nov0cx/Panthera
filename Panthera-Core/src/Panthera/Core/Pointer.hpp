@@ -148,14 +148,10 @@ namespace Panthera
             m_Storage->IncreaseReferenceCount();
         }
 
-        void Release()
+        T* Release()
         {
-            while (m_Storage->GetReferenceCount() > 1)
-            {
-                DecreaseReferenceCount();
-            }
-            m_Ptr = nullptr;
-            m_Storage = nullptr;
+            delete m_Storage;
+            return m_Ptr;
         }
 
         bool operator==(const Ref<T>& other) const { return m_Ptr == other.m_Ptr; }
