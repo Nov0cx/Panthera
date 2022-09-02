@@ -215,6 +215,14 @@ namespace Panthera
             m_AddComponentPopup = true;
             selected = false;
         }
+
+        ImGui::SameLine();
+        if (ImGui::Button("Delete Entity"))
+        {
+            entity.Destroy();
+            m_SelectedEntity = SceneEntity();
+        }
+
         ImGui::Separator();
 
 
