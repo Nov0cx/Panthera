@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <string>
 #include <functional>
+#include <glm/glm.hpp>
 
 namespace Panthera::UI
 {
@@ -54,6 +55,10 @@ namespace Panthera::UI
     }
 
     void RenderDropDown(const std::string& name, const std::string& currentName, const std::vector<std::string>& names, std::function<void(int)> callback, ImGuiComboFlags flags = ImGuiComboFlags_None);
+
+    void ClampedDragFloat3(const std::string& name, glm::vec3& value, float min = 0.001f, float max = 1.0f, float step = 0.001f);
+    void ClampedDragFloat2(const std::string& name, glm::vec2& value, float min = 0.001f, float max = 1.0f, float step = 0.001f);
+    void ClampedDragFloat(const std::string& name, float& value, float min = 0.001f, float max = 1.0f, float step = 0.001f);
 }
 
 #endif //PANTHERA_UIHELPER_HPP

@@ -160,8 +160,8 @@ namespace Panthera
             {
                 CircleComponent &circle = entity.GetComponent<CircleComponent>();
                 ImGui::ColorEdit4("Color", &circle.Color.x);
-                ImGui::DragFloat("Border Thickness", &circle.BorderThickness);
-                ImGui::DragFloat("Fade", &circle.Fade);
+                UI::ClampedDragFloat("Border Thickness", circle.BorderThickness, 0.0f, 0.2f);
+                UI::ClampedDragFloat("Fade", circle.Fade, 0.0f, 0.1f);
                 ImGui::TreePop();
             }
             ImGui::Separator();

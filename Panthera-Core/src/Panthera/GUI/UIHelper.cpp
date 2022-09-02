@@ -21,4 +21,19 @@ namespace Panthera::UI
             ImGui::EndCombo();
         }
     }
+
+    void ClampedDragFloat3(const std::string& name, glm::vec3& value, float min, float max, float step)
+    {
+        ImGui::DragFloat3(name.c_str(), &value.x, step, min, max);
+    }
+
+    void ClampedDragFloat2(const std::string &name, glm::vec2 &value, float min, float max, float step)
+    {
+        ImGui::DragFloat2(name.c_str(), &value.x, step, min, max);
+    }
+
+    void ClampedDragFloat(const std::string &name, float &value, float min, float max, float step)
+    {
+        ImGui::DragFloat(name.c_str(), &value, step, min, max);
+    }
 }
