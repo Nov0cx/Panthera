@@ -16,7 +16,7 @@ using json = nlohmann::json;
 namespace Panthera
 {
 
-    static json SerializeEntity(Scene &scene, SceneEntity entity)
+    static json SerializeEntity(Ref<Scene> scene, SceneEntity entity)
     {
         json entityJson;
 
@@ -142,7 +142,7 @@ namespace Panthera
         return entityJson;
     }
 
-    void SceneSerializer::Serialize(Scene &scene, const std::string &filename)
+    void SceneSerializer::Serialize(Ref<Scene> scene, const std::string &filename)
     {
         json sceneJson = Serialize(scene);
         std::ofstream o(filename);
@@ -156,27 +156,27 @@ namespace Panthera
         }
     }
 
-    nlohmann::json SceneSerializer::Serialize(Scene &scene)
+    nlohmann::json SceneSerializer::Serialize(Ref<Scene> scene)
     {
         json sceneJson;
-        sceneJson["name"] = scene.GetName();
-        sceneJson["path"] = scene.GetPath();
+        sceneJson["name"] = scene->GetName();
+        sceneJson["path"] = scene->GetPath();
         sceneJson["camera"] = {
                 {"position", {
-                                     {"x",   scene.m_Camera.GetCamera().GetPosition().x},
-                                     {"y", scene.m_Camera.GetCamera().GetPosition().y},
-                                     {"z", scene.m_Camera.GetCamera().GetPosition().z}
+                                     {"x",   scene->m_Camera.GetCamera().GetPosition().x},
+                                     {"y", scene->m_Camera.GetCamera().GetPosition().y},
+                                     {"z", scene->m_Camera.GetCamera().GetPosition().z}
                              }},
                 {"rotation", {
-                                     {"rot", scene.m_Camera.GetCamera().GetRotation()},
+                                     {"rot", scene->m_Camera.GetCamera().GetRotation()},
 
                              }
                 },
-                {"aspect", scene.m_Camera.GetAspectRatio()},
-                {"zoom", scene.m_Camera.GetZoom()}
+                {"aspect", scene->m_Camera.GetAspectRatio()},
+                {"zoom", scene->m_Camera.GetZoom()}
         };
         sceneJson["entities"] = {};
-        scene.ForAllEntities([&](SceneEntity entity)
+        scene->ForAllEntities([&](SceneEntity entity)
                              {
                                  sceneJson["entities"].push_back(
                                          SerializeEntity(scene, entity));
@@ -184,10 +184,10 @@ namespace Panthera
         return sceneJson;
     }
 
-    static SceneEntity DeserializeEntity(Scene &scene, json entity)
+    static SceneEntity DeserializeEntity(Ref<Scene> scene, json entity)
     {
         entity = entity[entity.begin().key()];
-        SceneEntity sceneEntity = scene.CreateEntity(entity["uuid"].get<uint64_t>(),
+        SceneEntity sceneEntity = scene->CreateEntity(entity["uuid"].get<uint64_t>(),
                                                      entity["components"]["name"].get<std::string>().c_str());
         if (entity["components"].find("transform") != entity["components"].end())
         {
@@ -272,7 +272,7 @@ namespace Panthera
         return sceneEntity;
     }
 
-    Scene* SceneSerializer::DeserializeJson(const nlohmann::json& sceneJson)
+    Ref<Scene> SceneSerializer::DeserializeJson(const nlohmann::json& sceneJson)
     {
         auto application = Application::GetInstance();
         OrthographicCameraController camera(application->GetWindow()->GetWidth() / application->GetWindow()->GetHeight(),
@@ -280,17 +280,17 @@ namespace Panthera
                                                       sceneJson["camera"]["position"]["y"],
                                                       sceneJson["camera"]["position"]["z"]),
                                             sceneJson["camera"]["rotation"]["rot"], sceneJson["camera"]["zoom"]);
-        Scene *scene = new Scene(camera, sceneJson["name"].get<std::string>(), sceneJson["path"].get<std::string>());
+        Ref<Scene> scene = CreateRef<Scene>(camera, sceneJson["name"].get<std::string>(), sceneJson["path"].get<std::string>());
 
         for (json entity: sceneJson["entities"])
         {
-            auto sceneEntity = DeserializeEntity(*scene, entity);
+            auto sceneEntity = DeserializeEntity(scene, entity);
         }
 
         return scene;
     }
 
-    Scene *SceneSerializer::Deserialize(const std::string &filename)
+    Ref<Scene> SceneSerializer::Deserialize(const std::string &filename)
     {
         std::ifstream file(filename);
         ASSERT(file.is_open(), "Could not open file: " + filename);

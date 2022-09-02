@@ -5,7 +5,7 @@
 namespace Panthera
 {
 
-    void ScenePanel::Render(Scene *scene)
+    void ScenePanel::Render(Ref<Scene> scene)
     {
         ImGui::Begin("Scene Properties");
 

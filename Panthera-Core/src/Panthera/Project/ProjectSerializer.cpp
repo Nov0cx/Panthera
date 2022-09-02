@@ -26,7 +26,7 @@ namespace Panthera
             }
 
             json["scenes"].push_back(scene->GetPath());
-            SceneSerializer::Serialize(*scene, scene->GetPath());
+            SceneSerializer::Serialize(scene, scene->GetPath());
 
         }
 
@@ -62,7 +62,7 @@ namespace Panthera
             }
             else
             {
-                project->AddScene(new Scene(OrthographicCameraController(Application::GetInstance()->GetWindow()->GetWidth() / (float) Application::GetInstance()->GetWindow()->GetHeight()), "New Scene"));
+                project->AddScene(CreateRef<Scene>(OrthographicCameraController(Application::GetInstance()->GetWindow()->GetWidth() / (float) Application::GetInstance()->GetWindow()->GetHeight()), "New Scene"));
             }
             return project;
         } else

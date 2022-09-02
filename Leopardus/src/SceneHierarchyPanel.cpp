@@ -19,7 +19,7 @@ namespace Panthera
         }
     }
 
-    void SceneHierarchyPanel::Render(Scene *scene)
+    void SceneHierarchyPanel::Render(Ref<Scene> scene)
     {
         ImGui::Begin("Scene Hierarchy");
 
@@ -95,7 +95,7 @@ namespace Panthera
         DrawSelectedEntityProperties(scene);
     }
 
-    void SceneHierarchyPanel::DrawSelectedEntityProperties(Scene *scene)
+    void SceneHierarchyPanel::DrawSelectedEntityProperties(Ref<Scene> scene)
     {
         ImGui::Begin("Entity Properties");
         if (!m_SelectedEntity)

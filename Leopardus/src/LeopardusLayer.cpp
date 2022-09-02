@@ -16,7 +16,7 @@ namespace Panthera
         LOG_DEBUG("Before creating Project");
         m_Project = CreateRef<Project>("Empty Project ", "", RendererAPI::OpenGL);
         LOG_DEBUG("After creating Project");
-        m_Project->AddScene(new Scene(OrthographicCameraController(aspectRatio), "Empty Scene"));
+        m_Project->AddScene(CreateRef<Scene>(OrthographicCameraController(aspectRatio), "Empty Scene"));
 
         m_SceneHierarchyPanel = CreateRef<SceneHierarchyPanel>();
 
@@ -180,7 +180,7 @@ namespace Panthera
             if (m_Project->GetActiveScene() == nullptr)
             {
                 LOG_DEBUG("No scene found!");
-                m_Project->AddScene(new Scene(OrthographicCameraController(Application::GetInstance()->GetWindow()->GetWidth() / (float) Application::GetInstance()->GetWindow()->GetHeight()), "New Scene"));
+                m_Project->AddScene(CreateRef<Scene>(OrthographicCameraController(Application::GetInstance()->GetWindow()->GetWidth() / (float) Application::GetInstance()->GetWindow()->GetHeight()), "New Scene"));
             }
             Application::GetInstance()->GetWindow()->SetTitle(("Leopardus - " + m_Project->GetName() + " - " + m_Project->GetActiveScene()->GetName()).c_str());
             m_ShowCreateProjectWindow = false;

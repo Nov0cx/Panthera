@@ -11,10 +11,10 @@ namespace Panthera
         SceneHierarchyPanel();
         ~SceneHierarchyPanel();
 
-        void Render(Scene* scene);
+        void Render(Ref<Scene> scene);
 
     private:
-        void DrawSelectedEntityProperties(Scene* scene);
+        void DrawSelectedEntityProperties(Ref<Scene> scene);
     private:
         SceneEntity m_SelectedEntity;
         bool m_AddComponentPopup = false;

@@ -8,7 +8,7 @@ namespace Panthera
     class ScenePanel
     {
     public:
-        void Render(Scene* scene);
+        void Render(Ref<Scene> scene);
     private:
     };
 }

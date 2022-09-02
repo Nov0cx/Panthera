@@ -16,7 +16,7 @@ namespace Panthera
 
         ~Project();
 
-        inline void AddScene(Scene *scene)
+        inline void AddScene(Ref<Scene> scene)
         {
             m_Scenes.push_back(scene);
             if (m_ActiveScene == nullptr)
@@ -25,7 +25,7 @@ namespace Panthera
             }
         }
 
-        inline const std::vector<Scene *> &GetScenes() const
+        inline const std::vector<Ref<Scene>> &GetScenes() const
         { return m_Scenes; }
 
         inline const std::string &GetName() const
@@ -43,12 +43,12 @@ namespace Panthera
         inline RendererAPI GetRendererAPI() const
         { return m_RendererAPI; }
 
-        inline Scene *GetActiveScene()
+        inline Ref<Scene> GetActiveScene()
         { return m_ActiveScene; }
 
         void SetActiveScene(const std::string &name);
 
-        inline void SetActiveScene(Scene *scene)
+        inline void SetActiveScene(Ref<Scene> scene)
         { m_ActiveScene = scene; }
 
         inline void SetRendererAPI(RendererAPI api)
@@ -57,8 +57,8 @@ namespace Panthera
             RendererState::SetAPI(api);
         }
     private:
-        std::vector<Scene *> m_Scenes = {};
-        Scene *m_ActiveScene = nullptr;
+        std::vector<Ref<Scene>> m_Scenes = {};
+        Ref<Scene> m_ActiveScene = nullptr;
         std::string m_Name;
         std::string m_Path;
         RendererAPI m_RendererAPI;
