@@ -1,0 +1,59 @@
+#ifndef PANTHERA_UIHELPER_HPP
+#define PANTHERA_UIHELPER_HPP
+
+#include <imgui.h>
+#include <string>
+#include <functional>
+
+namespace Panthera::UI
+{
+    template<typename T>
+    inline T RenderEnumDropDown(const std::string& name, T current, const char** names, size_t length, ImGuiComboFlags flags = ImGuiComboFlags_None)
+    {
+        static_assert(std::is_enum<T>::value, "T must be an enum");
+
+        if (ImGui::BeginCombo(name.c_str(), names[(int)current], flags))
+        {
+            for (int i = 0; i < length; i++)
+            {
+                bool is_selected = ((int)current == i);
+                if (ImGui::Selectable(names[i], is_selected))
+                {
+                    current = static_cast<T>(i);
+                }
+                if (is_selected)
+                {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+            ImGui::EndCombo();
+        }
+        return current;
+    }
+
+    template<typename T>
+    inline T RenderDropDown(const std::string& name, const std::string& currentName, const std::vector<std::string>& names, T current, const std::vector<T> &options, ImGuiComboFlags flags = ImGuiComboFlags_None)
+    {
+        if (ImGui::BeginCombo(name.c_str(), currentName.c_str(), flags))
+        {
+            for (int i = 0; i < names.size(); i++)
+            {
+                bool is_selected = (current == options[i]);
+                if (ImGui::Selectable(names[i].c_str(), is_selected))
+                {
+                    current = options[i];
+                }
+                if (is_selected)
+                {
+                    ImGui::SetItemDefaultFocus();
+                }
+            }
+            ImGui::EndCombo();
+        }
+        return current;
+    }
+
+    void RenderDropDown(const std::string& name, const std::string& currentName, const std::vector<std::string>& names, std::function<void(int)> callback, ImGuiComboFlags flags = ImGuiComboFlags_None);
+}
+
+#endif //PANTHERA_UIHELPER_HPP

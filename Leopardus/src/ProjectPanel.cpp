@@ -40,32 +40,22 @@ namespace Panthera
         ImGui::Separator();
 
         const char* items[] = {"None", "OpenGL", "Vulkan", "Direct X", "Metal", "OpenGL ES"};
-        if (ImGui::BeginCombo("Renderer API", items[(int)project->GetRendererAPI()], ImGuiComboFlags_None))
-        {
-            for (int i = 0; i < IM_ARRAYSIZE(items); i++)
-            {
-                bool is_selected = (project->GetRendererAPI() == static_cast<RendererAPI>(i));
-                if (ImGui::Selectable(items[i], is_selected))
-                {
-                    project->SetRendererAPI(static_cast<RendererAPI>(i));
-                }
-                if (is_selected)
-                {
-                    ImGui::SetItemDefaultFocus();
-                }
-            }
-            ImGui::EndCombo();
-        }
+        project->SetRendererAPI(UI::RenderEnumDropDown<RendererAPI>("Renderer API", project->GetRendererAPI(), items, IM_ARRAYSIZE(items)));
 
         auto scenes = project->GetScenes();
-        std::vector<const char *> sceneNames = {};
+        std::vector<std::string> sceneNames = {};
 
         for (auto scene : scenes)
         {
-            sceneNames.push_back(scene->GetName().c_str());
+            sceneNames.push_back(scene->GetName());
         }
 
-        if (ImGui::BeginCombo("Active Scene", project->GetActiveScene()->GetName().c_str(), ImGuiComboFlags_None))
+        UI::RenderDropDown("Active Scene", project->GetActiveScene()->GetName(), sceneNames, [&](int index)
+        {
+            project->SetActiveScene(scenes[index]);
+        });
+
+        /*if (ImGui::BeginCombo("Active Scene", project->GetActiveScene()->GetName().c_str(), ImGuiComboFlags_None))
         {
             for (int i = 0; i < sceneNames.size(); i++)
             {
@@ -80,7 +70,7 @@ namespace Panthera
                 }
             }
             ImGui::EndCombo();
-        }
+        }*/
         ImGui::Separator();
 
         ImGui::End();

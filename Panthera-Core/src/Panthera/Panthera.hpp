@@ -41,6 +41,7 @@
 #include "Project/ProjectSerializer.hpp"
 
 #include "GUI/ImGuiLayer.hpp"
+#include "GUI/UIHelper.hpp"
 
 #include <glm/glm.hpp>
 
