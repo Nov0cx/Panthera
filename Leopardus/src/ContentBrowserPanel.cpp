@@ -13,6 +13,12 @@ namespace Panthera
     ContentBrowserPanel::ContentBrowserPanel()
     {
         m_CurrentPath = AssetDirectory;
+        auto app = Application::GetInstance();
+        // TODO: Dont you Hazels icons
+        m_FileIcon = Texture2D::Create(
+                Texture2DSpecification{.Path = app->GetAssetPath("Panthera/Assets/GUI/File.png").c_str(), .Wrapping = Texture2DWrapping::ClampToEdge});
+        m_DirectoryIcon = Texture2D::Create(
+                Texture2DSpecification{.Path = app->GetAssetPath("Panthera/Assets/GUI/Directory.png").c_str(), .Wrapping = Texture2DWrapping::ClampToEdge});
     }
 
     void ContentBrowserPanel::Render()
@@ -28,6 +34,7 @@ namespace Panthera
         }
 
         static float cellWidth = 160.0f;
+        static float cellHeight = 160.0f;
         static float cellPadding = 12.0f;
 
         float panelWidth = ImGui::GetContentRegionAvail().x;
@@ -37,23 +44,28 @@ namespace Panthera
 
         ImGui::Columns(cellCountX, 0, false);
 
-        for (auto& entry : std::filesystem::directory_iterator(m_CurrentPath))
+        for (auto &entry: std::filesystem::directory_iterator(m_CurrentPath))
         {
             ImGui::PushID(entry.path().string().c_str());
-            if (entry.is_directory())
-            {
-                if (ImGui::Button(entry.path().filename().string().c_str()))
-                {
-                    m_CurrentPath = entry.path();
-                }
-            }
-            else
-            {
-                if (ImGui::Button(("File: " + entry.path().filename().string()).c_str()))
-                {
 
+            Ref <Texture2D> &icon = entry.is_directory() ? m_DirectoryIcon : m_FileIcon;
+
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+
+            ImGui::ImageButton((void *) icon->GetRendererID(), ImVec2(cellWidth, cellHeight), ImVec2(0, 1),
+                               ImVec2(1, 0), 0);
+
+            if (ImGui::IsItemClicked())
+            {
+                if (entry.is_directory())
+                {
+                    m_CurrentPath /= entry.path().filename();
                 }
             }
+
+            ImGui::TextWrapped(entry.path().filename().string().c_str());
+
+            ImGui::PopStyleColor();
 
             ImGui::NextColumn();
 

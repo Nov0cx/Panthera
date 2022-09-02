@@ -137,16 +137,7 @@ namespace Panthera
                     m_Spec.InternalFormat = Texture2DInternalFormat::RGBA8;
                     break;
                 default:
-                    ASSERT(false, "Unsupported texture format")
-            }
-
-            if (m_Format != InternalFormatToOpenGL(spec.InternalFormat))
-            {
-                LOG_WARN("The loaded texture '{}' has not the same format as the format given in the specification.", spec.Path)
-            }
-            if (m_DataFormat != DataFormatToOpenGL(spec.DataFormat))
-            {
-                LOG_WARN("The loaded texture '{}' has not the same data format as the data format given in the specification.", spec.Path)
+                    FAIL("Unsupported texture format")
             }
 
             glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);

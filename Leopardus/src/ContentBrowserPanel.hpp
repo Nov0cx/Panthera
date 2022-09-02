@@ -15,6 +15,8 @@ namespace Panthera
         void Render();
 
     private:
+        Ref<Texture2D> m_FileIcon;
+        Ref<Texture2D> m_DirectoryIcon;
         std::filesystem::path m_CurrentPath;
     };
 }
