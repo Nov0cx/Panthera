@@ -7,7 +7,7 @@ namespace Panthera
 
     void ScenePanel::Render(Scene *scene)
     {
-        ImGui::Begin("Scene Panel");
+        ImGui::Begin("Scene Propertie");
 
         std::string name = scene->GetName();
         char nameBuffer[256];

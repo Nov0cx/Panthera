@@ -13,7 +13,7 @@ namespace Panthera
 
     void ProjectPanel::Render(Ref <Project> &project)
     {
-        ImGui::Begin("Project Panel");
+        ImGui::Begin("Project Properties");
 
         std::string name = project->GetName();
         char nameBuffer[256];
