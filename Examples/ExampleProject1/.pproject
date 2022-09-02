@@ -1,6 +1,6 @@
 {
     "active_scene": "Main",
-    "name": "New Project",
+    "name": "Example 1",
     "renderer_api": 1,
     "scenes": [
         "scenes/Main.pscene",
