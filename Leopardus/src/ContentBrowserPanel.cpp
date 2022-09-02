@@ -14,7 +14,6 @@ namespace Panthera
     {
         m_CurrentPath = AssetDirectory;
         auto app = Application::GetInstance();
-        // TODO: Dont you Hazels icons
         m_FileIcon = Texture2D::Create(
                 Texture2DSpecification{.Path = app->GetAssetPath("Panthera/Assets/GUI/File.png").c_str(), .Wrapping = Texture2DWrapping::ClampToEdge});
         m_DirectoryIcon = Texture2D::Create(
