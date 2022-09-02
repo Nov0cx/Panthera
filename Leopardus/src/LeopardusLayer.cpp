@@ -24,6 +24,8 @@ namespace Panthera
 
         m_ProjectPanel = CreateRef<ProjectPanel>();
         m_ScenePanel = CreateRef<ScenePanel>();
+
+        m_ContentBrowserPanel = CreateRef<ContentBrowserPanel>();
     }
 
     void LeoparudsLayer::OnEnd()
@@ -53,12 +55,15 @@ namespace Panthera
     void LeoparudsLayer::OnImGuiRender()
     {
         RenderMenu();
+
         ASSERT(m_Project != nullptr, "Project is null!");
         ASSERT(m_Project->GetActiveScene() != nullptr, "Scene is null!");
+
         m_ProjectPanel->Render(m_Project);
         m_ScenePanel->Render(m_Project->GetActiveScene());
         m_Project->GetActiveScene()->OnImGuiRender();
         m_SceneHierarchyPanel->Render(m_Project->GetActiveScene());
+        m_ContentBrowserPanel->Render();
     }
 
     void LeoparudsLayer::RenderMenu()

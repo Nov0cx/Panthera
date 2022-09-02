@@ -16,10 +16,16 @@ namespace Panthera
             LOG_DEBUG("{}", Application::GetInstance()->GetAssetPath("Panthera/Assets/Gui/imgui.ini"));
         }
 
-        std::filesystem::path p = std::filesystem::path(m_Path).parent_path().string() + "/scenes";
-        if (!std::filesystem::exists(p))
+        std::filesystem::path scenesPath = std::filesystem::path(m_Path).parent_path().string() + "/scenes";
+        if (!std::filesystem::exists(scenesPath))
         {
-            std::filesystem::create_directory(p);
+            std::filesystem::create_directory(scenesPath);
+        }
+
+        std::filesystem::path assetsPath = std::filesystem::path(m_Path).parent_path().string() + "/Assets";
+        if (!std::filesystem::exists(assetsPath))
+        {
+            std::filesystem::create_directory(assetsPath);
         }
     }
 

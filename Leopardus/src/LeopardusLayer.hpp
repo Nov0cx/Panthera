@@ -5,6 +5,7 @@
 #include "SceneHierarchyPanel.hpp"
 #include "ProjectPanel.hpp"
 #include "ScenePanel.hpp"
+#include "ContentBrowserPanel.hpp"
 
 namespace Panthera
 {
@@ -33,6 +34,7 @@ namespace Panthera
         Ref<SceneHierarchyPanel> m_SceneHierarchyPanel = nullptr;
         Ref<ProjectPanel> m_ProjectPanel = nullptr;
         Ref<ScenePanel> m_ScenePanel = nullptr;
+        Ref<ContentBrowserPanel> m_ContentBrowserPanel = nullptr;
         bool m_ShowCreateProjectWindow = false;
         char m_ProjectName[256] = "";
     };
