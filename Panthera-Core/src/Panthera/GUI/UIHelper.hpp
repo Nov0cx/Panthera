@@ -59,6 +59,9 @@ namespace Panthera::UI
     void ClampedDragFloat3(const std::string& name, glm::vec3& value, float min = 0.001f, float max = 1.0f, float step = 0.001f);
     void ClampedDragFloat2(const std::string& name, glm::vec2& value, float min = 0.001f, float max = 1.0f, float step = 0.001f);
     void ClampedDragFloat(const std::string& name, float& value, float min = 0.001f, float max = 1.0f, float step = 0.001f);
+
+    template<typename T>
+    void DragAndDropSource(std::string& name, std::function<void(const ImGuiPayload*)> handle);
 }
 
 #endif //PANTHERA_UIHELPER_HPP

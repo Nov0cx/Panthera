@@ -11,6 +11,21 @@ namespace Panthera
     ProjectPanel::~ProjectPanel()
     {}
 
+    static void DragAndDrop(std::function<void(std::string&, std::string&)> callback)
+    {
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+            {
+                const char* path = (const char*) payload->Data;
+                std::string filePath = path;
+                std::string extension = Utils::GetFileExtension(filePath);
+                callback(filePath, extension);
+            }
+            ImGui::EndDragDropTarget();
+        }
+    }
+
     void ProjectPanel::Render(Ref <Project> &project)
     {
         ImGui::Begin("Project Properties");
@@ -30,7 +45,7 @@ namespace Panthera
         std::string path = project->GetPath();
         if (ImGui::Selectable(("Path: " + path).c_str()))
         {
-            auto selection = pfd::select_folder("Select Scene Path", path == "" ? Application::GetInstance()->GetCurrentPath() : path).result();
+            auto selection = pfd::select_folder("Select Project Path", path == "" ? Application::GetInstance()->GetCurrentPath() : path).result();
             if (!selection.empty())
             {
                 path = selection + "/" + name + ".pproject";
@@ -55,22 +70,15 @@ namespace Panthera
             project->SetActiveScene(scenes[index]);
         });
 
-        /*if (ImGui::BeginCombo("Active Scene", project->GetActiveScene()->GetName().c_str(), ImGuiComboFlags_None))
+        DragAndDrop([&](std::string& filePath, std::string& extension)
         {
-            for (int i = 0; i < sceneNames.size(); i++)
+            if (extension == ".pscene")
             {
-                bool is_selected = (project->GetActiveScene() == scenes[i]);
-                if (ImGui::Selectable(sceneNames[i], is_selected))
-                {
-                    project->SetActiveScene(sceneNames[i]);
-                }
-                if (is_selected)
-                {
-                    ImGui::SetItemDefaultFocus();
-                }
+                LOG_DEBUG("Dropped scene: {}", filePath);
+                project->AddScene(SceneSerializer::Deserialize(filePath));
             }
-            ImGui::EndCombo();
-        }*/
+        });
+
         ImGui::Separator();
 
         ImGui::End();

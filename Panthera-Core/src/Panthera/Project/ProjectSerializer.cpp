@@ -22,12 +22,11 @@ namespace Panthera
         {
             if (scene->GetPath() == "")
             {
-                scene->SetPath("scenes/" + scene->GetName() + ".pscene");
+                scene->SetPath("Assets/scenes/" + scene->GetName() + ".pscene");
             }
 
             json["scenes"].push_back(scene->GetPath());
             SceneSerializer::Serialize(scene, scene->GetPath());
-
         }
 
         std::ofstream file(project->GetPath(), std::ios::binary);

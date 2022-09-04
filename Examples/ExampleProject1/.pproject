@@ -3,7 +3,7 @@
     "name": "Example 1",
     "renderer_api": 1,
     "scenes": [
-        "scenes/Main.pscene",
-        "scenes/Other.pscene"
+        "Assets/scenes/Other.pscene",
+        "Assets/scenes/Main.pscene"
     ]
 }

@@ -4,7 +4,6 @@
 
 namespace Panthera
 {
-
     void ScenePanel::Render(Ref<Scene> scene)
     {
         ImGui::Begin("Scene Properties");
@@ -22,15 +21,8 @@ namespace Panthera
         ImGui::Separator();
 
         std::string path = scene->GetPath();
-        if (ImGui::Selectable(("Path: " + path).c_str()))
-        {
-            auto selection = pfd::select_folder("Select Scene Path", path == "" ? Application::GetInstance()->GetCurrentPath() : path).result();
-            if (!selection.empty())
-            {
-                path = selection + "/" + name + ".pscene";
-            }
-        }
-        scene->SetPath(path);
+        ImGui::Text("Path: %s", path.c_str());
+
         ImGui::Separator();
 
         ImGui::End();

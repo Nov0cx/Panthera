@@ -36,4 +36,17 @@ namespace Panthera::UI
     {
         ImGui::DragFloat(name.c_str(), &value, step, min, max);
     }
+
+    template<typename T>
+    void DragAndDropSource(std::string &name, std::function<void(const ImGuiPayload *)> handle)
+    {
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(name.c_str()))
+            {
+                handle(payload);
+            }
+            ImGui::EndDragDropTarget();
+        }
+    }
 }
