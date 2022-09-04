@@ -1,5 +1,7 @@
 #include "SceneHierarchyPanel.hpp"
 
+#include <functional>
+
 namespace Panthera
 {
 
@@ -121,6 +123,7 @@ namespace Panthera
             ImGui::Separator();
         }
 
+
         if (entity.HasComponent<TransformComponent>())
         {
             if (ImGui::TreeNodeEx((void *) (uint64_t)
@@ -147,6 +150,15 @@ namespace Panthera
             {
                 QuadComponent &quad = entity.GetComponent<QuadComponent>();
                 ImGui::ColorEdit4("Color", &quad.Color.x);
+                ImGui::Text("Texture: %s", quad.Texture ? quad.Texture->GetPath() : "None");
+                DragAndDrop([this](std::string& path, std::string &extension) {
+                    if (extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".tga" || extension == ".bmp" || extension == ".hdr")
+                    {
+                        m_SelectedEntity.GetComponent<QuadComponent>().Texture = Texture2D::Create(Texture2DSpecification {
+                                .Path = path.c_str()
+                        });
+                    }
+                });
                 ImGui::TreePop();
             }
             ImGui::Separator();
@@ -162,6 +174,15 @@ namespace Panthera
                 ImGui::ColorEdit4("Color", &circle.Color.x);
                 UI::ClampedDragFloat("Border Thickness", circle.BorderThickness, 0.0f, 0.2f);
                 UI::ClampedDragFloat("Fade", circle.Fade, 0.0f, 0.1f);
+                ImGui::Text("Texture: %s", circle.Texture ? circle.Texture->GetPath() : "None");
+                DragAndDrop([this](std::string& path, std::string &extension) {
+                    if (extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".tga" || extension == ".bmp" || extension == ".hdr")
+                    {
+                        m_SelectedEntity.GetComponent<CircleComponent>().Texture = Texture2D::Create(Texture2DSpecification {
+                            .Path = path.c_str()
+                        });
+                    }
+                });
                 ImGui::TreePop();
             }
             ImGui::Separator();
@@ -175,6 +196,15 @@ namespace Panthera
             {
                 TriangleComponent &triangle = entity.GetComponent<TriangleComponent>();
                 ImGui::ColorEdit4("Color", &triangle.Color.x);
+                ImGui::Text("Texture: %s", triangle.Texture ? triangle.Texture->GetPath() : "None");
+                DragAndDrop([this](std::string& path, std::string &extension) {
+                    if (extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".tga" || extension == ".bmp" || extension == ".hdr")
+                    {
+                        m_SelectedEntity.GetComponent<TriangleComponent>().Texture = Texture2D::Create(Texture2DSpecification {
+                                .Path = path.c_str()
+                        });
+                    }
+                });
                 ImGui::TreePop();
             }
             ImGui::Separator();
@@ -230,5 +260,20 @@ namespace Panthera
 
 
         ImGui::End();
+    }
+
+    void SceneHierarchyPanel::DragAndDrop(std::function<void(std::string&, std::string&)> callback)
+    {
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+            {
+                const char* path = (const char*) payload->Data;
+                std::string filePath = path;
+                std::string extension = Utils::GetFileExtension(filePath);
+                callback(filePath, extension);
+            }
+            ImGui::EndDragDropTarget();
+        }
     }
 }

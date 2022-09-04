@@ -15,6 +15,7 @@ namespace Panthera
 
     private:
         void DrawSelectedEntityProperties(Ref<Scene> scene);
+        void DragAndDrop(std::function<void(std::string&, std::string&)> callback);
     private:
         SceneEntity m_SelectedEntity;
         bool m_AddComponentPopup = false;
