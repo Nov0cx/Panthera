@@ -29,6 +29,8 @@
 
 #include "Utils/Time.hpp"
 #include "Utils/Random.hpp"
+#include "Utils/FileUtils.hpp"
+
 #include <nlohmann/json.hpp>
 
 #include "Scene/Scene.hpp"
