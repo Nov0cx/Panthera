@@ -18,9 +18,9 @@ http_archive(
 
 http_archive(
     name = "com_github_Nov0cx_glad",
-    sha256 = "6167b3281b5ce3b34c86b3e7e20bdd07dcc6404932f275822041246d45aab22c",
-    strip_prefix = "glad-ec493400cc3300c4f3b34284e60b7f820f222036",
-    urls = ["https://github.com/Nov0cx/Glad/archive/ec493400cc3300c4f3b34284e60b7f820f222036.zip"],
+    sha256 = "c7615600b451f075dca79855007243873fb3b445b1ef1b7b9110b783b688b173",
+    strip_prefix = "glad-02433761991fc237925faad82a95ab62aaf274b4",
+    urls = ["https://github.com/Nov0cx/Glad/archive/02433761991fc237925faad82a95ab62aaf274b4.zip"],
 )
 
 http_archive(

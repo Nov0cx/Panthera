@@ -23,7 +23,7 @@ namespace Panthera
 
         if (!s_GladInitialized)
         {
-            if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+            if (!gladLoadGL((GLADloadfunc) glfwGetProcAddress))
             {
                 glfwTerminate();
                 FAIL("Failed to initialize GLAD!");
