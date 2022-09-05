@@ -41,53 +41,25 @@ layout (location = 4) in vec4 v_Color;
 
 layout (location = 0) out vec4 o_Color;
 
-//https://www.shadertoy.com/view/Mtj3Dd
-
-float distanceToLine(vec2 p1, vec2 p2, vec2 point) {
-    float a = p1.y - p2.y;
-    float b = p2.x - p1.x;
-    return abs(a * point.x + b * point.y + p1.x * p2.y - p2.x * p1.y) / sqrt(a * a + b * b);
-}
-
-vec2 midpoint (vec2 p1, vec2 p2)
-{
-    return vec2((p1.x+p2.x) / 2., (p1.y+p2.y) / 2.);
-
-}
-
-float clampToLine (vec2 p1, vec2 p2, vec2 point, float line)
-{
-    vec2 mp = midpoint(p1,p2);
-    float maxDistance = distance(mp,p1);
-    if (distance(mp,point) > maxDistance)
-    {
-        return 0.;
-    }
-    else
-    {
-        return line;
-    }
-
-}
 
 void main()
 {
     vec2 uv = v_InterpolatingPosition;
-    // get distance to line
-    float distance = distanceToLine (v_PosA.xy,v_PosB.xy,uv);
-    //line
-    float radius = v_Thickness;
-    float line =  smoothstep (radius, radius - 0.00001, distance);
 
-    line =  clampToLine(v_PosA.xy, v_PosB.xy, uv, line);
+    vec2 p1 = v_PosA.xy;
+    vec2 p2 = v_PosB.xy;
+    float thickness = v_Thickness;
 
+    vec2 p12 = p2 - p1;
+    vec2 p13 = uv - p1;
 
-    float outLine = line;
+    float d = dot(p12, p13) / length(p12);
+    vec2 p = p1 + normalize(p12) * d;
 
-    if (outLine < 0.5)
+    if (length(p - uv) > thickness)
     {
         o_Color = vec4(0.,0.,0.,0.);
         discard;
     }
-    o_Color = vec4(1.*outLine, 1.*outLine, 1.*outLine, 1.0) * v_Color;
+    o_Color = v_Color;
 }

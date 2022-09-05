@@ -875,8 +875,9 @@ namespace Panthera
         if (thickness < 0.0067f)
             thickness = 0.0067f;
 
-        glm::mat4 transform =
-                glm::translate(glm::mat4(1.0f), (end - start) * 0.5f);
+        glm::vec3 conntected = end - start;
+        glm::vec3 connectedCenter = start + conntected * 0.5f;
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), connectedCenter); //* glm::scale(glm::mat4(1.0f), glm::vec3(glm::length(conntected), thickness, 1.0f));
 
         for (uint32_t i = 0; i < 4; i++)
         {
@@ -890,7 +891,7 @@ namespace Panthera
             m_Data->LineVertices[m_Data->LineVerticesCount].Color = color;
             m_Data->LineVerticesCount++;
         }
-//
+
         m_Data->LineIndicesCount += 6;
     }
 

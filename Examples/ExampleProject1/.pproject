@@ -4,6 +4,6 @@
     "renderer_api": 1,
     "scenes": [
         "Assets/scenes/Other.pscene",
-        "Assets/scenes/Main.pscene"
+        "Assets/scenes/Main.pscene",
     ]
 }
