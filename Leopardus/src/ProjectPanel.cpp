@@ -79,6 +79,19 @@ namespace Panthera
             }
         });
 
+        if (ImGui::Button("Delete Active Scene"))
+        {
+            if (project->GetScenes().size() > 1)
+            {
+                project->RemoveScene(project->GetActiveScene());
+                project->SetActiveScene(project->GetScenes()[0]);
+            }
+            else
+            {
+                LOG_WARN("Cannot delete the last scene in a project! {} scenes left.", project->GetScenes().size());
+            }
+        }
+
         ImGui::Separator();
 
         ImGui::End();

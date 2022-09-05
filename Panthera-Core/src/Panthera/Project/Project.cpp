@@ -45,4 +45,9 @@ namespace Panthera
             }
         }
     }
+
+    void Project::RemoveScene(Ref <Scene> scene)
+    {
+        m_Scenes.erase(std::remove(m_Scenes.begin(), m_Scenes.end(), scene), m_Scenes.end());
+    }
 }

@@ -25,6 +25,8 @@ namespace Panthera
             }
         }
 
+        void RemoveScene(Ref<Scene> scene);
+
         inline const std::vector<Ref<Scene>> &GetScenes() const
         { return m_Scenes; }
 
