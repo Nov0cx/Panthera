@@ -39,6 +39,7 @@ namespace Panthera
 
     void LeoparudsLayer::OnUpdate(Timestep ts)
     {
+        m_Project->Update();
         m_Project->GetActiveScene()->OnUpdate(ts);
     }
 

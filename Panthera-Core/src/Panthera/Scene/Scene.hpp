@@ -9,6 +9,7 @@
 #include "UUID.hpp"
 #include <imgui.h>
 #include "Components.hpp"
+#include <functional>
 
 namespace Panthera
 {
@@ -43,7 +44,10 @@ namespace Panthera
         void DestroyEntity(UUID uuid);
         void DestroyEntity(entt::entity entity);
 
+        inline void SetDropCallback(std::function<void(std::string&)> callback) { m_DropCallback = callback; }
+
         inline std::string &GetName() { return m_Name; }
+        inline const std::string& GetName() const { return m_Name; }
         inline std::string &GetPath() { return m_Path; }
         inline void SetPath(const std::string &path) { m_Path = path; }
         inline void SetName(const std::string &name) { m_Name = name; }
@@ -57,6 +61,7 @@ namespace Panthera
         OrthographicCameraController m_Camera;
         ImVec2 m_ViewportSize;
         ImVec2 m_LastViewportSize;
+        std::function<void(std::string&)> m_DropCallback = [](std::string&){};
         std::string m_Name;
         std::string m_Path;
         bool m_HasBeginResized = false;

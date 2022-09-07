@@ -1,8 +1,9 @@
 {
-    "active_scene": "Main",
+    "active_scene": "Other",
     "name": "Example 1",
     "renderer_api": 1,
     "scenes": [
-        "Assets/scenes/Main.pscene"
+        "Assets/scenes/Main.pscene",
+        "Assets/scenes/Other.pscene"
     ]
 }

@@ -41,6 +41,12 @@ namespace Panthera
             if (scene->GetName() == name)
             {
                 m_ActiveScene = scene;
+                m_ActiveScene->SetDropCallback([this](std::string &filePath)
+                                               {
+                                                   auto scene = SceneSerializer::Deserialize(filePath);
+                                                   AddScene(scene);
+                                                   SetActiveScene(scene);
+                                               });
                 return;
             }
         }
@@ -48,6 +54,6 @@ namespace Panthera
 
     void Project::RemoveScene(Ref <Scene> scene)
     {
-        m_Scenes.erase(std::remove(m_Scenes.begin(), m_Scenes.end(), scene), m_Scenes.end());
+        Utils::STLVector::Remove(m_Scenes, scene);
     }
 }

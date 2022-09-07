@@ -10,6 +10,7 @@
 #include "Panthera/Core/Event.hpp"
 #include "Panthera/Events/WindowEvents.hpp"
 #include "Panthera/Core/Application.hpp"
+#include "Panthera/Utils/FileUtils.hpp"
 
 #include <utility>
 
@@ -25,6 +26,21 @@ namespace Panthera
     Scene::~Scene()
     {
 
+    }
+
+    static void DragAndDrop(std::function<void(std::string &, std::string &)> callback)
+    {
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+            {
+                const char *path = (const char *) payload->Data;
+                std::string filePath = path;
+                std::string extension = Utils::GetFileExtension(filePath);
+                callback(filePath, extension);
+            }
+            ImGui::EndDragDropTarget();
+        }
     }
 
     void Scene::OnUpdate(Timestep ts)
@@ -130,7 +146,8 @@ namespace Panthera
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
         ImGui::Begin("Scene Viewport");
 
-        Application::GetInstance()->GetImGuiLayer()->SetBlockEvents(!ImGui::IsWindowFocused() && !ImGui::IsWindowHovered());
+        Application::GetInstance()->GetImGuiLayer()->SetBlockEvents(
+                !ImGui::IsWindowFocused() && !ImGui::IsWindowHovered());
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         m_LastViewportSize = ImVec2{viewportPanelSize.x, viewportPanelSize.y};
@@ -143,6 +160,14 @@ namespace Panthera
                                  0).Texture->GetRendererID()),
                          ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0, 1}, ImVec2{1, 0});
         }
+
+        DragAndDrop([this](std::string &filePath, std::string &extension)
+                    {
+                        if (extension == ".pscene")
+                        {
+                            m_DropCallback(filePath);
+                        }
+                    });
 
         ImGui::End();
         ImGui::PopStyleVar();
