@@ -1,0 +1,42 @@
+config_setting(
+    name = "release",
+    define_values = {
+        "build_type": "release",
+    }
+)
+
+config_setting(
+    name = "debug",
+    define_values = {
+        "build_type": "debug",
+    }
+)
+
+config_setting(
+    name = "msvc",
+    define_values = {
+        "cmp": "msvc",
+    }
+)
+
+cc_library(
+    name = "Panthera-Core",
+    srcs = glob(["src/Panthera/*.cpp", "src/Panthera/**/*.cpp", "src/Panthera/**/**/*.cpp"]),
+    hdrs = glob(["src/Panthera/*.hpp", "src/Panthera/**/*.hpp", "src/Panthera/**/**/*.hpp"]),
+    strip_include_prefix = "src",
+    defines = [ "GLM_ENABLE_EXPERIMENTAL" ] + select({
+                                           ":debug":
+                                               ["PANTHERA_DEBUG"],
+                                           ":release":
+                                               ["PANTHERA_RELEASE"],
+                                           "//conditions:default":
+                                               ["PANTHERA_DEFAULT"],
+                                       }),
+    deps = [
+        "//pch:pch",
+    ],
+    copts = select({
+                ":msvc": ["/std:c++20", "/Zc:preprocessor", "/permissive-"],
+                "//conditions:default": ["-std=c++20"],
+    }),
+)

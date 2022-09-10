@@ -1,0 +1,79 @@
+workspace(name = "Panthera")
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "com_github_Nov0cx_glfw",
+    sha256 = "715ce2107146ff6786781b2afcc7447bd9495fcbc10068c957ca700a2fa187a3",
+    strip_prefix = "glfw-master",
+    urls = ["https://github.com/Nov0cx/glfw/archive/master.zip"],
+)
+
+http_archive(
+    name = "com_github_Nov0cx_glm",
+    sha256 = "460307392d92d236b56e45854445b41f094b1e7d866b2d838f63105d8bc26a70",
+    strip_prefix = "glm-master",
+    urls = ["https://github.com/Nov0cx/glm/archive/master.zip"],
+)
+
+http_archive(
+    name = "com_github_Nov0cx_glad",
+    sha256 = "c7615600b451f075dca79855007243873fb3b445b1ef1b7b9110b783b688b173",
+    strip_prefix = "glad-02433761991fc237925faad82a95ab62aaf274b4",
+    urls = ["https://github.com/Nov0cx/Glad/archive/02433761991fc237925faad82a95ab62aaf274b4.zip"],
+)
+
+http_archive(
+  name = "com_google_googletest",
+  urls = ["https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip"],
+  strip_prefix = "googletest-609281088cfefc76f9d0ce82e1ff6c30cc3591e5",
+  sha256 = "5cf189eb6847b4f8fc603a3ffff3b0771c08eec7dd4bd961bfd45477dd13eb73",
+)
+
+http_archive(
+    name = "com_github_Nov0cx_fmt",
+    sha256 = "3882d99514ceae01c9c09e8e99fb1a7921a6e1e8d12c6cc1606471c2326a5a91",
+    strip_prefix = "fmt-master",
+    urls = ["https://github.com/Nov0cx/fmt/archive/master.zip"],
+)
+
+http_archive(
+    name = "com_github_Nov0cx_spdlog",
+    sha256 = "4b953202b7feddb13e18bab444d2932e8308ccb15cc5de5a35c141e4a4093d4d",
+    strip_prefix = "spdlog-1.x",
+    urls = ["https://github.com/Nov0cx/spdlog/archive/v1.x.zip"],
+)
+
+http_archive(
+    name = "com_github_ocornut_imgui",
+    sha256 = "eb41440e95cdfe256feedf96bb59d7ccd927edc59dc807328f5afe37bf69b943",
+    strip_prefix = "imgui-docking",
+    urls = ["https://github.com/ocornut/imgui/archive/docking.zip"],
+    build_file = "@//extern:imgui.BUILD",
+)
+
+load("//extern/vulkan/rules:repositories.bzl", "vulkan_repositories")
+vulkan_repositories()
+
+http_archive(
+    name = "com_github_skypjack_entt",
+    sha256 = "55ec23c7f93ddac1d8b54738ffecc1e7a50fbdc38473ccd9f0ec5e0535acb33f",
+    strip_prefix = "entt-85ca2f356234de3c945667d12857dea2a26c214d",
+    urls = ["https://github.com/skypjack/entt/archive/85ca2f356234de3c945667d12857dea2a26c214d.zip"],
+)
+
+http_archive(
+    name = "com_github_nlohmann_json",
+    build_file = "//extern:nlohmann.BUILD",
+    sha256 = "95651d7d1fcf2e5c3163c3d37df6d6b3e9e5027299e6bd050d157322ceda9ac9",
+    strip_prefix = "json-3.11.2",
+    urls = ["https://github.com/nlohmann/json/archive/v3.11.2.zip"],
+)
+
+http_archive(
+    name = "com_github_samhocevar_pfd",
+    build_file = "//extern:pfd.BUILD",
+    sha256 = "2ff03df5569ccb4ba77681f1095650e6be5a6983c2a57a190e5a661ec8e50b32",
+    strip_prefix = "portable-file-dialogs-main",
+    urls = ["https://github.com/samhocevar/portable-file-dialogs/archive/main.zip"],
+)

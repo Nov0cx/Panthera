@@ -1,0 +1,17 @@
+py_binary(
+    name = "Packages",
+    srcs = ["Packages.py"]
+)
+
+py_library(
+    name = "Utils",
+    srcs = ["Utils.py"]
+)
+
+py_binary(
+    name = "VulkanDownload",
+    srcs = ["VulkanDownload.py"],
+    deps = [
+	":Utils",	
+    ],
+)
