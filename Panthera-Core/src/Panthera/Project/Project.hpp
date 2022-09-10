@@ -21,15 +21,13 @@ namespace Panthera
 
         inline void AddScene(Ref <Scene> scene)
         {
-            if (Utils::STLVector::Contains(m_Scenes, scene, [](const Ref<Scene>& a, const Ref<Scene>& b) {
-                LOG_DEBUG("Comparing {} and {}", a->GetName(), b->GetName());
-                return a->GetName() == b->GetName(); }))
+            if (Utils::STLVector::Contains(m_Scenes, scene, [](const Ref<Scene>& a, const Ref<Scene>& b) { return a->GetName() == b->GetName(); }))
                 return;
 
             m_Scenes.push_back(scene);
-            if (m_ActiveScene == nullptr)
+            if (!m_ActiveScene)
             {
-                m_ActiveScene = scene;
+                SetActiveScene(scene);
             }
         }
 

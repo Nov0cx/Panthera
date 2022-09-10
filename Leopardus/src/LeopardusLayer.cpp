@@ -60,9 +60,10 @@ namespace Panthera
         ASSERT(m_Project != nullptr, "Project is null!");
         ASSERT(m_Project->GetActiveScene() != nullptr, "Scene is null!");
 
+        m_Project->GetActiveScene()->OnImGuiRender();
+
         m_ProjectPanel->Render(m_Project);
         m_ScenePanel->Render(m_Project->GetActiveScene());
-        m_Project->GetActiveScene()->OnImGuiRender();
         m_SceneHierarchyPanel->Render(m_Project->GetActiveScene());
         m_ContentBrowserPanel->Render();
     }

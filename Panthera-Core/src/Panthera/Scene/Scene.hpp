@@ -6,6 +6,7 @@
 #include "Panthera/Core/Event.hpp"
 #include "Panthera/Render/Renderer.hpp"
 #include "Panthera/Render/Camera/OrthographicCameraController.hpp"
+#include "Panthera/Core/Log.hpp"
 #include "UUID.hpp"
 #include <imgui.h>
 #include "Components.hpp"
@@ -61,7 +62,7 @@ namespace Panthera
         OrthographicCameraController m_Camera;
         ImVec2 m_ViewportSize;
         ImVec2 m_LastViewportSize;
-        std::function<void(std::string&)> m_DropCallback = [](std::string&){};
+        std::function<void(std::string&)> m_DropCallback = [](std::string&){LOG_WARN("No drop callback set!")};
         std::string m_Name;
         std::string m_Path;
         bool m_HasBeginResized = false;

@@ -92,6 +92,8 @@ namespace Panthera
             }
         }
 
+        Application::GetInstance()->GetWindow()->SetTitle(("Leopardus - " + project->GetName() + " - " + project->GetActiveScene()->GetName()).c_str());
+
         ImGui::Separator();
 
         ImGui::End();
