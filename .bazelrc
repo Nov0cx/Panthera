@@ -1,11 +1,11 @@
-build:msvc_rel --enable_runfiles --define cmp=msvc --define build_type=release
+build:msvc_rel --enable_runfiles --define cmp=msvc --define build_type=release --cxxopt="/O2" --compilation_mode=opt
 build:msvc_dbg --enable_runfiles --define cmp=msvc --define build_type=debug
 
-build:clang_rel --enable_runfiles --define cmp=clang --define build_type=release
+build:clang_rel --enable_runfiles --define cmp=clang --define build_type=release --compilation_mode=opt
 build:clang_dbg --enable_runfiles --define cmp=clang --define build_type=debug
 
-build:clang_cl_rel --enable_runfiles --define cmp=clang_cl --define build_type=release
+build:clang_cl_rel --enable_runfiles --define cmp=clang_cl --define build_type=release --compilation_mode=opt
 build:clang_cl_dbg --enable_runfiles --define cmp=clang_cl --define build_type=debug
 
-build:rel --enable_runfiles --define build_type=release
+build:rel --enable_runfiles --define build_type=release --compilation_mode=opt
 build:dbg --enable_runfiles --define build_type=debug
