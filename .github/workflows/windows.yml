@@ -1,0 +1,22 @@
+name: Windows
+
+on: [push, pull_request, release]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: bazelbuild/setup-bazelisk@v2
+
+      - name: Bazel Cache
+        uses: actions/cache@v2
+        with:
+          path: "~/.cache/bazel"
+          key: bazel
+
+      - name: Build Code
+        run: bazel build --config=msvc_config_release ...
