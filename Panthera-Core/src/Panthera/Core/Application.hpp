@@ -3,6 +3,8 @@
 
 #include "ppch.hpp"
 
+extern int pmain(int argc, char** argv);
+
 namespace Panthera
 {
     struct ApplicationInfo
@@ -14,9 +16,19 @@ namespace Panthera
     class Application
     {
     public:
+        static inline Application* GetInstance() { return s_Instance; }
+
+    public:
 
     private:
+        Application(ApplicationInfo info);
+
+    private:
+        static Application* s_Instance;
+        static Application* Create(ApplicationInfo info);
+    private:
         ApplicationInfo m_Info;
+        friend int ::pmain(int argc, char** argv);
     };
 }
 

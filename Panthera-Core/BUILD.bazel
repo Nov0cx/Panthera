@@ -39,4 +39,5 @@ cc_library(
                 ":msvc": ["/std:c++20", "/Zc:preprocessor", "/permissive-"],
                 "//conditions:default": ["-std=c++20"],
     }),
+    visibility = ["//visibility:public"],
 )

@@ -1,0 +1,26 @@
+#ifndef PANTHERA_ENTRY_HPP
+#define PANTHERA_ENTRY_HPP
+
+#include "ppch.hpp"
+#include "Application.hpp"
+
+extern void ApplicationCreationCallback(Panthera::ApplicationInfo* outInfo);
+extern int PantheraMain(Panthera::Application* app);
+
+int pmain(int argc, char** argv)
+{
+    Panthera::ApplicationInfo info;
+    ApplicationCreationCallback(&info);
+    Panthera::Application *app = Panthera::Application::Create(info);
+
+    PantheraMain(app);
+
+    return 0;
+}
+
+int main(int argc, char** argv)
+{
+    return pmain(argc, argv);
+}
+
+#endif //PANTHERA_ENTRY_HPP
