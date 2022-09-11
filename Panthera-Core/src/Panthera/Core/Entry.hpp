@@ -4,12 +4,14 @@
 #include "ppch.hpp"
 #include "Application.hpp"
 
-extern void ApplicationCreationCallback(Panthera::ApplicationInfo* outInfo);
-extern int PantheraMain(Panthera::Application* app);
+extern void ApplicationCreationCallback(Panthera::ApplicationInfo *outInfo);
 
-int pmain(int argc, char** argv)
+extern int PantheraMain(Panthera::Application *app);
+
+int pmain(int argc, char **argv)
 {
     Panthera::ApplicationInfo info;
+    info.Args = Panthera::CommandLineArgs(argc, argv);
     ApplicationCreationCallback(&info);
     Panthera::Application *app = Panthera::Application::Create(info);
 
@@ -18,7 +20,7 @@ int pmain(int argc, char** argv)
     return 0;
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     return pmain(argc, argv);
 }

@@ -1,11 +1,11 @@
-build:msvc_rel --enable_runfiles --define cmp=msvc --define build_type=release --cxxopt="/O2" --compilation_mode=opt
-build:msvc_dbg --enable_runfiles --define cmp=msvc --define build_type=debug
+build:msvc_win_x64_rel --enable_runfiles --define build_type=release --platforms=//bazel/Platforms:cl_x64_windows --cxxopt="/O2" --compilation_mode=opt
+build:msvc_win_x64_dbg --enable_runfiles --define build_type=debug --platforms=//bazel/Platforms:cl_x64_windows --compilation_mode=dbg
 
-build:clang_rel --enable_runfiles --define cmp=clang --define build_type=release --compilation_mode=opt
-build:clang_dbg --enable_runfiles --define cmp=clang --define build_type=debug
+#build:clang_rel --enable_runfiles --define build_type=release --compilation_mode=opt
+#build:clang_dbg --enable_runfiles --platforms=//bazel/Platforms:clang_cl_x64_windows --compilation_mode=dbg
 
-build:clang_cl_rel --enable_runfiles --define cmp=clang_cl --define build_type=release --compilation_mode=opt
-build:clang_cl_dbg --enable_runfiles --define cmp=clang_cl --define build_type=debug
+build:clang_cl_win_x64_rel --enable_runfiles --incompatible_enable_cc_toolchain_resolution --platforms=//bazel/Platforms:x64_windows-clang-cl --define build_type=release --compilation_mode=opt
+build:clang_cl_win_x64_dbg --enable_runfiles --incompatible_enable_cc_toolchain_resolution --platforms=//bazel/Platforms:x64_windows-clang-cl  --define build_type=debug --compilation_mode=dbg
 
-build:rel --enable_runfiles --define build_type=release --compilation_mode=opt
-build:dbg --enable_runfiles --define build_type=debug
+#build:rel --enable_runfiles --define build_type=release --compilation_mode=opt
+#build:dbg --enable_runfiles --define build_type=debug --compilation_mode=dbg

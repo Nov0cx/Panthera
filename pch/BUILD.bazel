@@ -1,9 +1,4 @@
-config_setting(
-    name = "msvc",
-    define_values = {
-        "cmp": "msvc",
-    }
-)
+load("//bazel:copts.bzl", "copts")
 
 cc_library(
     name = "pch",
@@ -11,8 +6,5 @@ cc_library(
     hdrs = ["Panthera-Pch/ppch.hpp"],
     visibility = ["//visibility:public"],
     strip_include_prefix = "Panthera-Pch",
-    copts = select({
-                            ":msvc": ["/std:c++20", "/Zc:preprocessor", "/permissive-"],
-                            "//conditions:default": ["-std=c++20"],
-                }),
+    copts = copts,
 )

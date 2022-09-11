@@ -12,19 +12,11 @@ config_setting(
     }
 )
 
-config_setting(
-    name = "msvc",
-    define_values = {
-        "cmp": "msvc",
-    }
-)
+load("//bazel:copts.bzl", "copts")
 
 cc_binary(
-    name = "Leoparuds",
+    name = "Leopardus",
     srcs = ["Leopardus/Leopardus.cpp"],
     deps = ["//Panthera-Core:Panthera-Core"],
-    copts = select({
-                    ":msvc": ["/std:c++20", "/Zc:preprocessor", "/permissive-"],
-                    "//conditions:default": ["-std=c++20"],
-        }),
+    copts = copts,
 )

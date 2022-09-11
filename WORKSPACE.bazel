@@ -77,3 +77,11 @@ http_archive(
     strip_prefix = "portable-file-dialogs-main",
     urls = ["https://github.com/samhocevar/portable-file-dialogs/archive/main.zip"],
 )
+
+register_execution_platforms(
+    "//bazel/Platforms:x64_windows-clang-cl"
+)
+
+register_toolchains(
+      "@local_config_cc//:cc-toolchain-x64_windows-clang-cl",
+)

@@ -3,20 +3,47 @@
 
 #include "ppch.hpp"
 
-extern int pmain(int argc, char** argv);
+extern int pmain(int argc, char **argv);
 
 namespace Panthera
 {
+    struct CommandLineArgs
+    {
+        int argc;
+        char **argv;
+
+        CommandLineArgs(int argc, char **argv)
+        {
+            this->argc = argc;
+            this->argv = argv;
+        }
+
+        CommandLineArgs()
+        {
+            this->argc = 0;
+            this->argv = nullptr;
+        }
+
+        char* operator[](int index)
+        {
+            if (index >= argc)
+                return nullptr;
+            return argv[index];
+        }
+    };
+
     struct ApplicationInfo
     {
         std::string Name = "Panthera Application";
+        CommandLineArgs Args = {};
         uint32_t Width = 0, Height = 0;
     };
 
     class Application
     {
     public:
-        static inline Application* GetInstance() { return s_Instance; }
+        static inline Application *GetInstance()
+        { return s_Instance; }
 
     public:
 
@@ -24,11 +51,14 @@ namespace Panthera
         Application(ApplicationInfo info);
 
     private:
-        static Application* s_Instance;
-        static Application* Create(ApplicationInfo info);
+        static Application *s_Instance;
+
+        static Application *Create(ApplicationInfo info);
+
     private:
         ApplicationInfo m_Info;
-        friend int ::pmain(int argc, char** argv);
+
+        friend int::pmain(int argc, char **argv);
     };
 }
 

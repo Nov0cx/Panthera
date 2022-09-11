@@ -12,12 +12,7 @@ config_setting(
     }
 )
 
-config_setting(
-    name = "msvc",
-    define_values = {
-        "cmp": "msvc",
-    }
-)
+load("//bazel:copts.bzl", "copts")
 
 cc_library(
     name = "Panthera-Core",
@@ -35,9 +30,6 @@ cc_library(
     deps = [
         "//pch:pch",
     ],
-    copts = select({
-                ":msvc": ["/std:c++20", "/Zc:preprocessor", "/permissive-"],
-                "//conditions:default": ["-std=c++20"],
-    }),
+    copts = copts,
     visibility = ["//visibility:public"],
 )
