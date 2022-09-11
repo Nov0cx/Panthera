@@ -29,6 +29,7 @@ cc_library(
                                        }),
     deps = [
         "//pch:pch",
+        "@com_github_Nov0cx_fmt//:fmtlib",
     ],
     copts = copts,
     visibility = ["//visibility:public"],

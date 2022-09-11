@@ -25,5 +25,6 @@
 #include <any>
 #include <cinttypes>
 #include <cstdint>
+#include <string_view>
 
 #endif //PANTHERA_PPCH_HPP

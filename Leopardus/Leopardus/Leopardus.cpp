@@ -1,5 +1,6 @@
+#include "Panthera/Panthera.hpp"
+
 #include "Panthera/Core/Entry.hpp"
-#include "ppch.hpp"
 
 void ApplicationCreationCallback(Panthera::ApplicationInfo *outInfo)
 {
