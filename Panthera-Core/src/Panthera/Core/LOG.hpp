@@ -6,6 +6,8 @@
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 
+#include <Vendor/debugbreak/debugbreak.hpp>
+
 namespace Panthera
 {
     class Logger
@@ -78,10 +80,29 @@ namespace Panthera
     };
 }
 
+
+#ifdef PANTHERA_DEBUG
+
 #define PT_LOG_TRACE(...) Panthera::Logger::Log(Panthera::Logger::Level::Trace, __VA_ARGS__)
 #define PT_LOG_INFO(...) Panthera::Logger::Log(Panthera::Logger::Level::Info, __VA_ARGS__)
 #define PT_LOG_WARNING(...) Panthera::Logger::Log(Panthera::Logger::Level::Warning, __VA_ARGS__)
 #define PT_LOG_ERROR(...) Panthera::Logger::Log(Panthera::Logger::Level::Error, __VA_ARGS__)
 #define PT_LOG_FATAL(...) Panthera::Logger::Log(Panthera::Logger::Level::Fatal, __VA_ARGS__)
+
+#define PT_ASSERT(condition, ...) if (!(condition)) { PT_LOG_FATAL(__VA_ARGS__); debug_break(); }
+
+#else
+
+#define PT_LOG_TRACE(...)
+#define PT_LOG_INFO(...)
+#define PT_LOG_WARNING(...)
+#define PT_LOG_ERROR(...)
+#define PT_LOG_FATAL(...)
+
+#define PT_ASSERT(condition, ...)
+
+#endif
+
+#define PT_ASSERT_HANDLE(condition, handle) if (!(condition)) { handle(); }
 
 #endif //PANTHERA_LOG_HPP

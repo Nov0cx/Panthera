@@ -17,7 +17,7 @@ load("//bazel:copts.bzl", "copts")
 cc_library(
     name = "pch",
     srcs = ["src/ppch.cpp", "src/Panthera/Core/Log.cpp"],
-    hdrs = ["src/ppch.hpp", "src/Panthera/Core/Log.hpp", "src/Panthera/Core/StringBase.hpp"],
+    hdrs = ["src/ppch.hpp", "src/Panthera/Core/Log.hpp", "src/Panthera/Core/StringBase.hpp", "src/Vendor/debugbreak/debugbreak.hpp"],
     visibility = ["//visibility:public"],
     strip_include_prefix = "src",
     deps = [
@@ -28,8 +28,10 @@ cc_library(
 
 cc_library(
     name = "Panthera-Core",
-    srcs = glob(["src/Panthera/*.cpp", "src/Panthera/**/*.cpp", "src/Panthera/**/**/*.cpp"], exclude = ["src/Panthera/Core/Log.cpp"]),
-    hdrs = glob(["src/Panthera/*.hpp", "src/Panthera/**/*.hpp", "src/Panthera/**/**/*.hpp"], exclude = ["src/Panthera/Core/Log.hpp", "src/Panthera/Core/StringBase.hpp"]),
+    srcs = glob(["src/Panthera/*.cpp", "src/Panthera/**/*.cpp", "src/Panthera/**/**/*.cpp"],
+                exclude = ["src/Panthera/Core/Log.cpp"]),
+    hdrs = glob(["src/Panthera/*.hpp", "src/Panthera/**/*.hpp", "src/Panthera/**/**/*.hpp", "src/Vendor/debugbreak/*.hpp"],
+                exclude = ["src/Panthera/Core/Log.hpp", "src/Panthera/Core/StringBase.hpp"]),
     strip_include_prefix = "src",
     defines = [ "GLM_ENABLE_EXPERIMENTAL" ] + select({
                                            ":debug":
@@ -42,6 +44,7 @@ cc_library(
     deps = [
         ":pch",
         "@com_github_Nov0cx_fmt//:fmtlib",
+        "@bazel_tools//tools/cpp/runfiles",
     ],
     copts = copts,
     visibility = ["//visibility:public"],
