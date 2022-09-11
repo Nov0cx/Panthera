@@ -1,8 +1,6 @@
 #ifndef PANTHERA_LOG_HPP
 #define PANTHERA_LOG_HPP
 
-#include "ppch.hpp"
-
 #include <fmt/core.h>
 #include <fmt/color.h>
 #include <fmt/chrono.h>

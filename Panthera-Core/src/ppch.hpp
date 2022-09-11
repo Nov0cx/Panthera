@@ -27,4 +27,7 @@
 #include <cstdint>
 #include <string_view>
 
+#include "Panthera/Core/Log.hpp"
+#include "Panthera/Core/StringBase.hpp"
+
 #endif //PANTHERA_PPCH_HPP

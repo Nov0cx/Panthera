@@ -34,7 +34,7 @@ namespace Panthera
 
     struct ApplicationInfo
     {
-        std::string Name = "Panthera Application";
+        String Name = "Panthera Application";
         CommandLineArgs Args = {};
         uint32_t Width = 0, Height = 0;
     };
