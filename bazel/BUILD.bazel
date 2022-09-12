@@ -1,0 +1,3 @@
+load("//bazel:renderapis.bzl", "load_api_configs")
+
+load_api_configs()

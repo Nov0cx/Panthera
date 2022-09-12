@@ -30,6 +30,8 @@ cc_library(
                             ["PANTHERA_RELEASE"],
                         "//conditions:default":
                             ["PANTHERA_DEFAULT"],
+    }) + select({
+        "//bazel:all_apis": ["PANTHERA_OPENGL", "PANTHERA_VULKAN", "PANTHERA_DIRECTX"],
     }),
     copts = copts,
 )

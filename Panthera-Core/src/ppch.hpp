@@ -27,7 +27,7 @@
 #include <cstdint>
 #include <string_view>
 
-#include "Panthera/Core/Log.hpp"
+#include "Panthera/Core/LOG.hpp"
 #include "Panthera/Core/StringBase.hpp"
 #include "Panthera/Core/Ref.hpp"
 
