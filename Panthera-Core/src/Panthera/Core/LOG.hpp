@@ -28,36 +28,32 @@ namespace Panthera
         template<class... Args>
         static void Trace(fmt::format_string<Args...> format, Args&&... args)
         {
-            fmt::print(fg(fmt::color::light_yellow), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [TRACE] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-            fmt::print(fg(fmt::color::white), "");
+            fmt::print(fg(fmt::terminal_color::bright_yellow), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [TRACE] {}\n",
+                       fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
         }
 
         template<class... Args>
         static void Info(fmt::format_string<Args...> format, Args&&... args)
         {
-            fmt::print(fg(fmt::color::light_blue), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [INFO] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-            fmt::print(fg(fmt::color::white), "");
+            fmt::print(fg(fmt::terminal_color::bright_cyan), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [INFO] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
         }
 
         template<class... Args>
         static void Warning(fmt::format_string<Args...> format, Args&&... args)
         {
-            fmt::print(fg(fmt::color::fire_brick), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [WARNING] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-            fmt::print(fg(fmt::color::white), "");
+            fmt::print(fg(fmt::terminal_color::bright_red), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [WARNING] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
         }
 
         template<class... Args>
         static void Error(fmt::format_string<Args...> format, Args&&... args)
         {
-            fmt::print(fg(fmt::color::magenta), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [ERROR] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-            fmt::print(fg(fmt::color::white), "");
+            fmt::print(fg(fmt::terminal_color::magenta), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [ERROR] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
         }
 
         template<class... Args>
         static void Fatal(fmt::format_string<Args...> format, Args&&... args)
         {
-            fmt::print(fg(fmt::color::red), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [FATAL] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-            fmt::print(fg(fmt::color::white), "");
+            fmt::print(fg(fmt::terminal_color::red), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [FATAL] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
         }
 
         template<class... Args>
@@ -94,7 +90,7 @@ namespace Panthera
 #define PT_LOG_ERROR(...) Panthera::Logger::Log(Panthera::Logger::Level::Error, __VA_ARGS__)
 #define PT_LOG_FATAL(...) Panthera::Logger::Log(Panthera::Logger::Level::Fatal, __VA_ARGS__)
 
-#define PT_ASSERT(condition, ...) if (!(condition)) { PT_LOG_FATAL(__VA_ARGS__); /*debug_break();*/ }
+#define PT_ASSERT(condition, ...) if (!(condition)) { PT_LOG_FATAL(__VA_ARGS__); debug_break(); }
 
 #else
 

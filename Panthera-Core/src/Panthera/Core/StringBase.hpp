@@ -398,12 +398,6 @@ namespace Panthera
     using U16String = StringBase<char16_t>;
     using U32String = StringBase<char32_t>;
     using U8String = StringBase<char8_t>;
-
-    using StringView = const StringBase<char>;
-    using WStringView = const StringBase<wchar_t>;
-    using U16StringView = const StringBase<char16_t>;
-    using U32StringView = const StringBase<char32_t>;
-    using U8StringView = const StringBase<char8_t>;
 }
 
 #endif //PANTHERA_STRINGBASE_HPP
