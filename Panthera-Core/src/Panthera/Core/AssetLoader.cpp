@@ -12,7 +12,7 @@ namespace Panthera::AssetLoader
         return s_Runfiles->Rlocation(path);
     }
 
-    void Init(String &arg0)
+    void Init(const String &arg0)
     {
         String error;
         s_Runfiles = Runfiles::Create(arg0, (std::string*)&error);

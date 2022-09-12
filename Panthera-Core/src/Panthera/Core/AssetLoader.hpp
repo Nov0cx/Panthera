@@ -5,7 +5,7 @@
 
 namespace Panthera::AssetLoader
 {
-    void Init(String &arg0);
+    void Init(const String &arg0);
     String GetAssetPath(const String &path);
 }
 
