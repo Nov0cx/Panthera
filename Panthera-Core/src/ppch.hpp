@@ -29,5 +29,6 @@
 
 #include "Panthera/Core/Log.hpp"
 #include "Panthera/Core/StringBase.hpp"
+#include "Panthera/Core/Ref.hpp"
 
 #endif //PANTHERA_PPCH_HPP

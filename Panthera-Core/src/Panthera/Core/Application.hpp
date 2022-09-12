@@ -46,6 +46,8 @@ namespace Panthera
         { return s_Instance; }
 
     public:
+        inline ApplicationInfo& GetInfo() { return m_Info; }
+        inline const ApplicationInfo& GetInfo() const { return m_Info; }
 
     private:
         Application(ApplicationInfo info);
@@ -58,7 +60,7 @@ namespace Panthera
     private:
         ApplicationInfo m_Info;
 
-        friend int::pmain(int argc, char **argv);
+        friend int ::pmain(int argc, char **argv);
     };
 }
 
