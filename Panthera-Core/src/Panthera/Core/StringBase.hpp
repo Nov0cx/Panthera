@@ -20,13 +20,21 @@ namespace Panthera
             m_Data[m_Length] = 0;
         }
 
-        StringBase(const StringBase &other)
+        StringBase(const T chr)
+        {
+            m_Length = 1;
+            m_Data = new T[m_Length + 1];
+            m_Data[0] = chr;
+            m_Data[m_Length] = 0;
+        }
+
+        StringBase(const StringBase<T> &other)
         {
             m_Data = other.m_Data;
             m_Length = other.m_Length;
         }
 
-        StringBase(StringBase &&other) noexcept
+        StringBase(StringBase<T> &&other) noexcept
         {
             m_Data = other.m_Data;
             m_Length = other.m_Length;
@@ -50,7 +58,7 @@ namespace Panthera
             m_Length = str.substr(pos, len).length();
         }
 
-        inline StringBase &operator=(const T* str)
+        inline StringBase<T> &operator=(const T* str)
         {
             m_Length = std::char_traits<T>::length(str);
             m_Data = new T[m_Length + 1];
@@ -59,28 +67,28 @@ namespace Panthera
             return *this;
         }
 
-        inline StringBase &operator=(const StringBase &other)
+        inline StringBase<T> &operator=(const StringBase<T> &other)
         {
             m_Data = other.m_Data;
             m_Length = other.m_Length;
             return *this;
         }
 
-        inline StringBase &operator=(StringBase &&other) noexcept
+        inline StringBase<T> &operator=(StringBase<T> &&other) noexcept
         {
             m_Data = other.m_Data;
             m_Length = other.m_Length;
             return *this;
         }
 
-        inline StringBase &operator=(const std::basic_string<T> &str)
+        inline StringBase<T> &operator=(const std::basic_string<T> &str)
         {
             m_Data = str.data();
             m_Length = str.length();
             return *this;
         }
 
-        inline StringBase &operator=(std::basic_string<T> &&str) noexcept
+        inline StringBase<T> &operator=(std::basic_string<T> &&str) noexcept
         {
             m_Data = str.data();
             m_Length = str.length();
@@ -106,7 +114,7 @@ namespace Panthera
             return m_Length;
         }
 
-        inline void Append(const StringBase& other)
+        inline void Append(const StringBase<T>& other)
         {
             T* newStr = new T[Length() + other.Length()];
             std::memcpy(newStr, m_Data, Length());
@@ -127,7 +135,7 @@ namespace Panthera
             return false;
         }
 
-        inline void Contains(const StringBase& other) const
+        inline void Contains(const StringBase<T>& other) const
         {
             for (std::size_t i = 0; i < Length(); i++)
             {
@@ -178,7 +186,7 @@ namespace Panthera
             return -1;
         }
 
-        inline std::size_t FindFirst(const StringBase& other) const
+        inline std::size_t FindFirst(const StringBase<T>& other) const
         {
             for (std::size_t i = 0; i < Length(); i++)
             {
@@ -198,7 +206,7 @@ namespace Panthera
             return -1;
         }
 
-        inline std::size_t FindLast(const StringBase& other) const
+        inline std::size_t FindLast(const StringBase<T>& other) const
         {
             for (std::size_t i = Length() - 1; i >= 0; i--)
             {
@@ -218,14 +226,21 @@ namespace Panthera
             return -1;
         }
 
-        inline StringBase SubString(std::size_t start, std::size_t end = Length()) const
+        inline StringBase<T> SubString(std::size_t start, std::size_t end) const
         {
             T* newStr = new T[end - start];
             std::memcpy(newStr, m_Data + start, end - start);
             return StringBase(newStr);
         }
 
-        inline bool operator==(const StringBase& other) const
+        inline StringBase<T> SubString(std::size_t start) const
+        {
+            T* newStr = new T[Length() - start];
+            std::memcpy(newStr, m_Data + start, Length() - start);
+            return StringBase(newStr);
+        }
+
+        inline bool operator==(const StringBase<T>& other) const
         {
             if (Length() != other.Length())
                 return false;
@@ -239,7 +254,7 @@ namespace Panthera
             return true;
         }
 
-        inline bool operator!=(const StringBase& other) const
+        inline bool operator!=(const StringBase<T>& other) const
         {
             return *this != other;
         }
@@ -253,12 +268,142 @@ namespace Panthera
         {
             return m_Data;
         }
+
+        inline StringBase<T> operator + (const StringBase<T>& other) const
+        {
+            return StringBase<T>(*this) += other;
+        }
+
+        inline StringBase<T> operator + (const T* str) const
+        {
+            return StringBase<T>(*this) += StringBase<T>(str);
+        }
+
+        inline StringBase<T> operator + (T chr) const
+        {
+            return StringBase<T>(*this) += StringBase<T>(chr);
+        }
+
+        inline StringBase<T> operator + (const std::basic_string<T>& str) const
+        {
+            return StringBase<T>(*this) += StringBase<T>(str);
+        }
+
+        inline StringBase<T> operator += (const StringBase<T>& other)
+        {
+            Append(other);
+            return *this;
+        }
+
+        inline StringBase<T> operator += (const T* str)
+        {
+            Append(StringBase<T>(str));
+            return *this;
+        }
+
+
+        inline StringBase<T> operator += (T chr)
+        {
+            Append(StringBase<T>(chr));
+            return *this;
+        }
+
+        inline StringBase<T> operator += (const std::basic_string<T>& str)
+        {
+            Append(StringBase<T>(str));
+            return *this;
+        }
+
+        inline T operator [] (std::size_t index) const
+        {
+            return m_Data[index];
+        }
+
+        inline T& operator [] (std::size_t index)
+        {
+            return m_Data[index];
+        }
+
+        inline static consteval StringBase<T> ToString(int32_t value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static consteval StringBase<T> ToString(uint32_t value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static consteval StringBase<T> ToString(int64_t value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static consteval StringBase<T> ToString(uint64_t value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static consteval StringBase<T> ToString(float value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static consteval StringBase<T> ToString(double value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static consteval StringBase<T> ToString(long double value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static consteval StringBase<T> ToString(bool value)
+        {
+            return StringBase<T>(value ? "true" : "false");
+        }
+
+        inline static consteval StringBase<T> ToString(char value)
+        {
+            return StringBase<T>(value);
+        }
+
+        inline static consteval StringBase<T> ToString(wchar_t value)
+        {
+            return StringBase<T>(value);
+        }
+
+        inline static consteval StringBase<T> ToString(char16_t value)
+        {
+            return StringBase<T>(value);
+        }
+
+        inline static consteval StringBase<T> ToString(char32_t value)
+        {
+            return StringBase<T>(value);
+        }
+
+        inline static consteval StringBase<T> ToString(const std::string& value)
+        {
+            return StringBase<T>(value);
+        }
     private:
         T *m_Data;
         std::size_t m_Length;
     };
 
     using String = StringBase<char>;
+    using WString = StringBase<wchar_t>;
+    using U16String = StringBase<char16_t>;
+    using U32String = StringBase<char32_t>;
+    using U8String = StringBase<char8_t>;
+
+    using StringView = const StringBase<char>;
+    using WStringView = const StringBase<wchar_t>;
+    using U16StringView = const StringBase<char16_t>;
+    using U32StringView = const StringBase<char32_t>;
+    using U8StringView = const StringBase<char8_t>;
 }
 
 #endif //PANTHERA_STRINGBASE_HPP

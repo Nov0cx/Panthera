@@ -23,6 +23,14 @@ cc_library(
     deps = [
         "@com_github_Nov0cx_fmt//:fmtlib",
     ],
+    defines = select({
+                        ":debug":
+                            ["PANTHERA_DEBUG"],
+                        ":release":
+                            ["PANTHERA_RELEASE"],
+                        "//conditions:default":
+                            ["PANTHERA_DEFAULT"],
+    }),
     copts = copts,
 )
 
