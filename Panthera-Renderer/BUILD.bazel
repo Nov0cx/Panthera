@@ -1,0 +1,14 @@
+load("//bazel:copts.bzl", "copts")
+
+cc_library(
+    name = "Panthera-Renderer",
+    srcs = glob(["src/Panthera/Renderer/*.cpp", "src/Panthera/Renderer/**/*.cpp"]),
+    hdrs = glob(["src/Panthera/RendererCore.hpp", "src/Panthera/Renderer/*.hpp", "src/Panthera/Renderer/**/*.hpp"]),
+    deps = ["//Panthera-Core:pch", "@com_github_Nov0cx_glfw//:glfw"],
+    visibility = ["//visibility:public"],
+    strip_include_prefix = "src",
+    defines = select({
+                "//bazel:all_apis": ["PANTHERA_OPENGL", "PANTHERA_VULKAN", "PANTHERA_DIRECTX"],
+    }),
+    copts = copts,
+)

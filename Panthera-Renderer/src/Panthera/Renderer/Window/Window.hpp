@@ -10,6 +10,8 @@ namespace Panthera
         String Title = "Panthera Window";
         uint32_t Width = 0, Height = 0;
         bool VSync = false;
+
+        WindowInfo() {}
     };
 
     class Window
@@ -17,6 +19,7 @@ namespace Panthera
     public:
         Ref<Window> Create(const WindowInfo &info);
     public:
+        virtual void Init() = 0;
         virtual void Update() = 0;
 
         virtual void* GetNativeWindow() = 0;

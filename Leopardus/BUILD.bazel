@@ -17,6 +17,6 @@ load("//bazel:copts.bzl", "copts")
 cc_binary(
     name = "Leopardus",
     srcs = ["Leopardus/Leopardus.cpp"],
-    deps = ["//Panthera-Core:Panthera-Core"],
+    deps = ["//Panthera-Core:Panthera-Core", "//Panthera-Renderer:Panthera-Renderer"],
     copts = copts,
 )

@@ -6,7 +6,4 @@
 #include "Core/Application.hpp"
 #include "Core/AssetLoader.hpp"
 
-#include "Render/Renderer.hpp"
-#include "Render/Window/Window.hpp"
-
 #endif //PANTHERA_PANTHERA_HPP
