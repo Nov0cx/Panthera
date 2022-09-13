@@ -1,24 +1,50 @@
 #include "Panthera/Panthera.hpp"
+#include "Panthera/RenderCore.hpp"
 
 #include "Panthera/Core/Entry.hpp"
 
-void ApplicationCreationCallback(Panthera::ApplicationInfo *outInfo)
+namespace Panthera
 {
-    outInfo->Name = "Leopardus";
-    //PT_ASSERT(0 == 1, "Lol");
-    Panthera::String test = "Hello";
-    std::string test2 = "Hello";
-    PT_LOG_INFO("Hello world!");
-    PT_LOG_TRACE("my string size {}, std string size {}", sizeof(Panthera::String), sizeof(std::string));
-    PT_ASSERT_HANDLE(false, []() {
-        PT_LOG_ERROR("ASSERT HANDLE FAILED");
-    });
-    PT_LOG_FATAL("FATAL");
-    PT_LOG_WARNING("WARNING");
-    std::cout << "Hello world!" << std::endl;
-}
+    void ApplicationCreationCallback(ApplicationInfo *outInfo)
+    {
+        outInfo->Name = "Leopardus";
+        outInfo->Version = {0, 3, 0};
+        outInfo->Width = 500;
+        outInfo->Height = 500;
 
-int PantheraMain(Panthera::Application *app)
-{
-    return 0;
+        PT_LOG_INFO("Hello world!");
+        PT_LOG_TRACE("my string size {}, std string size {}", sizeof(Panthera::String), sizeof(std::string));
+        PT_ASSERT_HANDLE(false, []() {
+            PT_LOG_ERROR("ASSERT HANDLE FAILED");
+        });
+        PT_LOG_FATAL("FATAL");
+        PT_LOG_WARNING("WARNING");
+    }
+
+    int Main(Application *app)
+    {
+        WindowInfo windowInfo;
+        windowInfo.Title = app->GetInfo().Name + " - " + app->GetInfo().Version.ToString();
+        windowInfo.Width = app->GetInfo().Width;
+        windowInfo.Height = app->GetInfo().Height;
+        windowInfo.VSync = false;
+
+        GlobalRenderer::Init(windowInfo);
+
+        while (true)
+        {
+            GlobalRenderer::BeginFrame();
+            GlobalRenderer::SubmitFunc([]() {
+                PT_LOG_INFO("Hello world!");
+            });
+            GlobalRenderer::SubmitFunc([]() {
+                GlobalRenderer::GetMainWindow()->Update();
+            });
+            GlobalRenderer::EndFrame();
+        }
+
+        GlobalRenderer::Shutdown();
+
+        return 0;
+    }
 }

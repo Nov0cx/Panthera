@@ -5,9 +5,13 @@
 #include "Application.hpp"
 #include "AssetLoader.hpp"
 
-extern void ApplicationCreationCallback(Panthera::ApplicationInfo *outInfo);
+namespace Panthera
+{
+    extern void ApplicationCreationCallback(ApplicationInfo *outInfo);
+    extern int Main(Application *app);
 
-extern int PantheraMain(Panthera::Application *app);
+}
+
 
 int pmain(int argc, char **argv)
 {
@@ -15,11 +19,11 @@ int pmain(int argc, char **argv)
 
     Panthera::ApplicationInfo info;
     info.Args = Panthera::CommandLineArgs(argc, argv);
-    ApplicationCreationCallback(&info);
+    Panthera::ApplicationCreationCallback(&info);
 
     Panthera::Application *app = Panthera::Application::Create(info);
 
-    PantheraMain(app);
+    Panthera::Main(app);
 
     return 0;
 }

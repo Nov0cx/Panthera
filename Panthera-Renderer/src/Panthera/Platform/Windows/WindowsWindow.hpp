@@ -16,6 +16,9 @@ namespace Panthera
 
         void* GetNativeWindow() override;
 
+        void SetVSync(bool enabled) override;
+        bool IsVSync() const override;
+
         WindowInfo& GetInfo() override;
         const WindowInfo& GetInfo() const override;
 
@@ -25,7 +28,6 @@ namespace Panthera
         void* m_Window = nullptr;
         WindowInfo m_Info;
         bool m_IsShutDown = false;
-        static uint32_t s_WindowCount;
     };
 }
 

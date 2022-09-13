@@ -6,5 +6,6 @@
 #include "Core/Application.hpp"
 #include "Core/AssetLoader.hpp"
 #include "Core/Random.hpp"
+#include "Core/Version.hpp"
 
 #endif //PANTHERA_PANTHERA_HPP

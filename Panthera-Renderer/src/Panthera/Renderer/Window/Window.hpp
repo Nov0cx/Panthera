@@ -17,12 +17,15 @@ namespace Panthera
     class Window
     {
     public:
-        Ref<Window> Create(const WindowInfo &info);
+        static Ref<Window> Create(const WindowInfo &info);
     public:
         virtual void Init() = 0;
         virtual void Update() = 0;
 
         virtual void* GetNativeWindow() = 0;
+
+        virtual void SetVSync(bool enabled) = 0;
+        virtual bool IsVSync() const = 0;
 
         virtual WindowInfo& GetInfo() = 0;
         virtual const WindowInfo& GetInfo() const = 0;

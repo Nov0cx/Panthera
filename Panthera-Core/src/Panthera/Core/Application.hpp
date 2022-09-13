@@ -3,6 +3,8 @@
 
 #include "ppch.hpp"
 
+#include "Version.hpp"
+
 extern int pmain(int argc, char **argv);
 
 namespace Panthera
@@ -35,6 +37,7 @@ namespace Panthera
     struct ApplicationInfo
     {
         String Name = "Panthera Application";
+        Version Version = {0, 3, 0};
         CommandLineArgs Args = {};
         uint32_t Width = 0, Height = 0;
     };
@@ -46,6 +49,8 @@ namespace Panthera
         { return s_Instance; }
 
     public:
+        void Run();
+
         inline ApplicationInfo& GetInfo() { return m_Info; }
         inline const ApplicationInfo& GetInfo() const { return m_Info; }
 

@@ -48,11 +48,17 @@ cc_library(
                                                ["PANTHERA_RELEASE"],
                                            "//conditions:default":
                                                ["PANTHERA_DEFAULT"],
-                                       }),
+                                       }) + select({
+                                                  "@platforms//os:windows": ["PANTHERA_PLATFORM_WINDOWS"],
+                                                  "@platforms//os:linux": ["PANTHERA_PLATFORM_LINUX"],
+                                                  "@platforms//os:macos": ["PANTHERA_PLATFORM_MACOS"],
+                                                  "//conditions:default": [],
+                                              }),
     deps = [
         ":pch",
         "@com_github_Nov0cx_fmt//:fmtlib",
         "@bazel_tools//tools/cpp/runfiles",
+        "@com_github_Nov0cx_glm//:glm",
     ],
     copts = copts,
     visibility = ["//visibility:public"],

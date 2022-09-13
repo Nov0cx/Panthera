@@ -3,6 +3,8 @@
 
 #include "ppch.hpp"
 
+#include "Window/Window.hpp"
+
 namespace Panthera
 {
     enum class RenderAPI
@@ -22,11 +24,20 @@ namespace Panthera
     class GlobalRenderer
     {
     public:
-        static void Init();
+        static void Init(WindowInfo info);
         static void Shutdown();
+
+        static void BeginFrame();
+        static void EndFrame();
 
         static void SetRenderAPI(RenderAPI api);
         static RenderAPI GetAPI();
+
+        static void SubmitFunc(const std::function<void()>& func);
+
+        static Ref<Window> GetMainWindow();
+        static void SetMainWindow(Ref<Window> window);
+        static Ref<Window> CreateWindow(const WindowInfo &info);
     };
 }
 

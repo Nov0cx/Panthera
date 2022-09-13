@@ -10,4 +10,9 @@ namespace Panthera
     {
         return new Application(info);
     }
+
+    void Application::Run()
+    {
+
+    }
 }

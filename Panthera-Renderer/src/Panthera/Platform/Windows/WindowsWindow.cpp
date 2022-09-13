@@ -1,11 +1,13 @@
 #include "WindowsWindow.hpp"
 
 #include "ppch.hpp"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 namespace Panthera
 {
     static bool s_InitGLFW = false;
+    static uint32_t s_WindowCount = 0;
 
     WindowsWindow::WindowsWindow(const WindowInfo &info)
     {
@@ -26,34 +28,69 @@ namespace Panthera
         if (!s_InitGLFW)
         {
             PT_ASSERT(glfwInit(), "Failed to init GLFW!");
+
             s_InitGLFW = true;
         }
 
         m_Window = glfwCreateWindow(m_Info.Width, m_Info.Height, m_Info.Title.CStr(), nullptr, nullptr);
         if (!m_Window)
         {
-            PT_FATAL("Failed to create GLFW window!");
+            PT_LOG_FATAL("Failed to create GLFW window!");
             Shutdown();
             return;
         }
 
-        glfwSetWindowUserPointer(m_Window, &m_Info);
+        //glfwSetWindowUserPointer((GLFWwindow*)m_Window, &m_Info);
 
         glfwSetErrorCallback([](int error, const char *description)
         {
-            PT_ERROR("GLFW error: {}", description);
+            PT_LOG_ERROR("GLFW error: {}", description);
         });
+
+        // TODO: move
+        glfwMakeContextCurrent((GLFWwindow*)m_Window);
+
+        if (!gladLoadGL((GLADloadfunc) glfwGetProcAddress))
+        {
+            std::cout << "Failed to initialize GLAD" << std::endl;
+            return;
+        }
+
+        SetVSync(m_Info.VSync);
     }
 
     void WindowsWindow::Update()
     {
         if (m_IsShutDown)
             return;
+
+        glfwMakeContextCurrent((GLFWwindow*)m_Window);
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glfwSwapBuffers((GLFWwindow*)m_Window);
+
+        glfwPollEvents();
     }
 
     void *WindowsWindow::GetNativeWindow()
     {
-        return NULL;
+        return m_Window;
+    }
+
+    void WindowsWindow::SetVSync(bool enabled)
+    {
+        m_Info.VSync = enabled;
+        if (enabled)
+            glfwSwapInterval(1);
+        else
+            glfwSwapInterval(0);
+    }
+
+    bool WindowsWindow::IsVSync() const
+    {
+        return m_Info.VSync;
     }
 
     WindowInfo &WindowsWindow::GetInfo()
@@ -72,7 +109,7 @@ namespace Panthera
             return;
 
         glfwDestroyWindow((GLFWwindow*)m_Window);
-        if (s_WindowCount-- <=)
+        if (s_WindowCount-- <= 0)
         {
             glfwTerminate();
             s_InitGLFW = true;
