@@ -254,6 +254,61 @@ namespace Panthera
             return true;
         }
 
+        inline void ToLower()
+        {
+            for (std::size_t i = 0; i < Length(); i++)
+            {
+                if (m_Data[i] >= 'A' && m_Data[i] <= 'Z')
+                    m_Data[i] += 32;
+            }
+        }
+
+        inline void ToUpper()
+        {
+            for (std::size_t i = 0; i < Length(); i++)
+            {
+                if (m_Data[i] >= 'a' && m_Data[i] <= 'z')
+                    m_Data[i] -= 32;
+            }
+        }
+
+        inline bool EqualsIgnoreCase(const StringBase<T>& other) const
+        {
+            if (Length() != other.Length())
+                return false;
+
+            for (std::size_t i = 0; i < Length(); i++)
+            {
+                if (m_Data[i] != other.m_Data[i])
+                {
+                    if (m_Data[i] >= 'A' && m_Data[i] <= 'Z')
+                    {
+                        if (m_Data[i] + 32 != other.m_Data[i])
+                            return false;
+                    }
+                    else if (m_Data[i] >= 'a' && m_Data[i] <= 'z')
+                    {
+                        if (m_Data[i] - 32 != other.m_Data[i])
+                            return false;
+                    }
+                    else
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        inline bool IsEmpty() const
+        {
+            return Length() == 0 || m_Data == nullptr || m_Data[0] == '\0';
+        }
+
+        inline operator bool() const
+        {
+            return !IsEmpty();
+        }
+
         inline bool operator!=(const StringBase<T>& other) const
         {
             return *this != other;
@@ -262,6 +317,11 @@ namespace Panthera
         inline operator std::basic_string<T>() const
         {
             return std::basic_string<T>(m_Data, m_Length);
+        }
+
+        inline operator T*()
+        {
+            return m_Data;
         }
 
         inline operator const T*() const

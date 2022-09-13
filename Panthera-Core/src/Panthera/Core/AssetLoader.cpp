@@ -16,6 +16,6 @@ namespace Panthera::AssetLoader
     {
         String error;
         s_Runfiles = Runfiles::Create(arg0, (std::string*)&error);
-        PT_ASSERT(s_Runfiles, "Failed to create runfiles: {}", error);
+        PT_ASSERT(s_Runfiles, "Failed to create runfiles: {}", (char*)error);
     }
 }
