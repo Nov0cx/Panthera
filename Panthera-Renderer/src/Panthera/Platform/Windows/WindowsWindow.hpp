@@ -17,6 +17,7 @@ namespace Panthera
         void* GetNativeWindow() override;
 
         void SetFullScreen(bool state, void* monitor = nullptr) override;
+        void SetMaximized(bool state) override;
 
         void SetVSync(bool enabled) override;
         bool IsVSync() const override;

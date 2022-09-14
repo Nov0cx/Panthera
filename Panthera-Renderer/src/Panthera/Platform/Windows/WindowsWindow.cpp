@@ -60,6 +60,8 @@ namespace Panthera
         }
 
         SetVSync(m_Info.VSync);
+        SetMaximized(m_Info.Maximized);
+        SetFullScreen(m_Info.Fullscreen);
     }
 
     void WindowsWindow::Update()
@@ -106,6 +108,15 @@ namespace Panthera
             const GLFWvidmode *mode = glfwGetVideoMode(mon);
             glfwSetWindowMonitor((GLFWwindow*)m_Window, mon, m_PosX, m_PosY, m_Info.Width, m_Info.Height, mode->refreshRate);
         }
+    }
+
+    void WindowsWindow::SetMaximized(bool state)
+    {
+        m_Info.Maximized = state;
+        if (state)
+            glfwMaximizeWindow((GLFWwindow*)m_Window);
+        else
+            glfwRestoreWindow((GLFWwindow*)m_Window);
     }
 
     void WindowsWindow::SetVSync(bool enabled)
