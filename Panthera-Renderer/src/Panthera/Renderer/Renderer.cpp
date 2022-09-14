@@ -8,6 +8,7 @@ namespace Panthera
         Ref<Window> MainWindow;
         std::vector<Ref<Window>> Windows;
         std::vector<std::function<void()>> RendererFunctions;
+        bool ShutdownAllowed = false;
     };
 
     static GlobalRendererData s_globalRenderData;
@@ -68,5 +69,16 @@ namespace Panthera
         for (auto &func : s_globalRenderData.RendererFunctions)
             func();
         s_globalRenderData.RendererFunctions.clear();
+    }
+
+    bool GlobalRenderer::RequestShutdown()
+    {
+        s_globalRenderData.ShutdownAllowed = true;
+        return true;
+    }
+
+    bool GlobalRenderer::ShutdownAllowed()
+    {
+        return s_globalRenderData.ShutdownAllowed;
     }
 }

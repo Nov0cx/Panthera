@@ -31,12 +31,9 @@ namespace Panthera
 
         GlobalRenderer::Init(windowInfo);
 
-        while (true)
+        while (!GlobalRenderer::ShutdownAllowed())
         {
             GlobalRenderer::BeginFrame();
-            GlobalRenderer::SubmitFunc([]() {
-                PT_LOG_INFO("Hello world!");
-            });
             GlobalRenderer::SubmitFunc([]() {
                 GlobalRenderer::GetMainWindow()->Update();
             });

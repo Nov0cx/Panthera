@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "Panthera/Renderer/Renderer.hpp"
+
 namespace Panthera
 {
     static bool s_InitGLFW = false;
@@ -63,6 +65,9 @@ namespace Panthera
     {
         if (m_IsShutDown)
             return;
+
+        if (glfwWindowShouldClose((GLFWwindow*)m_Window))
+            GlobalRenderer::RequestShutdown();
 
         glfwMakeContextCurrent((GLFWwindow*)m_Window);
 
