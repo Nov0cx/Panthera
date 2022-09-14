@@ -13,7 +13,7 @@ namespace Panthera
 
         String ToString() const
         {
-            return String::ToString(Major) + "." + String::ToString(Minor) + "." + String::ToString(Patch);
+            return String::From(Major) + "." + String::From(Minor) + "." + String::From(Patch);
         }
 
         Version(uint32_t major, uint32_t minor, uint32_t patch)

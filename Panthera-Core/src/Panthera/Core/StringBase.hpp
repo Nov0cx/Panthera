@@ -4,492 +4,634 @@
 #include <memory>
 #include <cinttypes>
 #include <string>
+#include <cassert>
 
 namespace Panthera
 {
+    namespace StringUtils
+    {
+        template<typename T>
+        std::size_t GetLength(const T* str)
+        {
+            return std::char_traits<T>::length(str);
+        }
+
+        template<typename T>
+        void Copy(T* dest, const T* src, std::size_t length)
+        {
+            for (std::size_t i = 0; i < length; i++)
+            {
+                if (src[i] == '\0')
+                    break;
+                dest[i] = src[i];
+            }
+        }
+    }
+
     template<typename T>
     class StringBase
     {
     public:
-        StringBase() = default;
+        StringBase()
+        {
+            Set((const T*)"");
+        }
 
         StringBase(const T *str)
         {
-            m_Length = std::char_traits<T>::length(str);
-            m_Data = new T[m_Length + 1];
-            std::char_traits<T>::copy(m_Data, str, m_Length);
-            m_Data[m_Length] = 0;
+            Set(str);
         }
 
-        StringBase(const T chr)
+        StringBase(const StringBase<T> &str)
         {
-            m_Length = 1;
-            m_Data = new T[m_Length + 1];
-            m_Data[0] = chr;
-            m_Data[m_Length] = 0;
+            Set(str.m_Data);
         }
 
-        StringBase(const StringBase<T> &other)
+        StringBase(StringBase<T> &&moved)
         {
-            m_Data = new T[other.m_Length + 1];
-            std::char_traits<T>::copy(m_Data, other.m_Data, other.m_Length);
-            m_Length = other.m_Length;
+            Set(moved.m_Data);
+            delete[] moved.m_Data;
+            moved.m_Data = nullptr;
+            moved.m_Length = 0;
         }
 
-        StringBase(StringBase<T> &&other)
-
-        noexcept
+        StringBase(const std::basic_string<T> &str)
         {
-            m_Data = new T[other.m_Length + 1];
-            std::char_traits<T>::copy(m_Data, other.m_Data, other.m_Length);
-            m_Length = other.m_Length;
+            Set(str.c_str());
         }
 
-        StringBase(const std::basic_string <T> &str)
+        StringBase(const std::basic_string<T> &&moved)
         {
-            m_Length = str.length();
-            m_Data = new T[m_Length + 1];
-            std::char_traits<T>::copy(m_Data, str.c_str(), m_Length);
-            m_Data[m_Length] = 0;
-        }
-
-        StringBase(std::basic_string <T> &&str)
-        noexcept
-        {
-            m_Length = str.length();
-            m_Data = new T[m_Length + 1];
-            std::char_traits<T>::copy(m_Data, str.c_str(), m_Length);
-            m_Data[m_Length] = 0;
-        }
-
-        inline StringBase<T> &operator=(const T *str)
-        {
-            m_Length = std::char_traits<T>::length(str);
-            m_Data = new T[m_Length + 1];
-            std::char_traits<T>::copy(m_Data, str, m_Length);
-            m_Data[m_Length] = 0;
-            return *this;
-        }
-
-        inline StringBase<T> &operator=(const StringBase<T> &other)
-        {
-            m_Data = new T[other.m_Length + 1];
-            std::char_traits<T>::copy(m_Data, other.m_Data, other.m_Length);
-            m_Length = other.m_Length;
-            return *this;
-        }
-
-        inline StringBase<T> &operator=(StringBase<T> &&other)
-        noexcept
-        {
-            m_Data = new T[other.m_Length + 1];
-            std::char_traits<T>::copy(m_Data, other.m_Data, other.m_Length);
-            m_Length = other.m_Length;
-            return *this;
-        }
-
-        inline StringBase<T> &operator=(const std::basic_string <T> &str)
-        {
-            m_Length = str.length();
-            m_Data = new T[m_Length + 1];
-            std::char_traits<T>::copy(m_Data, str.c_str(), m_Length);
-            m_Data[m_Length] = 0;
-            return *this;
-        }
-
-        inline StringBase<T> &operator=(std::basic_string <T> &&str)
-
-        noexcept
-        {
-            m_Length = str.length();
-            m_Data = new T[m_Length + 1];
-            std::char_traits<T>::copy(m_Data, str.c_str(), m_Length);
-            m_Data[m_Length] = 0;
-            return *this;
+            Set(moved.c_str());
         }
 
         ~StringBase()
         {
+            if (m_Data != nullptr)
+                delete[] m_Data;
         }
 
-        inline const T *CStr() const
+        inline StringBase<T>& operator=(const StringBase<T> &str)
         {
-            return m_Data;
-        }
-
-        inline T *Str()
-        {
-            return m_Data;
-        }
-
-        inline std::size_t Length() const
-        {
-            return m_Length;
-        }
-
-        inline void Append(const StringBase<T> &other)
-        {
-            T *newStr = new T[Length() + other.Length()];
-            std::memcpy(newStr, m_Data, Length());
-            std::memcpy(newStr + Length(), other.m_Data, other.Length());
-            if (m_Data)
-                delete m_Data;
-            m_Data = newStr;
-            m_Length += other.Length();
-        }
-
-        inline void Contains(T chr) const
-        {
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] == chr)
-                    return true;
-            }
-
-            return false;
-        }
-
-        inline void Contains(const StringBase<T> &other) const
-        {
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] == other.m_Data[0])
-                {
-                    for (std::size_t j = 0; j < other.Length(); j++)
-                    {
-                        if (m_Data[i + j] != other.m_Data[j])
-                            break;
-
-                        if (j == other.Length() - 1)
-                            return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        inline void Replace(T chr, T newChr)
-        {
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] == chr)
-                    m_Data[i] = newChr;
-            }
-        }
-
-        inline std::size_t FindFirst(T chr) const
-        {
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] == chr)
-                    return i;
-            }
-
-            return -1;
-        }
-
-        inline std::size_t FindLast(T chr) const
-        {
-            for (std::size_t i = Length() - 1; i >= 0; i--)
-            {
-                if (m_Data[i] == chr)
-                    return i;
-            }
-
-            return -1;
-        }
-
-        inline std::size_t FindFirst(const StringBase<T> &other) const
-        {
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] == other.m_Data[0])
-                {
-                    for (std::size_t j = 0; j < other.Length(); j++)
-                    {
-                        if (m_Data[i + j] != other.m_Data[j])
-                            break;
-
-                        if (j == other.Length() - 1)
-                            return i;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
-        inline std::size_t FindLast(const StringBase<T> &other) const
-        {
-            for (std::size_t i = Length() - 1; i >= 0; i--)
-            {
-                if (m_Data[i] == other.m_Data[0])
-                {
-                    for (std::size_t j = 0; j < other.Length(); j++)
-                    {
-                        if (m_Data[i + j] != other.m_Data[j])
-                            break;
-
-                        if (j == other.Length() - 1)
-                            return i;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
-        inline StringBase<T> SubString(std::size_t start, std::size_t end) const
-        {
-            T *newStr = new T[end - start];
-            std::memcpy(newStr, m_Data + start, end - start);
-            return StringBase(newStr);
-        }
-
-        inline StringBase<T> SubString(std::size_t start) const
-        {
-            T *newStr = new T[Length() - start];
-            std::memcpy(newStr, m_Data + start, Length() - start);
-            return StringBase(newStr);
-        }
-
-        inline bool operator==(const StringBase<T> &other) const
-        {
-            if (Length() != other.Length())
-                return false;
-
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] != other.m_Data[i])
-                    return false;
-            }
-
-            return true;
-        }
-
-        inline void ToLower()
-        {
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] >= 'A' && m_Data[i] <= 'Z')
-                    m_Data[i] += 32;
-            }
-        }
-
-        inline void ToUpper()
-        {
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] >= 'a' && m_Data[i] <= 'z')
-                    m_Data[i] -= 32;
-            }
-        }
-
-        inline bool EqualsIgnoreCase(const StringBase<T> &other) const
-        {
-            if (Length() != other.Length())
-                return false;
-
-            for (std::size_t i = 0; i < Length(); i++)
-            {
-                if (m_Data[i] != other.m_Data[i])
-                {
-                    if (m_Data[i] >= 'A' && m_Data[i] <= 'Z')
-                    {
-                        if (m_Data[i] + 32 != other.m_Data[i])
-                            return false;
-                    } else if (m_Data[i] >= 'a' && m_Data[i] <= 'z')
-                    {
-                        if (m_Data[i] - 32 != other.m_Data[i])
-                            return false;
-                    } else
-                        return false;
-                }
-            }
-
-            return true;
-        }
-
-        inline bool IsEmpty() const
-        {
-            return Length() == 0 || m_Data == nullptr || m_Data[0] == '\0';
-        }
-
-        inline operator bool() const
-        {
-            return !IsEmpty();
-        }
-
-        inline bool operator!=(const StringBase<T> &other) const
-        {
-            return *this != other;
-        }
-
-        inline operator std::basic_string<T>() const
-        {
-            return std::basic_string<T>(m_Data, m_Length);
-        }
-
-        inline operator T *()
-        {
-            return m_Data;
-        }
-
-        inline operator const T *() const
-        {
-            return m_Data;
-        }
-
-        inline StringBase<T> operator+(const StringBase<T> &other) const
-        {
-            return StringBase<T>(*this) += other;
-        }
-
-        inline StringBase<T> operator+(const T *str) const
-        {
-            return StringBase<T>(*this) += StringBase<T>(str);
-        }
-
-        inline StringBase<T> operator+(T chr) const
-        {
-            return StringBase<T>(*this) += StringBase<T>(chr);
-        }
-
-        inline StringBase<T> operator+(const std::basic_string <T> &str) const
-        {
-            return StringBase<T>(*this) += StringBase<T>(str);
-        }
-
-        inline StringBase<T> operator+=(const StringBase<T> &other)
-        {
-            Append(other);
+            Set(str.m_Data);
             return *this;
+        }
+
+        inline StringBase<T>& operator=(StringBase<T> &&moved)
+        {
+            Set(moved.m_Data);
+            delete[] moved.m_Data;
+            moved.m_Data = nullptr;
+            moved.m_Length = 0;
+            return *this;
+        }
+
+        inline StringBase<T>& operator=(const T *str)
+        {
+            Set(str);
+            return *this;
+        }
+
+        inline StringBase<T>& operator=(const std::basic_string<T> &str)
+        {
+            Set(str.c_str());
+            return *this;
+        }
+
+        inline StringBase<T>& operator=(const std::basic_string<T> &&moved)
+        {
+            Set(moved.c_str());
+            return *this;
+        }
+
+        inline void Append(const T *str)
+        {
+            const auto oldLength = m_Length;
+            const auto oldData = m_Data;
+
+            m_Length = oldLength + StringUtils::GetLength(str);
+            m_Data = new T[m_Length + 1];
+
+            StringUtils::Copy(m_Data, oldData, oldLength);
+            StringUtils::Copy(m_Data + oldLength, str, m_Length - oldLength);
+            m_Data[m_Length] = '\0';
+
+            delete[] oldData;
+        }
+
+        inline void Append(StringBase<T> toAppend)
+        {
+            Append(toAppend.m_Data);
+        }
+
+        inline void Append(const std::basic_string<T> &str)
+        {
+            Append(str.c_str());
         }
 
         inline StringBase<T> operator+=(const T *str)
         {
-            Append(StringBase<T>(str));
+            Append(str);
             return *this;
         }
 
-
-        inline StringBase<T> operator+=(T chr)
+        inline StringBase<T> operator+=(const StringBase<T> &str)
         {
-            Append(StringBase<T>(chr));
+            Append(str);
             return *this;
         }
 
-        inline StringBase<T> operator+=(const std::basic_string <T> &str)
+        inline StringBase<T> operator+=(const std::basic_string<T> &str)
         {
-            Append(StringBase<T>(str));
+            Append(str);
             return *this;
         }
 
-        inline T operator[](std::size_t index) const
+        inline StringBase<T> operator+(const T *str)
+        {
+            StringBase<T> newStr = *this;
+            newStr.Append(str);
+            return newStr;
+        }
+
+        inline StringBase<T> operator+(const StringBase<T> &str)
+        {
+            StringBase<T> newStr = *this;
+            newStr.Append(str);
+            return newStr;
+        }
+
+        inline StringBase<T> operator+(const std::basic_string<T> &str)
+        {
+            StringBase<T> newStr = *this;
+            newStr.Append(str);
+            return newStr;
+        }
+
+        inline uint32_t Find(const T *str)
+        {
+            const auto length = StringUtils::GetLength(str);
+            for (uint32_t i = 0; i < m_Length; i++)
+            {
+                if (m_Data[i] == str[0])
+                {
+                    bool found = true;
+                    for (uint32_t j = 0; j < length; j++)
+                    {
+                        if (m_Data[i + j] != str[j])
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                        return i;
+                }
+            }
+
+            return -1;
+        }
+
+        inline uint32_t Find(const StringBase<T> &str)
+        {
+            return Find(str.m_Data);
+        }
+
+        inline uint32_t Find(const std::basic_string<T> &str)
+        {
+            return Find(str.c_str());
+        }
+
+        inline uint32_t FindLast(const T *str)
+        {
+            const auto length = StringUtils::GetLength(str);
+            for (uint32_t i = m_Length - 1; i >= 0; i--)
+            {
+                if (m_Data[i] == str[0])
+                {
+                    bool found = true;
+                    for (uint32_t j = 0; j < length; j++)
+                    {
+                        if (m_Data[i + j] != str[j])
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                        return i;
+                }
+            }
+
+            return -1;
+        }
+
+        inline uint32_t FindLast(const StringBase<T> &str)
+        {
+            return FindLast(str.m_Data);
+        }
+
+        inline uint32_t FindLast(const std::basic_string<T> &str)
+        {
+            return FindLast(str.c_str());
+        }
+
+        inline StringBase<T> Substring(uint32_t start, uint32_t length)
+        {
+            if (start >= m_Length)
+                return StringBase<T>();
+
+            if (start + length > m_Length)
+                length = m_Length - start;
+
+            T *data = new T[length + 1];
+            StringUtils::Copy(data, m_Data + start, length);
+            data[length] = '\0';
+
+            StringBase<T> str(data);
+            delete[] data;
+            return str;
+        }
+
+        inline StringBase<T> Substring(uint32_t start)
+        {
+            return Substring(start, m_Length - start);
+        }
+
+        inline StringBase<T> Substring(const T *str)
+        {
+            const auto index = Find(str);
+            if (index == -1)
+                return StringBase<T>();
+
+            return Substring(index + StringUtils::GetLength(str));
+        }
+
+        inline StringBase<T> Substring(const StringBase<T> &str)
+        {
+            return Substring(str.m_Data);
+        }
+
+        inline StringBase<T> Substring(const std::basic_string<T> &str)
+        {
+            return Substring(str.c_str());
+        }
+
+        inline StringBase<T> SubstringLast(const T *str)
+        {
+            const auto index = FindLast(str);
+            if (index == -1)
+                return StringBase<T>();
+
+            return Substring(index + StringUtils::GetLength(str));
+        }
+
+        inline StringBase<T> SubstringLast(const StringBase<T> &str)
+        {
+            return SubstringLast(str.m_Data);
+        }
+
+        inline StringBase<T> SubstringLast(const std::basic_string<T> &str)
+        {
+            return SubstringLast(str.c_str());
+        }
+
+        inline StringBase<T> SubstringBefore(const T *str)
+        {
+            const auto index = Find(str);
+            if (index == -1)
+                return StringBase<T>();
+
+            return Substring(0, index);
+        }
+
+        inline StringBase<T> SubstringBefore(const StringBase<T> &str)
+        {
+            return SubstringBefore(str.m_Data);
+        }
+
+        inline StringBase<T> SubstringBefore(const std::basic_string<T> &str)
+        {
+            return SubstringBefore(str.c_str());
+        }
+
+        inline StringBase<T> SubstringBeforeLast(const T *str)
+        {
+            const auto index = FindLast(str);
+            if (index == -1)
+                return StringBase<T>();
+
+            return Substring(0, index);
+        }
+
+        inline StringBase<T> SubstringBeforeLast(const StringBase<T> &str)
+        {
+            return SubstringBeforeLast(str.m_Data);
+        }
+
+        inline StringBase<T> SubstringBeforeLast(const std::basic_string<T> &str)
+        {
+            return SubstringBeforeLast(str.c_str());
+        }
+
+        inline void Remove(uint32_t start, uint32_t length)
+        {
+            assert(start <= m_Length);
+            assert(start + length <= m_Length);
+
+            if (start + length > m_Length)
+                length = m_Length - start;
+
+            for (uint32_t i = start; i < m_Length - length; i++)
+                m_Data[i] = m_Data[i + length];
+
+            m_Length -= length;
+            m_Data[m_Length] = '\0';
+        }
+
+        inline void Replace(const T *str, const T *replace)
+        {
+            const auto length = StringUtils::GetLength(str);
+            const auto replaceLength = StringUtils::GetLength(replace);
+
+            for (uint32_t i = 0; i < m_Length; i++)
+            {
+                if (m_Data[i] == str[0])
+                {
+                    bool found = true;
+                    for (uint32_t j = 0; j < length; j++)
+                    {
+                        if (m_Data[i + j] != str[j])
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                    {
+                        if (replaceLength > length)
+                        {
+                            const auto diff = replaceLength - length;
+                            const auto newLength = m_Length + diff;
+                            T *newData = new T[newLength + 1];
+                            StringUtils::Copy(newData, m_Data, i);
+                            StringUtils::Copy(newData + i, replace, replaceLength);
+                            StringUtils::Copy(newData + i + replaceLength, m_Data + i + length, m_Length - i - length);
+                            newData[newLength] = '\0';
+
+                            delete[] m_Data;
+                            m_Data = newData;
+                            m_Length = newLength;
+                        }
+                        else
+                        {
+                            StringUtils::Copy(m_Data + i, replace, replaceLength);
+                            if (replaceLength < length)
+                                Remove(i + replaceLength, length - replaceLength);
+                        }
+                    }
+                }
+            }
+        }
+
+        inline bool Equals(const T *str)
+        {
+            if (m_Length != StringUtils::GetLength(str))
+                return false;
+            for (std::size_t i = 0; i < m_Length; i++)
+                if (m_Data[i] != str[i])
+                    return false;
+            return true;
+        }
+
+        inline bool Equals(const StringBase<T> &str)
+        {
+            return Equals(str.m_Data);
+        }
+
+        inline bool Equals(const std::basic_string<T> &str)
+        {
+            return Equals(str.c_str());
+        }
+
+        inline bool operator==(const T *str)
+        {
+            return Equals(str);
+        }
+
+        inline bool operator==(const StringBase<T> &str)
+        {
+            return Equals(str);
+        }
+
+        inline bool operator==(const std::basic_string<T> &str)
+        {
+            return Equals(str);
+        }
+
+        inline bool operator!=(const T *str)
+        {
+            return !Equals(str);
+        }
+
+        inline bool operator!=(const StringBase<T> &str)
+        {
+            return !Equals(str);
+        }
+
+        inline bool operator!=(const std::basic_string<T> &str)
+        {
+            return !Equals(str);
+        }
+
+        inline T& operator[](std::size_t index)
         {
             return m_Data[index];
         }
 
-        inline T &operator[](std::size_t index)
+        inline const T& operator[](std::size_t index) const
         {
             return m_Data[index];
         }
 
-        inline static constexpr StringBase<T>
-        ToString(int32_t
-        value)
+        inline T* Get()
+        {
+            return m_Data;
+        }
+
+        inline const T* Get() const
+        {
+            return m_Data;
+        }
+
+        inline uint32_t GetLength() const
+        {
+            return m_Length;
+        }
+
+        inline std::size_t GetSize() const
+        {
+            return sizeof(this);
+        }
+
+        inline operator T*()
+        {
+            return m_Data;
+        }
+
+        inline operator const T*() const
+        {
+            return m_Data;
+        }
+
+        inline operator std::basic_string<T>()
+        {
+            return std::basic_string<T>(m_Data);
+        }
+
+        inline operator const std::basic_string<T>() const
+        {
+            return std::basic_string<T>(m_Data);
+        }
+
+        inline void Clear()
+        {
+            if (m_Data != nullptr)
+                delete[] m_Data;
+            m_Data = nullptr;
+            m_Length = 0;
+        }
+
+        inline bool IsEmpty() const
+        {
+            return m_Length == 0 || m_Data == nullptr || m_Data[0] == '\0';
+        }
+
+        inline static StringBase<T> Empty()
+        {
+            return StringBase<T>();
+        }
+
+        inline static StringBase<T> From(const T *str)
+        {
+            return StringBase<T>(str);
+        }
+
+        inline static StringBase<T> From(const StringBase<T> &str)
+        {
+            return StringBase<T>(str);
+        }
+
+        inline static StringBase<T> From(const std::basic_string<T> &str)
+        {
+            return StringBase<T>(str);
+        }
+
+        inline static StringBase<T> From(uint64_t value)
         {
             return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-        ToString(uint32_t
-        value)
+        inline static StringBase<T> From(int64_t value)
         {
             return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-        ToString(int64_t
-        value)
+        inline static StringBase<T> From(uint32_t value)
         {
             return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-        ToString(uint64_t
-        value)
+        inline static StringBase<T> From(int32_t value)
         {
             return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-
-        ToString(float value)
+        inline static StringBase<T> From(uint16_t value)
         {
-            return StringBase < T > (std::to_string(value));
+            return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-
-        ToString(double value)
+        inline static StringBase<T> From(int16_t value)
         {
-            return StringBase < T > (std::to_string(value));
+            return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-
-        ToString(long double value)
+        inline static StringBase<T> From(uint8_t value)
         {
-            return StringBase < T > (std::to_string(value));
+            return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-
-        ToString(bool value)
+        inline static StringBase<T> From(int8_t value)
         {
-            return StringBase < T > (value ? "true" : "false");
+            return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-
-        ToString(char value)
+        inline static StringBase<T> From(float value)
         {
-            return StringBase < T > (value);
+            return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-
-        ToString(wchar_t value)
+        inline static StringBase<T> From(double value)
         {
-            return StringBase < T > (value);
+            return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-        ToString(char16_t
-        value)
+        inline static StringBase<T> From(long double value)
         {
-            return StringBase<T>(value);
+            return StringBase<T>(std::to_string(value));
         }
 
-        inline static constexpr StringBase<T>
-        ToString(char32_t
-        value)
+        inline static StringBase<T> From(bool value)
         {
-            return StringBase<T>(value);
+            return StringBase<T>(value ? "true" : "false");
         }
 
-        inline static constexpr StringBase<T>
-
-        ToString(const std::string &value)
+        inline static StringBase<T> From(char value)
         {
-            return StringBase < T > (value);
+            return StringBase<T>(std::to_string(value));
         }
 
+        inline static StringBase<T> From(wchar_t value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static StringBase<T> From(char16_t value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static StringBase<T> From(char32_t value)
+        {
+            return StringBase<T>(std::to_string(value));
+        }
+
+        inline static StringBase<T> From(void *value)
+        {
+            return StringBase<T>(std::to_string((uint64_t)value));
+        }
     private:
-        T *m_Data;
-        std::size_t m_Length;
+        inline void Set(const T *str)
+        {
+            if (m_Data)
+                delete[] m_Data;
+            m_Length = StringUtils::GetLength(str);
+            if (m_Length <= 0)
+            {
+                m_Data = nullptr;
+                return;
+            }
+            m_Data = new T[m_Length + 1];
+            StringUtils::Copy(m_Data, str, m_Length);
+            m_Data[m_Length] = '\0';
+        }
+    private:
+        T *m_Data = nullptr;
+        uint32_t m_Length;
     };
 
     using String = StringBase<char>;

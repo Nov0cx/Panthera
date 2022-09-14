@@ -32,7 +32,7 @@ namespace Panthera
             s_InitGLFW = true;
         }
 
-        m_Window = glfwCreateWindow(m_Info.Width, m_Info.Height, m_Info.Title.CStr(), nullptr, nullptr);
+        m_Window = glfwCreateWindow(m_Info.Width, m_Info.Height, m_Info.Title.Get(), nullptr, nullptr);
         if (!m_Window)
         {
             PT_LOG_FATAL("Failed to create GLFW window!");

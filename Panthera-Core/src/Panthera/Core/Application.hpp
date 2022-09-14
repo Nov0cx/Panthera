@@ -55,12 +55,12 @@ namespace Panthera
         inline const ApplicationInfo& GetInfo() const { return m_Info; }
 
     private:
-        Application(ApplicationInfo info);
+        Application(ApplicationInfo &info);
 
     private:
         static Application *s_Instance;
 
-        static Application *Create(ApplicationInfo info);
+        static Application *Create(ApplicationInfo &info);
 
     private:
         ApplicationInfo m_Info;
