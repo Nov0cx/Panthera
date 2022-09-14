@@ -17,6 +17,7 @@ namespace Panthera
         m_Info.Width = info.Width;
         m_Info.Height = info.Height;
         m_Info.VSync = info.VSync;
+        m_Info.Fullscreen = info.Fullscreen;
     }
 
     WindowsWindow::~WindowsWindow()
@@ -82,6 +83,29 @@ namespace Panthera
     void *WindowsWindow::GetNativeWindow()
     {
         return m_Window;
+    }
+
+    void WindowsWindow::SetFullScreen(bool state, void *monitor)
+    {
+        if (state == m_Info.Fullscreen)
+            return;
+
+        m_Info.Fullscreen = state;
+
+        if (state)
+        {
+            glfwGetWindowPos((GLFWwindow*)m_Window, &m_PosX, &m_PosY);
+
+            GLFWmonitor *mon = monitor ? (GLFWmonitor*)monitor : glfwGetPrimaryMonitor();
+            const GLFWvidmode *mode = glfwGetVideoMode(mon);
+            glfwSetWindowMonitor((GLFWwindow*)m_Window, mon, 0, 0, mode->width, mode->height, mode->refreshRate);
+        }
+        else
+        {
+            GLFWmonitor *mon = monitor ? (GLFWmonitor*)monitor : glfwGetPrimaryMonitor();
+            const GLFWvidmode *mode = glfwGetVideoMode(mon);
+            glfwSetWindowMonitor((GLFWwindow*)m_Window, mon, m_PosX, m_PosY, m_Info.Width, m_Info.Height, mode->refreshRate);
+        }
     }
 
     void WindowsWindow::SetVSync(bool enabled)

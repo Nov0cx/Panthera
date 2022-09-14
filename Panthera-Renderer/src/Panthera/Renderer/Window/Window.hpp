@@ -10,6 +10,7 @@ namespace Panthera
         String Title = "Panthera Window";
         uint32_t Width = 0, Height = 0;
         bool VSync = false;
+        bool Fullscreen = false;
 
         WindowInfo() {}
     };
@@ -23,6 +24,8 @@ namespace Panthera
         virtual void Update() = 0;
 
         virtual void* GetNativeWindow() = 0;
+
+        virtual void SetFullScreen(bool state, void* monitor = nullptr) = 0;
 
         virtual void SetVSync(bool enabled) = 0;
         virtual bool IsVSync() const = 0;

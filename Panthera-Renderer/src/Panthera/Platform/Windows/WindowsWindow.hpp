@@ -16,6 +16,8 @@ namespace Panthera
 
         void* GetNativeWindow() override;
 
+        void SetFullScreen(bool state, void* monitor = nullptr) override;
+
         void SetVSync(bool enabled) override;
         bool IsVSync() const override;
 
@@ -28,6 +30,7 @@ namespace Panthera
         void* m_Window = nullptr;
         WindowInfo m_Info;
         bool m_IsShutDown = false;
+        int m_PosX = 0, m_PosY = 0;
     };
 }
 
