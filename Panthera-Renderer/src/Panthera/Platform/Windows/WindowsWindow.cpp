@@ -1,7 +1,6 @@
 #include "WindowsWindow.hpp"
 
 #include "ppch.hpp"
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include "Panthera/Renderer/Renderer.hpp"
@@ -34,6 +33,12 @@ namespace Panthera
 
             s_InitGLFW = true;
         }
+        else
+        {
+            PT_LOG_INFO("GLFW already initialized!");
+        }
+
+        PT_LOG_INFO("Creating window {} ({}, {})", m_Info.Title, m_Info.Width, m_Info.Height);
 
         m_Window = glfwCreateWindow(m_Info.Width, m_Info.Height, m_Info.Title.Get(), nullptr, nullptr);
         if (!m_Window)
@@ -46,18 +51,13 @@ namespace Panthera
         //glfwSetWindowUserPointer((GLFWwindow*)m_Window, &m_Info);
 
         glfwSetErrorCallback([](int error, const char *description)
-        {
-            PT_LOG_ERROR("GLFW error: {}", description);
-        });
+                             {
+                                 PT_LOG_ERROR("GLFW error: {}", description);
+                             });
 
-        // TODO: move
-        glfwMakeContextCurrent((GLFWwindow*)m_Window);
-
-        if (!gladLoadGL((GLADloadfunc) glfwGetProcAddress))
-        {
-            std::cout << "Failed to initialize GLAD" << std::endl;
-            return;
-        }
+        m_Context = RenderContext::Create(m_Window);
+        m_Context->Init();
+        m_Context->MakeCurrent();
 
         SetVSync(m_Info.VSync);
         SetMaximized(m_Info.Maximized);
@@ -69,16 +69,12 @@ namespace Panthera
         if (m_IsShutDown)
             return;
 
-        if (glfwWindowShouldClose((GLFWwindow*)m_Window))
+        if (glfwWindowShouldClose((GLFWwindow *) m_Window))
             GlobalRenderer::RequestShutdown();
 
-        glfwMakeContextCurrent((GLFWwindow*)m_Window);
+        m_Context->MakeCurrent();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glfwSwapBuffers((GLFWwindow*)m_Window);
-
+        m_Context->SwapBuffers();
         glfwPollEvents();
     }
 
@@ -96,17 +92,17 @@ namespace Panthera
 
         if (state)
         {
-            glfwGetWindowPos((GLFWwindow*)m_Window, &m_PosX, &m_PosY);
+            glfwGetWindowPos((GLFWwindow *) m_Window, &m_PosX, &m_PosY);
 
-            GLFWmonitor *mon = monitor ? (GLFWmonitor*)monitor : glfwGetPrimaryMonitor();
+            GLFWmonitor *mon = monitor ? (GLFWmonitor *) monitor : glfwGetPrimaryMonitor();
             const GLFWvidmode *mode = glfwGetVideoMode(mon);
-            glfwSetWindowMonitor((GLFWwindow*)m_Window, mon, 0, 0, mode->width, mode->height, mode->refreshRate);
-        }
-        else
+            glfwSetWindowMonitor((GLFWwindow *) m_Window, mon, 0, 0, mode->width, mode->height, mode->refreshRate);
+        } else
         {
-            GLFWmonitor *mon = monitor ? (GLFWmonitor*)monitor : glfwGetPrimaryMonitor();
+            GLFWmonitor *mon = monitor ? (GLFWmonitor *) monitor : glfwGetPrimaryMonitor();
             const GLFWvidmode *mode = glfwGetVideoMode(mon);
-            glfwSetWindowMonitor((GLFWwindow*)m_Window, mon, m_PosX, m_PosY, m_Info.Width, m_Info.Height, mode->refreshRate);
+            glfwSetWindowMonitor((GLFWwindow *) m_Window, mon, m_PosX, m_PosY, m_Info.Width, m_Info.Height,
+                                 mode->refreshRate);
         }
     }
 
@@ -114,9 +110,9 @@ namespace Panthera
     {
         m_Info.Maximized = state;
         if (state)
-            glfwMaximizeWindow((GLFWwindow*)m_Window);
+            glfwMaximizeWindow((GLFWwindow *) m_Window);
         else
-            glfwRestoreWindow((GLFWwindow*)m_Window);
+            glfwRestoreWindow((GLFWwindow *) m_Window);
     }
 
     void WindowsWindow::SetVSync(bool enabled)
@@ -148,7 +144,7 @@ namespace Panthera
         if (m_IsShutDown)
             return;
 
-        glfwDestroyWindow((GLFWwindow*)m_Window);
+        glfwDestroyWindow((GLFWwindow *) m_Window);
         if (s_WindowCount-- <= 0)
         {
             glfwTerminate();
@@ -156,5 +152,10 @@ namespace Panthera
         }
         s_WindowCount < 0 ? s_WindowCount = 0 : s_WindowCount;
         m_IsShutDown = true;
+    }
+
+    Ref <RenderContext> WindowsWindow::GetRenderContext() const
+    {
+        return m_Context;
     }
 }

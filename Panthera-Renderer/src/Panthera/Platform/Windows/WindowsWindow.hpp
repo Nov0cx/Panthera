@@ -22,6 +22,8 @@ namespace Panthera
         void SetVSync(bool enabled) override;
         bool IsVSync() const override;
 
+        Ref<RenderContext> GetRenderContext() const override;
+
         WindowInfo& GetInfo() override;
         const WindowInfo& GetInfo() const override;
 
@@ -29,7 +31,8 @@ namespace Panthera
         void Shutdown();
     private:
         void* m_Window = nullptr;
-        WindowInfo m_Info;
+        Ref<RenderContext> m_Context = nullptr;
+        WindowInfo m_Info {};
         bool m_IsShutDown = false;
         int m_PosX = 0, m_PosY = 0;
     };

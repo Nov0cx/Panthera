@@ -2,6 +2,7 @@
 #define PANTHERA_WINDOW_HPP
 
 #include "ppch.hpp"
+#include "Panthera/Renderer/Context/RenderContext.hpp"
 
 namespace Panthera
 {
@@ -15,6 +16,8 @@ namespace Panthera
 
         WindowInfo() {}
     };
+
+    class RenderContext;
 
     class Window
     {
@@ -31,6 +34,8 @@ namespace Panthera
 
         virtual void SetVSync(bool enabled) = 0;
         virtual bool IsVSync() const = 0;
+
+        virtual Ref<RenderContext> GetRenderContext() const = 0;
 
         virtual WindowInfo& GetInfo() = 0;
         virtual const WindowInfo& GetInfo() const = 0;

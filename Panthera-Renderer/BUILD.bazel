@@ -6,11 +6,15 @@ cc_library(
         "@platforms//os:windows": glob(["src/Panthera/Platform/Windows/**/*.cpp"]),
         "@platforms//os:linux": glob(["src/Panthera/Platform/Linux/**/*.cpp"]),
         "@platforms//os:macos": glob(["src/Panthera/Platform/MacOS/**/*.cpp"]),
+    }) + select({
+        "//bazel:all_apis": glob(["src/Panthera/Platform/OpenGL/*.cpp", "src/Panthera/Platform/OpenGL/**/*.cpp"]),
     }),
     hdrs = glob(["src/Panthera/RenderCore.hpp", "src/Panthera/Renderer/*.hpp", "src/Panthera/Renderer/**/*.hpp"]) + select({
         "@platforms//os:windows": glob(["src/Panthera/Platform/Windows/**/*.hpp"]),
         "@platforms//os:linux": glob(["src/Panthera/Platform/Linux/**/*.hpp"]),
         "@platforms//os:macos": glob(["src/Panthera/Platform/MacOS/**/*.hpp"]),
+    }) + select({
+              "//bazel:all_apis": glob(["src/Panthera/Platform/OpenGL/*.hpp", "src/Panthera/Platform/OpenGL/**/*.hpp"]),
     }),
     deps = ["//Panthera-Core:pch", "@com_github_Nov0cx_glfw//:glfw", "@com_github_Nov0cx_glm//:glm", "@com_github_Nov0cx_glad//:glad"],
     visibility = ["//visibility:public"],

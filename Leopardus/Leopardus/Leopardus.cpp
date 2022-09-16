@@ -11,14 +11,6 @@ namespace Panthera
         outInfo->Version = {0, 3, 0};
         outInfo->Width = 500;
         outInfo->Height = 500;
-
-        PT_LOG_INFO("Hello world!");
-        PT_LOG_TRACE("my string size {}, std string size {}", sizeof(Panthera::String), sizeof(std::string));
-        PT_ASSERT_HANDLE(false, []() {
-            PT_LOG_ERROR("ASSERT HANDLE FAILED");
-        });
-        PT_LOG_FATAL("FATAL");
-        PT_LOG_WARNING("WARNING");
     }
 
     int Main(Application *app)
@@ -34,6 +26,9 @@ namespace Panthera
         while (!GlobalRenderer::ShutdownAllowed())
         {
             GlobalRenderer::BeginFrame();
+            GlobalRenderer::SubmitFunc([]() {
+                GlobalRenderer::GetMainWindow()->GetRenderContext()->Clear({0.2f, 0.2f, 0.2f, 1.0f});
+            });
             GlobalRenderer::SubmitFunc([]() {
                 GlobalRenderer::GetMainWindow()->Update();
             });
