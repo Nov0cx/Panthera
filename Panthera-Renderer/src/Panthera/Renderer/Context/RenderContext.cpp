@@ -1,7 +1,7 @@
 #include "RenderContext.hpp"
 
 #ifdef PANTHERA_OPENGL
-#include "Panthera/Platform/OpenGL/OpenGLRenderContext.hpp"
+#include "Panthera/Platform/OpenGL/Context/OpenGLRenderContext.hpp"
 #endif
 
 namespace Panthera
