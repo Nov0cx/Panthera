@@ -26,7 +26,7 @@
 ```bash
 bazel run --config=msvc_win_x64_rel //Leopardus:Leopardus
 ```
-Note: clang-cl is in work
+Note: clang-cl is in [work](https://github.com/bazelbuild/bazel/issues/16249) 
 
 ### Linux
 Not really working yet
