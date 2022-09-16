@@ -5,6 +5,7 @@
 #include <cinttypes>
 #include <string>
 #include <cassert>
+#include <iostream>
 
 namespace Panthera
 {
@@ -25,6 +26,12 @@ namespace Panthera
                     break;
                 dest[i] = src[i];
             }
+        }
+
+        template<typename T>
+        bool Equals(const T* str1, const T* str2)
+        {
+            return std::char_traits<T>::compare(str1, str2, GetLength(str1)) == 0;
         }
     }
 
@@ -213,6 +220,11 @@ namespace Panthera
                     bool found = true;
                     for (uint32_t j = 0; j < length; j++)
                     {
+                        if (m_Length - i < length)
+                        {
+                            found = false;
+                            break;
+                        }
                         if (m_Data[i + j] != str[j])
                         {
                             found = false;
@@ -285,7 +297,7 @@ namespace Panthera
             if (index == -1)
                 return StringBase<T>();
 
-            return Substring(index + StringUtils::GetLength(str));
+            return Substring(0, index);
         }
 
         inline StringBase<T> SubstringLast(const StringBase<T> &str)
@@ -399,17 +411,21 @@ namespace Panthera
 
         inline bool Equals(const T *str)
         {
-            if (m_Length != StringUtils::GetLength(str))
-                return false;
-            for (std::size_t i = 0; i < m_Length; i++)
-                if (m_Data[i] != str[i])
-                    return false;
-            return true;
+            return Equals(StringBase<T>(str));
         }
 
         inline bool Equals(const StringBase<T> &str)
         {
-            return Equals(str.m_Data);
+            if (m_Length != str.m_Length)
+                return false;
+
+            for (uint32_t i = 0; i < m_Length; i++)
+            {
+                if (m_Data[i] != str.m_Data[i])
+                    return false;
+            }
+
+            return true;
         }
 
         inline bool Equals(const std::basic_string<T> &str)
@@ -638,7 +654,6 @@ namespace Panthera
     using WString = StringBase<wchar_t>;
     using U16String = StringBase<char16_t>;
     using U32String = StringBase<char32_t>;
-    using U8String = StringBase<char8_t>;
 }
 
 #endif //PANTHERA_STRINGBASE_HPP
