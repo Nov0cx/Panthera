@@ -15,6 +15,7 @@ namespace Panthera
 
 int pmain(int argc, char **argv)
 {
+    Panthera::Log::Init();
     Panthera::AssetLoader::Init(argv[0]);
 
     Panthera::ApplicationInfo info;

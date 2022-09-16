@@ -18,8 +18,8 @@ namespace Panthera
         s_globalRenderData.API = RenderAPI::None;
 
         // create main window
-        SetMainWindow(CreateWindow(info));
-        GetMainWindow()->Init();
+        SetMainWindow(CreateAndGetWindow(info));
+        s_globalRenderData.MainWindow->Init();
     }
 
     void GlobalRenderer::Shutdown()
@@ -52,7 +52,7 @@ namespace Panthera
         s_globalRenderData.MainWindow = window;
     }
 
-    Ref <Window> GlobalRenderer::CreateWindow(const WindowInfo &info)
+    Ref <Window> GlobalRenderer::CreateAndGetWindow(const WindowInfo &info)
     {
         Ref<Window> window = Window::Create(info);
         s_globalRenderData.Windows.push_back(window);

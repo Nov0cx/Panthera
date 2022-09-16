@@ -1,99 +1,45 @@
 #ifndef PANTHERA_LOG_HPP
 #define PANTHERA_LOG_HPP
 
-#include <fmt/core.h>
-#include <fmt/color.h>
-#include <fmt/chrono.h>
-#include <fmt/format.h>
+#pragma warning(push, 0)
+
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
+
+#pragma warning(pop)
+
+#include <memory>
 
 #include <Vendor/debugbreak/debugbreak.hpp>
 
 namespace Panthera
 {
-    class Logger
+    class Log
     {
-    public:
-        enum class Level
-        {
-            Trace,
-            Info,
-            Warning,
-            Error,
-            Fatal
-        };
-
     public:
         static void Init();
 
-        template<class... Args>
-        static void Trace(fmt::format_string<Args...> format, Args&&... args)
-        {
-            fmt::print(fg(fmt::terminal_color::bright_yellow), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [TRACE] {}\n",
-                       fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-        }
-
-        template<class... Args>
-        static void Info(fmt::format_string<Args...> format, Args&&... args)
-        {
-            fmt::print(fg(fmt::terminal_color::bright_cyan), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [INFO] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-        }
-
-        template<class... Args>
-        static void Warning(fmt::format_string<Args...> format, Args&&... args)
-        {
-            fmt::print(fg(fmt::terminal_color::bright_red), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [WARNING] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-        }
-
-        template<class... Args>
-        static void Error(fmt::format_string<Args...> format, Args&&... args)
-        {
-            fmt::print(fg(fmt::terminal_color::magenta), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [ERROR] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-        }
-
-        template<class... Args>
-        static void Fatal(fmt::format_string<Args...> format, Args&&... args)
-        {
-            fmt::print(fg(fmt::terminal_color::red), "[PANTHERA] [{:%Y-%m-%d %H:%M:%S}] [FATAL] {}\n", fmt::localtime(std::time(nullptr)), fmt::format(format, std::forward<Args>(args)...));
-        }
-
-        template<class... Args>
-        static void Log(Level level, fmt::format_string<Args...> format, Args&&... args)
-        {
-            switch (level)
-            {
-                case Level::Trace:
-                    Trace(format, std::forward<Args>(args)...);
-                    break;
-                case Level::Info:
-                    Info(format, std::forward<Args>(args)...);
-                    break;
-                case Level::Warning:
-                    Warning(format, std::forward<Args>(args)...);
-                    break;
-                case Level::Error:
-                    Error(format, std::forward<Args>(args)...);
-                    break;
-                case Level::Fatal:
-                    Fatal(format, std::forward<Args>(args)...);
-                    break;
-            }
-        }
+        inline static std::shared_ptr<spdlog::logger>& GetLogger() { return s_Logger; }
+    private:
+        static std::shared_ptr<spdlog::logger> s_Logger;
     };
 }
 
 
 #ifdef PANTHERA_DEBUG
 
-#define PT_LOG_TRACE(...) Panthera::Logger::Log(Panthera::Logger::Level::Trace, __VA_ARGS__)
-#define PT_LOG_INFO(...) Panthera::Logger::Log(Panthera::Logger::Level::Info, __VA_ARGS__)
-#define PT_LOG_WARNING(...) Panthera::Logger::Log(Panthera::Logger::Level::Warning, __VA_ARGS__)
-#define PT_LOG_ERROR(...) Panthera::Logger::Log(Panthera::Logger::Level::Error, __VA_ARGS__)
-#define PT_LOG_FATAL(...) Panthera::Logger::Log(Panthera::Logger::Level::Fatal, __VA_ARGS__)
+#define PT_LOG_DEBUG(...) ::Panthera::Log::GetLogger()->debug(__VA_ARGS__);
+#define PT_LOG_TRACE(...) ::Panthera::Log::GetLogger()->trace(__VA_ARGS__);
+#define PT_LOG_INFO(...) ::Panthera::Log::GetLogger()->info(__VA_ARGS__);
+#define PT_LOG_WARNING(...) ::Panthera::Log::GetLogger()->warn(__VA_ARGS__);
+#define PT_LOG_ERROR(...) ::Panthera::Log::GetLogger()->error(__VA_ARGS__);
+#define PT_LOG_FATAL(...) ::Panthera::Log::GetLogger()->critical(__VA_ARGS__);
 
 #define PT_ASSERT(condition, ...) if (!(condition)) { PT_LOG_FATAL(__VA_ARGS__); debug_break(); }
 
 #else
 
+#define PT_LOG_DEBUG(...)
 #define PT_LOG_TRACE(...)
 #define PT_LOG_INFO(...)
 #define PT_LOG_WARNING(...)

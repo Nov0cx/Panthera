@@ -39,7 +39,7 @@ namespace Panthera
 
         static Ref<Window> GetMainWindow();
         static void SetMainWindow(Ref<Window> window);
-        static Ref<Window> CreateWindow(const WindowInfo &info);
+        static Ref<Window> CreateAndGetWindow(const WindowInfo &info);
     };
 }
 

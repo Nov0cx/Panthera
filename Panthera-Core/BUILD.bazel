@@ -21,7 +21,7 @@ cc_library(
     visibility = ["//visibility:public"],
     strip_include_prefix = "src",
     deps = [
-        "@com_github_Nov0cx_fmt//:fmtlib",
+        "@com_github_Nov0cx_spdlog//:spdlog",
     ],
     defines = select({
                         ":debug":
