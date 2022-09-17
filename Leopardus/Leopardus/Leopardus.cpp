@@ -3,6 +3,8 @@
 
 #include "Panthera/Core/Entry.hpp"
 
+#include <glad/glad.h>
+
 namespace Panthera
 {
     void ApplicationCreationCallback(ApplicationInfo *outInfo)
@@ -23,11 +25,30 @@ namespace Panthera
 
         GlobalRenderer::Init(windowInfo);
 
+        float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f, 0.5f, 0.0f
+        };
+        Ref<VertexArray> vertexArray = VertexArray::Create();
+        Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, 3 * sizeof(float) * 3);
+
+        uint32_t indices[] = {
+            0, 1, 2
+        };
+        Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, 3);
+        vertexArray->AddVertexBuffer(vertexBuffer);
+        vertexArray->SetIndexBuffer(indexBuffer);
+
         while (!GlobalRenderer::ShutdownAllowed())
         {
             GlobalRenderer::BeginFrame();
             GlobalRenderer::SubmitFunc([]() {
                 GlobalRenderer::GetMainWindow()->GetRenderContext()->Clear({0.2f, 0.2f, 0.2f, 1.0f});
+            });
+            GlobalRenderer::SubmitFunc([vertexArray](){
+                vertexArray->Bind();
+               glDrawArrays(GL_TRIANGLES, 0, 3);
             });
             GlobalRenderer::SubmitFunc([]() {
                 GlobalRenderer::GetMainWindow()->Update();

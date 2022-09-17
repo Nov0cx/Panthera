@@ -27,6 +27,35 @@ namespace Panthera
             Element(ShaderDataType type, const String& name, bool normalized = false, uint32_t divisor = 0)
                     : Type(type), Name(name), Normalized(normalized), Size(GetDataTypeSize(type)), Offset(0), Divisor(divisor)
             {}
+
+            uint32_t GetCount() const
+            {
+                switch (Type)
+                {
+                    case ShaderDataType::Float:
+                        return 1;
+                    case ShaderDataType::Float2:
+                        return 2;
+                    case ShaderDataType::Float3:
+                        return 3;
+                    case ShaderDataType::Float4:
+                        return 4;
+                    case ShaderDataType::Mat3:
+                        return 3;
+                    case ShaderDataType::Mat4:
+                        return 4;
+                    case ShaderDataType::Int:
+                        return 1;
+                    case ShaderDataType::Int2:
+                        return 2;
+                    case ShaderDataType::Int3:
+                        return 3;
+                    case ShaderDataType::Int4:
+                        return 4;
+                    case ShaderDataType::Bool:
+                        return 1;
+                }
+            }
         };
     public:
 

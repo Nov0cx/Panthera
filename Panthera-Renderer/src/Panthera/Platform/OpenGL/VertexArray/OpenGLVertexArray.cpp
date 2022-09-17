@@ -25,7 +25,8 @@ namespace Panthera
                 return GL_INT;
         }
 
-        ASSERT(false, "Unsupported ShaderDataType. {}", (int) type);
+        PT_ASSERT(false, "Unsupported ShaderDataType. {}", (int) type);
+        return 0;
     }
 
     OpenGLVertexArray::OpenGLVertexArray()
@@ -61,18 +62,17 @@ namespace Panthera
         glBindVertexArray(m_RendererID);
         vertexBuffer->Bind();
 
-        uint32_t index = 0;
         const auto& layout = vertexBuffer->GetLayout();
         for (const auto& element : layout)
         {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index,
-                                  element.GetComponentCount(),
+            glEnableVertexAttribArray(m_VertexBufferIndex);
+            glVertexAttribPointer(m_VertexBufferIndex,
+                                  element.GetCount(),
                                   GetOpenGLDataType(element.Type),
                                   element.Normalized ? GL_TRUE : GL_FALSE,
                                   layout.GetStride(),
                                   (const void *) element.Offset);
-            index++;
+            m_VertexBufferIndex++;
         }
 
         m_VertexBuffers.push_back(vertexBuffer);

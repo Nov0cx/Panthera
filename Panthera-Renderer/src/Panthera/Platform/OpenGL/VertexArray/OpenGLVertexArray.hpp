@@ -27,6 +27,7 @@ namespace Panthera
         RendererID m_RendererID;
         std::vector<Ref<VertexBuffer>> m_VertexBuffers;
         Ref<IndexBuffer> m_IndexBuffer;
+        uint32_t m_VertexBufferIndex = 0;
     };
 }
 
