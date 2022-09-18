@@ -8,6 +8,10 @@ namespace Panthera
     {
         T first;
         U second;
+
+        Pair() = default;
+        Pair(const T& first, const U& second)
+            : first(first), second(second) {}
     };
 }
 

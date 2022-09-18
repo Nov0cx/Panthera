@@ -409,6 +409,21 @@ namespace Panthera
             }
         }
 
+        inline bool Contains(const T *str)
+        {
+            return Find(str) != -1;
+        }
+
+        inline bool Contains(const StringBase<T> &str)
+        {
+            return Find(str) != -1;
+        }
+
+        inline bool Contains(const std::basic_string<T> &str)
+        {
+            return Find(str) != -1;
+        }
+
         inline bool Equals(const T *str)
         {
             return Equals(StringBase<T>(str));
