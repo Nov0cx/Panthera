@@ -32,6 +32,7 @@ namespace Panthera
             case ShaderDataType::Bool:
                 return sizeof(GLboolean);
         }
+        return 0;
     }
 
     OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t *indices, uint32_t count)

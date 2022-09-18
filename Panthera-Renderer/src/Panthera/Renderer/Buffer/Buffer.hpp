@@ -55,6 +55,7 @@ namespace Panthera
                     case ShaderDataType::Bool:
                         return 1;
                 }
+                return 0;
             }
         };
     public:

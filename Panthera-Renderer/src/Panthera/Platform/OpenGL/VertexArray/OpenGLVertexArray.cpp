@@ -57,6 +57,9 @@ namespace Panthera
         glBindVertexArray(0);
     }
 
+#pragma warning (push)
+#pragma warning (disable : 4312)
+
     void OpenGLVertexArray::AddVertexBuffer(const Ref <VertexBuffer> &vertexBuffer)
     {
         glBindVertexArray(m_RendererID);
@@ -71,12 +74,14 @@ namespace Panthera
                                   GetOpenGLDataType(element.Type),
                                   element.Normalized ? GL_TRUE : GL_FALSE,
                                   layout.GetStride(),
-                                  (const void *) element.Offset);
+                                  reinterpret_cast<void*>(element.Offset));
             m_VertexBufferIndex++;
         }
 
         m_VertexBuffers.push_back(vertexBuffer);
     }
+
+#pragma warning (pop)
 
     void OpenGLVertexArray::SetIndexBuffer(const Ref <IndexBuffer> &indexBuffer)
     {

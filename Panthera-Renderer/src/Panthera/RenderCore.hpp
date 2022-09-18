@@ -7,6 +7,7 @@
 
 #include "Renderer/Buffer/Buffer.hpp"
 #include "Renderer/Context/RenderContext.hpp"
+#include "Renderer/Shader/Shader.hpp"
 #include "Renderer/VertexArray/VertexArray.hpp"
 #include "Renderer/Window/Window.hpp"
 

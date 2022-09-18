@@ -48,7 +48,7 @@ namespace Panthera
             });
             GlobalRenderer::SubmitFunc([vertexArray](){
                 vertexArray->Bind();
-               glDrawArrays(GL_TRIANGLES, 0, 3);
+                glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
             });
             GlobalRenderer::SubmitFunc([]() {
                 GlobalRenderer::GetMainWindow()->Update();

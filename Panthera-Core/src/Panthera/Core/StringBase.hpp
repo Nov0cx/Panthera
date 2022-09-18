@@ -656,4 +656,16 @@ namespace Panthera
     using U32String = StringBase<char32_t>;
 }
 
+namespace std
+{
+    template<typename T>
+    struct hash<Panthera::StringBase<T>>
+    {
+        std::size_t operator()(const Panthera::StringBase<T> &str) const
+        {
+            return std::hash<std::basic_string<T>>()(str);
+        }
+    };
+}
+
 #endif //PANTHERA_STRINGBASE_HPP
