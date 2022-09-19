@@ -1,6 +1,5 @@
 #include "OpenGLShader.hpp"
 
-#include "Panthera/Utils/FileUtils.hpp"
 #include <glad/glad.h>
 
 namespace Panthera
@@ -94,7 +93,7 @@ namespace Panthera
         return shaderSources;
     }
 
-    void OpenGLShader::Compile(const Pair<String, uint32_t> &shader)
+    void OpenGLShader::Compile(const Pair<uint32_t, String> &shader)
     {
         const char* cachePath = GetCachePath();
 

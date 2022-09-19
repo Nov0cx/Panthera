@@ -5,10 +5,11 @@
 
 #include "Core/Application.hpp"
 #include "Core/AssetLoader.hpp"
-#include "Core/Pair.hpp"
 #include "Core/Random.hpp"
 #include "Core/Version.hpp"
 
-#include "Utils/FileUtils.hpp"
+#include "Panthera/RenderCore.hpp"
+
+
 
 #endif //PANTHERA_PANTHERA_HPP

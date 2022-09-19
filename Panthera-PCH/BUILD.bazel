@@ -1,0 +1,36 @@
+config_setting(
+    name = "release",
+    define_values = {
+        "build_type": "release",
+    }
+)
+
+config_setting(
+    name = "debug",
+    define_values = {
+        "build_type": "debug",
+    }
+)
+
+load("//bazel:copts.bzl", "copts")
+
+
+cc_library(
+    name = "pch",
+    srcs = glob(["src/Panthera/*.cpp", "src/Panthera/**/*.cpp", "src/Panthera/**/**/*.cpp", "src/*.cpp", "src/Vendor/debugbreak/*.cpp"],),
+    hdrs = glob(["src/Panthera/*.hpp", "src/Panthera/**/*.hpp", "src/Panthera/**/**/*.hpp", "src/*.hpp", "src/Vendor/debugbreak/*.hpp"],),
+    visibility = ["//visibility:public"],
+    strip_include_prefix = "src",
+    deps = [
+        "@com_github_Nov0cx_spdlog//:spdlog",
+    ],
+    defines = select({
+                        ":debug":
+                            ["PANTHERA_DEBUG"],
+                        ":release":
+                            ["PANTHERA_RELEASE"],
+                        "//conditions:default":
+                            ["PANTHERA_DEFAULT"],
+    }),
+    copts = copts,
+)

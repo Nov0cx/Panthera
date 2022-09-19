@@ -1,5 +1,4 @@
 #include "Panthera/Panthera.hpp"
-#include "Panthera/RenderCore.hpp"
 
 #include "Panthera/Core/Entry.hpp"
 

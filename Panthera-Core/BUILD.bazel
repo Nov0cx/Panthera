@@ -15,26 +15,6 @@ config_setting(
 load("//bazel:copts.bzl", "copts")
 
 cc_library(
-    name = "pch",
-    srcs = ["src/ppch.cpp", "src/Panthera/Core/Log.cpp"],
-    hdrs = ["src/ppch.hpp", "src/Panthera/Core/Log.hpp", "src/Panthera/Core/StringBase.hpp", "src/Vendor/debugbreak/debugbreak.hpp", "src/Panthera/Core/Ref.hpp"],
-    visibility = ["//visibility:public"],
-    strip_include_prefix = "src",
-    deps = [
-        "@com_github_Nov0cx_spdlog//:spdlog",
-    ],
-    defines = select({
-                        ":debug":
-                            ["PANTHERA_DEBUG"],
-                        ":release":
-                            ["PANTHERA_RELEASE"],
-                        "//conditions:default":
-                            ["PANTHERA_DEFAULT"],
-    }),
-    copts = copts,
-)
-
-cc_library(
     name = "Panthera-Core",
     srcs = glob(["src/Panthera/*.cpp", "src/Panthera/**/*.cpp", "src/Panthera/**/**/*.cpp"],
                 exclude = ["src/Panthera/Core/Log.cpp"]),
@@ -55,10 +35,11 @@ cc_library(
                                                   "//conditions:default": [],
                                               }),
     deps = [
-        ":pch",
+        "//Panthera-PCH:pch",
         "@com_github_Nov0cx_fmt//:fmtlib",
         "@bazel_tools//tools/cpp/runfiles",
         "@com_github_Nov0cx_glm//:glm",
+        "//Panthera-Renderer:Panthera-Renderer",
     ],
     copts = copts,
     visibility = ["//visibility:public"],
@@ -68,7 +49,7 @@ cc_test(
     name = "Panthera-Core-Test",
     srcs = glob(["Testing/*.cpp"]),
     deps = [
-        ":pch",
+        "//Panthera-PCH:pch",
         "@com_google_googletest//:gtest_main",
     ],
 )

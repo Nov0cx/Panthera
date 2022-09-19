@@ -31,5 +31,8 @@
 #include "Panthera/Core/LOG.hpp"
 #include "Panthera/Core/StringBase.hpp"
 #include "Panthera/Core/Ref.hpp"
+#include "Panthera/Core/Pair.hpp"
+
+#include "Panthera/Utils/FileUtils.hpp"
 
 #endif //PANTHERA_PPCH_HPP

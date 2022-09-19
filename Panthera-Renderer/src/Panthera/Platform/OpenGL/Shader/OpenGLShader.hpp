@@ -3,7 +3,6 @@
 
 #include "ppch.hpp"
 #include "Panthera/Renderer/Shader/Shader.hpp"
-#include "Panthera/Core/Pair.hpp"
 
 namespace Panthera
 {
@@ -17,7 +16,7 @@ namespace Panthera
         ~OpenGLShader();
     private:
         std::vector<Pair<uint32_t, String>> PreProcess(const String& source);
-        void Compile(const Pair<String, uint32_t>& shader);
+        void Compile(const Pair<uint32_t, String>& shader);
         void Link();
 
     private:
