@@ -20,8 +20,8 @@ namespace Panthera
         virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
         virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 
-        virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; }
-        virtual const Ref<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
+        virtual std::vector<Ref<VertexBuffer>>& GetVertexBuffers() override { return m_VertexBuffers; }
+        virtual const Ref<IndexBuffer> GetIndexBuffer() const override { return m_IndexBuffer; }
 
     private:
         RendererID m_RendererID;

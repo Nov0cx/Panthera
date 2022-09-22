@@ -24,13 +24,18 @@ namespace Panthera
 
         GlobalRenderer::Init(windowInfo);
 
+        Ref<Shader> shader = ShaderLibrary::Load(AssetLoader::GetAssetPath("Panthera/assets/shader/Triangle.glsl"));
+
         float vertices[] = {
             -0.5f, -0.5f, 0.0f,
             0.5f, -0.5f, 0.0f,
             0.0f, 0.5f, 0.0f
         };
         Ref<VertexArray> vertexArray = VertexArray::Create();
-        Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, 3 * sizeof(float) * 3);
+        Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(float) * 3 * 3);
+        vertexBuffer->SetBufferLayout({
+            {ShaderDataType::Float3, "a_Position"}
+        });
 
         uint32_t indices[] = {
             0, 1, 2
@@ -45,7 +50,8 @@ namespace Panthera
             GlobalRenderer::SubmitFunc([]() {
                 GlobalRenderer::GetMainWindow()->GetRenderContext()->Clear({0.2f, 0.2f, 0.2f, 1.0f});
             });
-            GlobalRenderer::SubmitFunc([vertexArray](){
+            GlobalRenderer::SubmitFunc([vertexArray, shader](){
+                shader->Bind();
                 vertexArray->Bind();
                 glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
             });

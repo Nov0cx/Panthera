@@ -49,7 +49,7 @@ namespace Panthera
 
         virtual const VertexBufferLayout &GetLayout() const override;
 
-        virtual void SetData(void *data, uint32_t size) override;
+        virtual void SetData(void *data, size_t size) override;
 
     private:
         RendererID m_RendererID;

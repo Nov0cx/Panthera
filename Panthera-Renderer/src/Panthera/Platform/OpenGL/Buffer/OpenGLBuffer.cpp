@@ -108,7 +108,7 @@ namespace Panthera
         return m_Layout;
     }
 
-    void OpenGLVertexBuffer::SetData(void *data, uint32_t size)
+    void OpenGLVertexBuffer::SetData(void *data, size_t size)
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
         glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);

@@ -135,7 +135,7 @@ namespace Panthera
         virtual void Bind() const = 0;
         virtual void Unbind() const = 0;
 
-        virtual void SetData(void* data, uint32_t size) = 0;
+        virtual void SetData(void* data, size_t size) = 0;
         virtual void SetBufferLayout(VertexBufferLayout layout) = 0;
         virtual VertexBufferLayout& GetLayout() = 0;
         virtual const VertexBufferLayout& GetLayout() const = 0;

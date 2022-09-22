@@ -12,9 +12,14 @@ namespace Panthera
         using RendererID = uint32_t;
     public:
         OpenGLShader(const String& filepath);
-        OpenGLShader(const std::initializer_list<const String> &src);
+        OpenGLShader(const String& filepath, const String& name);
+        OpenGLShader(const String& name, const std::initializer_list<const String> &src);
         ~OpenGLShader();
+
+        virtual void Bind() const override;
+        virtual void* GetRenderObject() const override;
     private:
+        void Handle(const std::vector<Pair<uint32_t, String>> &shaderSources);
         std::vector<Pair<uint32_t, String>> PreProcess(const String& source);
         void Compile(const Pair<uint32_t, String>& shader);
         void Link();
@@ -23,7 +28,7 @@ namespace Panthera
         RendererID m_RendererID;
         std::vector<Pair<uint32_t, std::vector<uint32_t>>> m_SpirV;
         std::vector<Pair<uint32_t, std::vector<uint32_t>>> m_OpenGLSpirV;
-        std::vector<Pair<uint32_t, std::vector<String>>> m_OpenGLSrc;
+        String m_Name;
     };
 }
 

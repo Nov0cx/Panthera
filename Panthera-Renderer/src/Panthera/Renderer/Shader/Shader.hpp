@@ -8,9 +8,12 @@ namespace Panthera
     class Shader
     {
     public:
+        virtual void Bind() const = 0;
+        virtual void* GetRenderObject() const = 0;
     private:
         static Ref<Shader> Create(const String& filepath);
-        static Ref<Shader> Create(const std::initializer_list<const String> &src);
+        static Ref<Shader> Create(const String& filepath, const String& name);
+        static Ref<Shader> Create(const String& name, const std::initializer_list<const String> &src);
         friend class ShaderLibrary;
     };
 

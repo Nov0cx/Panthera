@@ -17,10 +17,20 @@ namespace Panthera
 #endif
     }
 
-    Ref <Shader> Shader::Create(const std::initializer_list<const String> &src)
+    Ref <Shader> Shader::Create(const String &filepath, const String& name)
     {
 #ifdef PANTHERA_OPENGL
-        return Ref<OpenGLShader>::Create(src);
+        return Ref<OpenGLShader>::Create(filepath, name);
+#else
+        PT_ASSERT(false, "Not a valid renderer API!");
+        return nullptr;
+#endif
+    }
+
+    Ref <Shader> Shader::Create(const String& name, const std::initializer_list<const String> &src)
+    {
+#ifdef PANTHERA_OPENGL
+        return Ref<OpenGLShader>::Create(name, src);
 #else
         PT_ASSERT(false, "Not a valid renderer API!");
         return nullptr;
@@ -39,13 +49,13 @@ namespace Panthera
 
     Ref <Shader> ShaderLibrary::Load(const String &name, const String &filepath)
     {
-        auto shader = Shader::Create(filepath);
+        auto shader = Shader::Create(filepath, name);
         return s_Shaders[name] = shader;
     }
 
     Ref <Shader> ShaderLibrary::Load(const String &name, const std::initializer_list<const String> &src)
     {
-        auto shader = Shader::Create(src);
+        auto shader = Shader::Create(name, src);
         return s_Shaders[name] = shader;
     }
 

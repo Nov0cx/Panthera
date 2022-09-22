@@ -19,4 +19,7 @@ cc_binary(
     srcs = ["Leopardus/Leopardus.cpp"],
     deps = ["//Panthera-Core:Panthera-Core", "//Panthera-Renderer:Panthera-Renderer"],
     copts = copts,
+    data = [
+        "//assets:Assets"
+    ],
 )

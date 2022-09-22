@@ -14,14 +14,38 @@ def _impl(repository_ctx):
     repository_ctx.symlink(sdk_path, "vulkan_sdk_windows")
 
     file_content = """
+config_setting(
+    name = "release",
+    define_values = {
+        "build_type": "release",
+    }
+)
+
+config_setting(
+    name = "debug",
+    define_values = {
+        "build_type": "debug",
+    }
+)
+
 cc_library(
     name = "vulkan_cc_library",
-    srcs = ["vulkan_sdk_windows/Lib/vulkan-1.lib",
-                                                    "vulkan_sdk_windows/Lib/VkLayer_utils.lib",
-                                                    "vulkan_sdk_windows/Lib/shaderc_shared.lib",
-                                                    "vulkan_sdk_windows/Lib/spirv-cross-core.lib",
-                                                    "vulkan_sdk_windows/Lib/spirv-cross-glsl.lib",
-                                           ],
+    srcs = select({
+        ":debug": [
+            #"vulkan_sdk_windows/Lib/vulkan-1.lib",
+            #"vulkan_sdk_windows/Lib/VkLayer_utils.lib",
+            "vulkan_sdk_windows/Lib/shaderc_sharedd.lib",
+            "vulkan_sdk_windows/Lib/spirv-cross-cored.lib",
+            "vulkan_sdk_windows/Lib/spirv-cross-glsld.lib",
+        ],
+        "//conditions:default": [
+            #"vulkan_sdk_windows/Lib/vulkan-1.lib",
+            #"vulkan_sdk_windows/Lib/VkLayer_utils.lib",
+            "vulkan_sdk_windows/Lib/shaderc_shared.lib",
+            "vulkan_sdk_windows/Lib/spirv-cross-core.lib",
+            "vulkan_sdk_windows/Lib/spirv-cross-glsl.lib",
+        ],
+    }),
     hdrs = glob([
         "vulkan_sdk_windows/Include/**/*.h",
         "vulkan_sdk_windows/Include/**/*.hpp",

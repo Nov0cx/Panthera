@@ -14,6 +14,8 @@ namespace Panthera
         template<typename T>
         std::size_t GetLength(const T* str)
         {
+            if (!str)
+                return 0;
             return std::char_traits<T>::length(str);
         }
 

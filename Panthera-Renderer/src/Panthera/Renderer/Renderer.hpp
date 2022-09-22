@@ -40,6 +40,8 @@ namespace Panthera
         static Ref<Window> GetMainWindow();
         static void SetMainWindow(Ref<Window> window);
         static Ref<Window> CreateAndGetWindow(const WindowInfo &info);
+    private:
+
     };
 }
 
