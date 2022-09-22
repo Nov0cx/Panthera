@@ -236,32 +236,27 @@ namespace Panthera
             }
         }
 
-        for (auto& shaderSource : shaderSources)
-        {
-            PT_LOG_INFO("Found Shader type: {}", OpenGLShaderTypeToString(shaderSource.first));
-            PT_LOG_INFO("Found Shader source: {}", shaderSource.second);
-        }
-
         return shaderSources;
     }
 
     void OpenGLShader::Handle(const std::vector<Pair<uint32_t, String>> &shaderSources)
     {
-        PT_LOG_INFO("Compiling shader: {0}", m_Name);
+        PT_LOG_DEBUG("Compiling shader: {0}", m_Name);
 
         for (auto& shader : shaderSources)
         {
+            PT_LOG_DEBUG("Found Shader type: {}", OpenGLShaderTypeToString(shader.first));
+            PT_LOG_DEBUG("Found Shader source: {}", shader.second);
             Compile(shader);
         }
 
         Link();
     }
 
-    void OpenGLShader::Compile(const Pair<uint32_t, String> &shader)
+    void OpenGLShader::Compile(const Pair<uint32_t, String> &shader_)
     {
-        PT_LOG_INFO("Compiling shader: {0}", m_Name);
-        PT_LOG_INFO("Compiling shader type: {0}", OpenGLShaderTypeToString(shader.first));
-        PT_LOG_INFO("Compiling shader source: {0}", shader.second);
+        const Pair<uint32_t, String> shader = shader_;
+        String source = shader.second;
 
         const char* cachePath = GetCachePath();
 
@@ -278,14 +273,16 @@ namespace Panthera
         std::filesystem::path spirVPath = std::filesystem::path(cachePath) / (std::string(m_Name.Get()) + ".vulk" + GetCacheShaderExtension(shader.first));
         std::filesystem::path openGLPath = std::filesystem::path(cachePath) / (std::string(m_Name.Get()) + ".opgl" + GetCacheShaderExtension(shader.first));
 
-        PT_LOG_INFO("Gettet {}", shader.second.Get()); // raw string is fucked
-        shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv(shader.second.Get(), OpenGlShaderToSpriv(shader.first), m_Name.Get(), vulkanOptions);
+        const char* src = source.GetOwned();
+        shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv(src, OpenGlShaderToSpriv(shader.first), m_Name.Get(), vulkanOptions);
         if (result.GetCompilationStatus() != shaderc_compilation_status_success)
         {
             PT_ASSERT(false, "Failed to compile shader: {} error: {}", m_Name, result.GetErrorMessage());
             PT_LOG_ERROR("Failed to compile shader: {} error: {}", m_Name, result.GetErrorMessage());
+            delete src;
             return;
         }
+        delete src;
 
         std::vector<uint32_t> spirv = { result.cbegin(), result.cend() };
         m_SpirV.push_back({ shader.first, spirv });
@@ -308,14 +305,14 @@ namespace Panthera
         openGLOptions.SetTargetEnvironment(shaderc_target_env_opengl, shaderc_env_version_opengl_4_5);
         openGLOptions.SetOptimizationLevel(shaderc_optimization_level_performance);
 
-        static spirv_cross::CompilerGLSL glslCompiler(spirv);
+        spirv_cross::CompilerGLSL glslCompiler(spirv); // NEVER MAKE THIS STATIC OR YOU WILL LOOK LIKE A DUMBASS
         Pair<uint32_t, String> glsl = { shader.first, glslCompiler.compile() };
 
         result = compiler.CompileGlslToSpv(glsl.second.Get(), OpenGlShaderToSpriv(shader.first), openGLPath.string().c_str(), openGLOptions);
         if (result.GetCompilationStatus() != shaderc_compilation_status_success)
         {
-            PT_ASSERT(false, "Failed to compile shader: {} error: {}", m_Name, result.GetErrorMessage());
-            PT_LOG_ERROR("Failed to compile shader: {} error: {}", m_Name, result.GetErrorMessage());
+            PT_ASSERT(false, "Failed to compile shader: {} type {}: error: {} \nsrc: {}", m_Name, OpenGLShaderTypeToString(shader.first), result.GetErrorMessage(), source);
+            PT_LOG_ERROR("Failed to compile shader: {} type {}: error: {} \nsrc: {}", m_Name, OpenGLShaderTypeToString(shader.first), result.GetErrorMessage(), source);
             return;
         }
 

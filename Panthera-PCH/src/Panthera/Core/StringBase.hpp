@@ -35,6 +35,22 @@ namespace Panthera
         {
             return std::char_traits<T>::compare(str1, str2, GetLength(str1)) == 0;
         }
+
+        template<typename T>
+        T ToLower(T c)
+        {
+            if (c >= 'A' && c <= 'Z')
+                return c + 32;
+            return c;
+        }
+
+        template<typename T>
+        T ToUpper(T c)
+        {
+            if (c >= 'a' && c <= 'z')
+                return c - 32;
+            return c;
+        }
     }
 
     template<typename T>
@@ -450,6 +466,32 @@ namespace Panthera
             return Equals(str.c_str());
         }
 
+        inline StringBase<T> ToLower()
+        {
+            StringBase<T> str(m_Data);
+            for (uint32_t i = 0; i < m_Length; i++)
+                str.m_Data[i] = StringUtils::ToLower(str.m_Data[i]);
+            return str;
+        }
+
+        inline StringBase<T> ToUpper()
+        {
+            StringBase<T> str(m_Data);
+            for (uint32_t i = 0; i < m_Length; i++)
+                str.m_Data[i] = StringUtils::ToUpper(str.m_Data[i]);
+            return str;
+        }
+
+        inline StringBase<T> Copy()
+        {
+            return StringBase<T>(m_Data);
+        }
+
+        inline const StringBase<T> Copy() const
+        {
+            return StringBase<T>(m_Data);
+        }
+
         inline bool operator==(const T *str)
         {
             return Equals(str);
@@ -498,6 +540,19 @@ namespace Panthera
         inline const T* Get() const
         {
             return m_Data;
+        }
+
+        inline T* GetOwned()
+        {
+            T *data = new T[m_Length + 1];
+            StringUtils::Copy(data, m_Data, m_Length);
+            data[m_Length] = '\0';
+            return data;
+        }
+
+        inline const T* GetOwned() const
+        {
+            return GetOwned();
         }
 
         inline uint32_t GetLength() const
