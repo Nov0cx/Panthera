@@ -24,7 +24,7 @@ namespace Panthera
 
         GlobalRenderer::Init(windowInfo);
 
-        Ref<Shader> shader = ShaderLibrary::Load(AssetLoader::GetAssetPath("Panthera/assets/shader/Triangle.glsl"));
+        Ref<Shader> shader = ShaderLibrary::Load(AssetLoader::GetAssetPath("Panthera/assets/shader/FlatColor.glsl"));
 
         float vertices[] = {
             -0.5f, -0.5f, 0.0f,
@@ -43,6 +43,9 @@ namespace Panthera
         Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, 3);
         vertexArray->AddVertexBuffer(vertexBuffer);
         vertexArray->SetIndexBuffer(indexBuffer);
+        Ref<UniformBuffer> uniformBuffer = UniformBuffer::Create(sizeof(glm::vec4), 0);
+        glm::vec4 color = {0.0f, 1.0f, 0.0f, 1.0f};
+        uniformBuffer->SetData(&color, sizeof(glm::vec4), 0);
 
         while (!GlobalRenderer::ShutdownAllowed())
         {
