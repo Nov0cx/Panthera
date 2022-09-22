@@ -85,6 +85,27 @@ namespace Panthera
         return GL_NONE;
     }
 
+    static constexpr const char* OpenGLShaderTypeToString(GLenum type)
+    {
+        switch (type) {
+            case GL_VERTEX_SHADER:
+                return "Vertex";
+            case GL_FRAGMENT_SHADER:
+                return "Fragment";
+            case GL_GEOMETRY_SHADER:
+                return "Geometry";
+            case GL_COMPUTE_SHADER:
+                return "Compute";
+            case GL_TESS_CONTROL_SHADER:
+                return "Tessellation Control";
+            case GL_TESS_EVALUATION_SHADER:
+                return "Tessellation Evaluation";
+            case GL_NONE:
+                return "None";
+        }
+        return "None";
+    }
+
     OpenGLShader::OpenGLShader(const String &filepath)
     {
         auto fileName = std::filesystem::path((std::string)filepath).filename().string();
@@ -150,32 +171,56 @@ namespace Panthera
                 String type = line.Substring(line.Find(typeToken) + strlen(typeToken) + 1);
                 if (type.Contains("vertex"))
                 {
-                    shaderSources.push_back({ GL_VERTEX_SHADER, "\n" });
+                    Pair<uint32_t, String> pair;
+                    pair.first = GL_VERTEX_SHADER;
+                    pair.second = "\n";
+                    shaderSources.push_back(pair);
                 }
                 else if (type.Contains("fragment"))
                 {
-                    shaderSources.push_back({ GL_FRAGMENT_SHADER, "\n" });
+                    Pair<uint32_t, String> pair;
+                    pair.first = GL_FRAGMENT_SHADER;
+                    pair.second = "\n";
+                    shaderSources.push_back(pair);
                 }
                 else if (type.Contains("geometry"))
                 {
-                    shaderSources.push_back({ GL_GEOMETRY_SHADER, "\n" });
+                    Pair<uint32_t, String> pair;
+                    pair.first = GL_GEOMETRY_SHADER;
+                    pair.second = "\n";
+                    shaderSources.push_back(pair);
                 }
                 else if (type.Contains("compute"))
                 {
-                    shaderSources.push_back({ GL_COMPUTE_SHADER, "\n" });
+                    Pair<uint32_t, String> pair;
+                    pair.first = GL_COMPUTE_SHADER;
+                    pair.second = "\n";
+                    shaderSources.push_back(pair);
                 }
                 else if (type.Contains("tessellation"))
                 {
-                    shaderSources.push_back({ GL_TESS_CONTROL_SHADER, "\n" });
-                    shaderSources.push_back({ GL_TESS_EVALUATION_SHADER, "\n" });
+                    Pair<uint32_t, String> pair;
+                    pair.first = GL_TESS_CONTROL_SHADER;
+                    pair.second = "\n";
+                    shaderSources.push_back(pair);
+                    Pair<uint32_t, String> pair2;
+                    pair2.first = GL_TESS_EVALUATION_SHADER;
+                    pair2.second = "\n";
+                    shaderSources.push_back(pair2);
                 }
                 else if (type.Contains("tessellation_control"))
                 {
-                    shaderSources.push_back({ GL_TESS_CONTROL_SHADER, "\n" });
+                    Pair<uint32_t, String> pair;
+                    pair.first = GL_TESS_CONTROL_SHADER;
+                    pair.second = "\n";
+                    shaderSources.push_back(pair);
                 }
                 else if (type.Contains("tessellation_evaluation"))
                 {
-                    shaderSources.push_back({ GL_TESS_EVALUATION_SHADER, "\n" });
+                    Pair<uint32_t, String> pair;
+                    pair.first = GL_TESS_EVALUATION_SHADER;
+                    pair.second = "\n";
+                    shaderSources.push_back(pair);
                 }
                 else
                 {
@@ -189,6 +234,12 @@ namespace Panthera
                 if (!shaderSources.empty())
                     shaderSources.back().second += line + "\n";
             }
+        }
+
+        for (auto& shaderSource : shaderSources)
+        {
+            PT_LOG_INFO("Found Shader type: {}", OpenGLShaderTypeToString(shaderSource.first));
+            PT_LOG_INFO("Found Shader source: {}", shaderSource.second);
         }
 
         return shaderSources;
@@ -208,7 +259,9 @@ namespace Panthera
 
     void OpenGLShader::Compile(const Pair<uint32_t, String> &shader)
     {
-        PT_LOG_INFO("Shader: Compiling shader {0}", shader.second);
+        PT_LOG_INFO("Compiling shader: {0}", m_Name);
+        PT_LOG_INFO("Compiling shader type: {0}", OpenGLShaderTypeToString(shader.first));
+        PT_LOG_INFO("Compiling shader source: {0}", shader.second);
 
         const char* cachePath = GetCachePath();
 
@@ -225,6 +278,7 @@ namespace Panthera
         std::filesystem::path spirVPath = std::filesystem::path(cachePath) / (std::string(m_Name.Get()) + ".vulk" + GetCacheShaderExtension(shader.first));
         std::filesystem::path openGLPath = std::filesystem::path(cachePath) / (std::string(m_Name.Get()) + ".opgl" + GetCacheShaderExtension(shader.first));
 
+        PT_LOG_INFO("Gettet {}", shader.second.Get()); // raw string is fucked
         shaderc::SpvCompilationResult result = compiler.CompileGlslToSpv(shader.second.Get(), OpenGlShaderToSpriv(shader.first), m_Name.Get(), vulkanOptions);
         if (result.GetCompilationStatus() != shaderc_compilation_status_success)
         {
