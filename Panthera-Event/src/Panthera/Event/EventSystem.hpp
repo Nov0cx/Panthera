@@ -11,6 +11,7 @@ namespace Panthera
         virtual ~Event() = default;
 
         virtual bool IsCancelled() const = 0;
+        virtual String GetDebugName() const { return "Event"; }
     protected:
         bool m_IsCancelled = false;
     };
@@ -24,5 +25,7 @@ namespace Panthera
         static void DispatchEvent(Event& event);
     };
 }
+
+#define EVENT_NAME(name) virtual String GetDebugName() const override { return name; }
 
 #endif //PANTHERA_EVENTSYSTEM_HPP
