@@ -1,5 +1,7 @@
 #include "Application.hpp"
 
+#include "Panthera/Utils/Time.hpp"
+
 namespace Panthera
 {
     Application::Application(ApplicationInfo &info)
@@ -9,6 +11,23 @@ namespace Panthera
         m_Info.Version = info.Version;
         m_Info.Width = info.Width;
         m_Info.Height = info.Height;
+
+        WindowInfo windowInfo;
+        windowInfo.Title = m_Info.Name + " - " + m_Info.Version.ToString();
+        windowInfo.Width = m_Info.Width;
+        windowInfo.Height = m_Info.Height;
+        windowInfo.VSync = false;
+        windowInfo.Fullscreen = false;
+
+        GlobalRenderer::Init(windowInfo);
+
+        m_LayerStack = new LayerStack();
+    }
+
+    Application::~Application()
+    {
+        GlobalRenderer::Shutdown();
+        delete m_LayerStack;
     }
 
     Application *Application::Create(ApplicationInfo &info)
@@ -18,6 +37,22 @@ namespace Panthera
 
     void Application::Run()
     {
+        while (!GlobalRenderer::ShutdownAllowed())
+        {
+            float now = Time::GetSeconds();
+            float delta = now - m_LastFrameTime;
+            m_LastFrameTime = now;
+            Timestep ts = delta;
 
+            GlobalRenderer::BeginFrame();
+
+            m_LayerStack->OnUpdate(ts);
+
+            GlobalRenderer::SubmitFunc([]() {
+                GlobalRenderer::GetMainWindow()->Update();
+            });
+
+            GlobalRenderer::EndFrame();
+        }
     }
 }

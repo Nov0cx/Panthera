@@ -42,6 +42,11 @@ namespace Panthera
         s_globalRenderData.RendererFunctions.push_back(func);
     }
 
+    void GlobalRenderer::SubmitFunc(std::function<void()> &func)
+    {
+        s_globalRenderData.RendererFunctions.push_back(func);
+    }
+
     Ref <Window> GlobalRenderer::GetMainWindow()
     {
         return s_globalRenderData.MainWindow;

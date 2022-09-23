@@ -16,14 +16,6 @@ namespace Panthera
 
     int Main(Application *app)
     {
-        WindowInfo windowInfo;
-        windowInfo.Title = app->GetInfo().Name + " - " + app->GetInfo().Version.ToString();
-        windowInfo.Width = app->GetInfo().Width;
-        windowInfo.Height = app->GetInfo().Height;
-        windowInfo.VSync = false;
-
-        GlobalRenderer::Init(windowInfo);
-
         Ref<Shader> shader = ShaderLibrary::Load(AssetLoader::GetAssetPath("Panthera/assets/shader/FlatColor.glsl"));
 
         float vertices[] = {

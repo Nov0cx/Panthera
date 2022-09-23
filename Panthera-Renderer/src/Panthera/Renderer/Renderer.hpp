@@ -36,6 +36,7 @@ namespace Panthera
         static RenderAPI GetAPI();
 
         static void SubmitFunc(const std::function<void()>& func);
+        static void SubmitFunc(std::function<void()>& func);
 
         static Ref<Window> GetMainWindow();
         static void SetMainWindow(Ref<Window> window);

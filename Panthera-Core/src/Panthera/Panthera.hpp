@@ -5,8 +5,12 @@
 
 #include "Core/Application.hpp"
 #include "Core/AssetLoader.hpp"
-#include "Core/Random.hpp"
+#include "Core/LayerSystem.hpp"
+#include "Core/Timestep.hpp"
 #include "Core/Version.hpp"
+
+#include "Utils/Random.hpp"
+#include "Utils/Time.hpp"
 
 #include "Panthera/RenderCore.hpp"
 
