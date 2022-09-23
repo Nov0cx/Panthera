@@ -4,6 +4,7 @@
 #include "ppch.hpp"
 
 #include "Renderer/Renderer.hpp"
+#include "Renderer/Renderer2D.hpp"
 
 #include "Renderer/Buffer/Buffer.hpp"
 #include "Renderer/Context/RenderContext.hpp"
