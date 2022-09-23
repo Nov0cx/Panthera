@@ -40,6 +40,7 @@ cc_library(
         "@bazel_tools//tools/cpp/runfiles",
         "@com_github_Nov0cx_glm//:glm",
         "//Panthera-Renderer:Panthera-Renderer",
+        "//Panthera-Event:Panthera-Event",
     ],
     copts = copts,
     visibility = ["//visibility:public"],

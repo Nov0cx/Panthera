@@ -27,6 +27,8 @@
 #include <cstdint>
 #include <string_view>
 #include <random>
+#include <typeindex>
+
 
 #include "Panthera/Core/LOG.hpp"
 #include "Panthera/Core/StringBase.hpp"

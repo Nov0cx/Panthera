@@ -1,0 +1,11 @@
+load("//bazel:copts.bzl", "copts")
+
+cc_library(
+    name = "Panthera-Event",
+    srcs = glob(["src/Panthera/Event/*.cpp"]),
+    hdrs = glob(["src/Panthera/Event/*.hpp"]),
+    deps = ["//Panthera-PCH:pch"],
+    copts = copts,
+    visibility = ["//visibility:public"],
+    strip_include_prefix = "src",
+)

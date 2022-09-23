@@ -1,6 +1,7 @@
 #include "Application.hpp"
 
 #include "Panthera/Utils/Time.hpp"
+#include "Panthera/Event/EventSystem.hpp"
 
 namespace Panthera
 {
@@ -19,6 +20,7 @@ namespace Panthera
         windowInfo.VSync = false;
         windowInfo.Fullscreen = false;
 
+        EventManager::Init();
         GlobalRenderer::Init(windowInfo);
 
         m_LayerStack = new LayerStack();
