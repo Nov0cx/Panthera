@@ -2,7 +2,7 @@
 #define PANTHERA_OPENGLUNIFORMBUFFER_HPP
 
 #include "ppch.hpp"
-#include "Panthera/Renderer/Shader/UniformBuffer.hpp"
+#include "Panthera/Renderer/Buffer/UniformBuffer.hpp"
 
 namespace Panthera
 {
