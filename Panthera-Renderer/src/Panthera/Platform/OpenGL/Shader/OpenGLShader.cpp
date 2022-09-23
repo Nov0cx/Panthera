@@ -149,7 +149,7 @@ namespace Panthera
 
     OpenGLShader::~OpenGLShader()
     {
-
+        glDeleteProgram(m_RendererID);
     }
 
     std::vector<Pair<uint32_t, String>> OpenGLShader::PreProcess(const String &source)

@@ -1,7 +1,7 @@
 #include "UniformBuffer.hpp"
 
 #ifdef PANTHERA_OPENGL
-#include "Panthera/Platform/OpenGL/Shader/OpenGLUniformBuffer.hpp"
+#include "Panthera/Platform/OpenGL/Buffer/OpenGLUniformBuffer.hpp"
 #endif
 
 namespace Panthera
