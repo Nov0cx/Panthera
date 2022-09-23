@@ -8,12 +8,17 @@ namespace Panthera
 {
     struct WindowResizeEvent : public Event
     {
-        uint32_t Width, Height;
+        int Width, Height;
 
-        WindowResizeEvent(uint32_t width, uint32_t height) : Width(width), Height(height)
+        WindowResizeEvent(int width, int height) : Width(width), Height(height)
         {}
 
         EVENT_NAME("WindowResizeEvent");
+    };
+
+    struct WindowCloseEvent : public Event
+    {
+        EVENT_NAME("WindowCloseEvent");
     };
 }
 

@@ -29,9 +29,9 @@ namespace Panthera
 
     struct KeyTypedEvent : public Event
     {
-        int Key;
+        uint32_t Key;
 
-        KeyTypedEvent(int key) : Key(key)
+        KeyTypedEvent(uint32_t key) : Key(key)
         {}
 
         EVENT_NAME("KeyTypedEvent");

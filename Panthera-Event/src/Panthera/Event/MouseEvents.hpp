@@ -38,9 +38,9 @@ namespace Panthera
 
     struct MouseMoveEvent : public Event
     {
-        double DeltaX, DeltaY;
+        float PosX, PosY;
 
-        MouseMoveEvent(double deltaX, double deltaY) : DeltaX(deltaX), DeltaY(deltaY)
+        MouseMoveEvent(float posX, float posY) : PosX(posX), PosY(posY)
         {}
 
         EVENT_NAME("MouseMoveEvent");

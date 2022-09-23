@@ -10,7 +10,8 @@ namespace Panthera
     public:
         virtual ~Event() = default;
 
-        virtual bool IsCancelled() const = 0;
+        virtual bool IsCancelled() const { return m_IsCancelled; };
+        virtual void Cancel() { m_IsCancelled = true; };
         virtual String GetDebugName() const { return "Event"; }
     protected:
         bool m_IsCancelled = false;

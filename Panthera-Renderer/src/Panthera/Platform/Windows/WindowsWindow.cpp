@@ -4,6 +4,10 @@
 #include <GLFW/glfw3.h>
 
 #include "Panthera/Renderer/Renderer.hpp"
+#include "Panthera/Event/EventSystem.hpp"
+#include "Panthera/Event/WindowEvents.hpp"
+#include "Panthera/Event/KeyboardEvents.hpp"
+#include "Panthera/Event/MouseEvents.hpp"
 
 namespace Panthera
 {
@@ -32,8 +36,7 @@ namespace Panthera
             PT_ASSERT(glfwInit(), "Failed to init GLFW!");
 
             s_InitGLFW = true;
-        }
-        else
+        } else
         {
             PT_LOG_INFO("GLFW already initialized!");
         }
@@ -55,9 +58,83 @@ namespace Panthera
                                  PT_LOG_ERROR("GLFW error: {}", description);
                              });
 
-        m_Context = RenderContext::Create(m_Window);
+        m_Context = RenderContext::Create((GLFWwindow*)m_Window);
         m_Context->Init();
         m_Context->MakeCurrent();
+
+        glfwSetWindowSizeCallback((GLFWwindow*)m_Window, [](GLFWwindow *window, int width, int height)
+        {
+            WindowResizeEvent resizeEvent {width, height};
+            EventManager::DispatchEvent(resizeEvent);
+        });
+
+        glfwSetWindowCloseCallback((GLFWwindow*)m_Window, [](GLFWwindow *window)
+        {
+            WindowCloseEvent closeEvent = WindowCloseEvent();
+            EventManager::DispatchEvent(closeEvent);
+        });
+
+        glfwSetKeyCallback((GLFWwindow*)m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
+        {
+            switch (action)
+            {
+                case GLFW_PRESS:
+                {
+                    KeyPressedEvent keyEvent = KeyPressedEvent(key, 0);
+                    EventManager::DispatchEvent(keyEvent);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    KeyReleasedEvent keyEvent = KeyReleasedEvent(key);
+                    EventManager::DispatchEvent(keyEvent);
+                    break;
+                }
+                case GLFW_REPEAT:
+                {
+                    KeyPressedEvent keyEvent = KeyPressedEvent(key, 1);
+                    EventManager::DispatchEvent(keyEvent);
+                    break;
+                }
+            }
+        });
+
+        glfwSetCharCallback((GLFWwindow*)m_Window, [](GLFWwindow *window, unsigned int keycode)
+        {
+            KeyTypedEvent keyEvent = KeyTypedEvent(keycode);
+            EventManager::DispatchEvent(keyEvent);
+        });
+
+        glfwSetMouseButtonCallback((GLFWwindow*)m_Window, [](GLFWwindow *window, int button, int action, int mods)
+        {
+            switch (action)
+            {
+                case GLFW_PRESS:
+                {
+                    MouseButtonPressedEvent mouseEvent = MouseButtonPressedEvent(button);
+                    EventManager::DispatchEvent(mouseEvent);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    MouseButtonReleasedEvent mouseEvent = MouseButtonReleasedEvent(button);
+                    EventManager::DispatchEvent(mouseEvent);
+                    break;
+                }
+            }
+        });
+
+        glfwSetScrollCallback((GLFWwindow*)m_Window, [](GLFWwindow *window, double xOffset, double yOffset)
+        {
+            MouseScrollEvent mouseEvent = MouseScrollEvent((float)xOffset, (float)yOffset);
+            EventManager::DispatchEvent(mouseEvent);
+        });
+
+        glfwSetCursorPosCallback((GLFWwindow*)m_Window, [](GLFWwindow *window, double xPos, double yPos)
+        {
+            MouseMoveEvent mouseEvent = MouseMoveEvent((float)xPos, (float)yPos);
+            EventManager::DispatchEvent(mouseEvent);
+        });
 
         SetVSync(m_Info.VSync);
         SetMaximized(m_Info.Maximized);
