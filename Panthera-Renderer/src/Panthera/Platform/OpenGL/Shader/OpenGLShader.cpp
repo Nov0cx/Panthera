@@ -118,7 +118,6 @@ namespace Panthera
         ss << file.rdbuf();
         file.close();
         String source = ss.str();
-        PT_LOG_INFO("Compiling shader: {}", source);
         auto shaderSources = PreProcess(source);
 
         Handle(shaderSources);
@@ -245,8 +244,6 @@ namespace Panthera
 
         for (auto& shader : shaderSources)
         {
-            PT_LOG_DEBUG("Found Shader type: {}", OpenGLShaderTypeToString(shader.first));
-            PT_LOG_DEBUG("Found Shader source: {}", shader.second);
             Compile(shader);
         }
 

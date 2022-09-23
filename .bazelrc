@@ -1,8 +1,8 @@
-build:msvc_win_x64_rel --enable_runfiles --define build_type=release  --define ALL_APIS=1--platforms=//bazel/Platforms:cl_x64_windows --cxxopt="/O2" --compilation_mode=opt
+build:msvc_win_x64_rel --enable_runfiles --define build_type=release  --define ALL_APIS=1 --platforms=//bazel/Platforms:cl_x64_windows --cxxopt="/O2" --compilation_mode=opt
 build:msvc_win_x64_dbg --enable_runfiles --define build_type=debug --define ALL_APIS=1 --platforms=//bazel/Platforms:cl_x64_windows --compilation_mode=dbg
 
-#build:clang_rel --enable_runfiles --define build_type=release --compilation_mode=opt
-#build:clang_dbg --enable_runfiles --platforms=//bazel/Platforms:clang_cl_x64_windows --compilation_mode=dbg
+#build:clang_rel --enable_runfiles --define build_type=release --platforms=//bazel/Platforms:clang_cl_x64_windows --compilation_mode=opt
+#build:clang_dbg --enable_runfiles --define build_type=debug --platforms=//bazel/Platforms:clang_cl_x64_windows --compilation_mode=dbg
 
 build:clang_cl_win_x64_rel --enable_runfiles --incompatible_enable_cc_toolchain_resolution --platforms=//bazel/Platforms:x64_windows-clang-cl --define build_type=release --compilation_mode=opt
 build:clang_cl_win_x64_dbg --enable_runfiles --incompatible_enable_cc_toolchain_resolution --platforms=//bazel/Platforms:x64_windows-clang-cl  --define build_type=debug --compilation_mode=dbg
