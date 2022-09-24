@@ -381,6 +381,37 @@ namespace Panthera
             m_Data[m_Length] = '\0';
         }
 
+        inline void RemoveAll(const T *str)
+        {
+            const auto length = StringUtils::GetLength(str);
+            for (uint32_t i = 0; i < m_Length; i++)
+            {
+                if (m_Data[i] == str[0])
+                {
+                    bool found = true;
+                    for (uint32_t j = 0; j < length; j++)
+                    {
+                        if (m_Data[i + j] != str[j])
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                    {
+                        Remove(i, length);
+                        i--;
+                    }
+                }
+            }
+        }
+
+        inline void RemoveAll(const StringBase<T> &str)
+        {
+            RemoveAll(str.m_Data);
+        }
+
         inline void Replace(const T *str, const T *replace)
         {
             const auto length = StringUtils::GetLength(str);

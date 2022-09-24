@@ -47,9 +47,11 @@ cc_library(
 
 cc_test(
     name = "Panthera-Core-Test",
-    srcs = glob(["Testing/*.cpp"]),
+    srcs = glob(["Test/*.cpp"]),
     deps = [
         "//Panthera-PCH:pch",
         "@com_google_googletest//:gtest_main",
+        ":Panthera-Core",
     ],
+    copts = copts,
 )
