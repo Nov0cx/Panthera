@@ -3,7 +3,7 @@
 
 #include "ppch.hpp"
 #include "Application.hpp"
-#include "AssetLoader.hpp"
+#include "../../../../Panthera-PCH/src/Panthera/Core/AssetLoader.hpp"
 
 namespace Panthera
 {

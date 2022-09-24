@@ -1,7 +1,7 @@
 #ifndef PANTHERA_ASSETLOADER_HPP
 #define PANTHERA_ASSETLOADER_HPP
 
-#include "ppch.hpp"
+#include "StringBase.hpp"
 
 namespace Panthera::AssetLoader
 {

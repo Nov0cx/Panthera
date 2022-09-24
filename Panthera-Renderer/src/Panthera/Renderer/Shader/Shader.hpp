@@ -24,6 +24,7 @@ namespace Panthera
         static Ref<Shader> Load(const String& name, const String& filepath);
         static Ref<Shader> Load(const String& name, const std::initializer_list<const String> &src);
         static Ref<Shader> Get(const String& name);
+        static bool Exists(const String& name);
     };
 }
 

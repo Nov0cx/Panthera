@@ -14,7 +14,10 @@ namespace Panthera
         void Init();
         void Shutdown();
 
-        void DrawIndexed();
+        void DrawTriangle(const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3);
+
+        void DrawIndexed(uint32_t count);
+        void Flush();
     private:
         Renderer2DStorage* m_Storage;
     };

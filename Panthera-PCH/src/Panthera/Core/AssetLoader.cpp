@@ -1,5 +1,6 @@
 #include "AssetLoader.hpp"
 
+#include "LOG.hpp"
 #include "tools/cpp/runfiles/runfiles.h"
 using bazel::tools::cpp::runfiles::Runfiles;
 

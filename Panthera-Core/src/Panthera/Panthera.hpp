@@ -4,7 +4,7 @@
 #include "ppch.hpp"
 
 #include "Core/Application.hpp"
-#include "Core/AssetLoader.hpp"
+#include "../../../Panthera-PCH/src/Panthera/Core/AssetLoader.hpp"
 #include "Core/LayerSystem.hpp"
 #include "Core/Timestep.hpp"
 #include "Core/Version.hpp"

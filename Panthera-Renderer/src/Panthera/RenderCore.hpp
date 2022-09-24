@@ -3,6 +3,7 @@
 
 #include "ppch.hpp"
 
+#include "Renderer/RenderCommands.hpp"
 #include "Renderer/Renderer.hpp"
 #include "Renderer/Renderer2D.hpp"
 

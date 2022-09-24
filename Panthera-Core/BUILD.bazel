@@ -37,7 +37,6 @@ cc_library(
     deps = [
         "//Panthera-PCH:pch",
         "@com_github_Nov0cx_fmt//:fmtlib",
-        "@bazel_tools//tools/cpp/runfiles",
         "@com_github_Nov0cx_glm//:glm",
         "//Panthera-Renderer:Panthera-Renderer",
         "//Panthera-Event:Panthera-Event",

@@ -23,6 +23,8 @@ cc_library(
     strip_include_prefix = "src",
     deps = [
         "@com_github_Nov0cx_spdlog//:spdlog",
+        "@com_github_Nov0cx_glm//:glm",
+        "@bazel_tools//tools/cpp/runfiles",
     ],
     defines = select({
                         ":debug":
