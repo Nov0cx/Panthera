@@ -40,7 +40,7 @@ namespace Panthera
         }
 
         m_Storage->VertexArray = VertexArray::Create();
-        m_Storage->VertexBuffer = VertexBuffer::Create(m_Storage->MaxVertices * sizeof(Vertex));
+        m_Storage->VertexBuffer = VertexBuffer::Create(Renderer2DStorage::MaxVertices * sizeof(Vertex));
         m_Storage->VertexBuffer->SetBufferLayout({
             { ShaderDataType::Float3, "a_Position" }
         });
@@ -49,16 +49,13 @@ namespace Panthera
 
         uint32_t *indices = new uint32_t[Renderer2DStorage::MaxIndices];
         uint32_t offset = 0;
-        for (uint32_t i = 0; i < Renderer2DStorage::MaxIndices; i += 6)
+        for (uint32_t i = 0; i < Renderer2DStorage::MaxIndices; i += 3)
         {
             indices[i] = offset + 0;
             indices[i + 1] = offset + 1;
             indices[i + 2] = offset + 2;
 
-            indices[i + 3] = offset + 2;
-            indices[i + 4] = offset + 3;
-            indices[i + 5] = offset + 0;
-            offset += 4;
+            offset += 3;
         }
 
         m_Storage->IndexBuffer = IndexBuffer::Create(indices, Renderer2DStorage::MaxIndices);
@@ -85,16 +82,16 @@ namespace Panthera
 
     void Renderer2D::DrawTriangle(const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3)
     {
+        if (m_Storage->VerticesCount >= Renderer2DStorage::MaxVertices)
+        {
+            Flush();
+        }
+
         m_Storage->Vertecies[m_Storage->VerticesCount++] = { { p1.x, p1.y, 0.0f } };
         m_Storage->Vertecies[m_Storage->VerticesCount++] = { { p2.x, p2.y, 0.0f } };
         m_Storage->Vertecies[m_Storage->VerticesCount++] = { { p3.x, p3.y, 0.0f } };
 
         m_Storage->IndicesCount += 3;
-
-        if (m_Storage->VerticesCount >= Renderer2DStorage::MaxVertices)
-        {
-            Flush();
-        }
     }
 
     void Renderer2D::Flush()

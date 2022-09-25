@@ -66,6 +66,6 @@ namespace Panthera
 
     bool ShaderLibrary::Exists(const String &name)
     {
-        return s_Shaders.find(name) != s_Shaders.end();
+        return s_Shaders.contains(name);
     }
 }
