@@ -5,7 +5,7 @@
 #include <cinttypes>
 #include <string>
 #include <cassert>
-#include <iostream>
+#include <vector>
 
 namespace Panthera
 {
@@ -193,7 +193,17 @@ namespace Panthera
             return newStr;
         }
 
-        inline uint32_t Find(const T *str)
+        inline int64_t Find(const T c)
+        {
+            for (int64_t i = 0; i < m_Length; i++)
+            {
+                if (m_Data[i] == c)
+                    return i;
+            }
+            return -1;
+        }
+
+        inline int64_t Find(const T *str)
         {
             const auto length = StringUtils::GetLength(str);
             for (uint32_t i = 0; i < m_Length; i++)
@@ -218,17 +228,17 @@ namespace Panthera
             return -1;
         }
 
-        inline uint32_t Find(const StringBase<T> &str)
+        inline int64_t Find(const StringBase<T> &str)
         {
             return Find(str.m_Data);
         }
 
-        inline uint32_t Find(const std::basic_string<T> &str)
+        inline int64_t Find(const std::basic_string<T> &str)
         {
             return Find(str.c_str());
         }
 
-        inline uint32_t FindLast(const T *str)
+        inline int64_t FindLast(const T *str)
         {
             const auto length = StringUtils::GetLength(str);
             for (uint32_t i = m_Length - 1; i >= 0; i--)
@@ -258,12 +268,12 @@ namespace Panthera
             return -1;
         }
 
-        inline uint32_t FindLast(const StringBase<T> &str)
+        inline int64_t FindLast(const StringBase<T> &str)
         {
             return FindLast(str.m_Data);
         }
 
-        inline uint32_t FindLast(const std::basic_string<T> &str)
+        inline int64_t FindLast(const std::basic_string<T> &str)
         {
             return FindLast(str.c_str());
         }
@@ -732,6 +742,20 @@ namespace Panthera
         inline static StringBase<T> From(void *value)
         {
             return StringBase<T>(std::to_string((uint64_t)value));
+        }
+
+        inline static std::vector<StringBase<T>> Split(StringBase<T> str, T delimiter)
+        {
+            std::vector<StringBase<T>> result;
+            int pos = -1;
+            while ((pos = str.Find(delimiter)) != -1)
+            {
+                result.push_back(str.Substring(0, pos));
+                str = str.Substring(pos + 1);
+            }
+            result.push_back(str);
+
+            return result;
         }
     private:
         inline void Set(const T *str)

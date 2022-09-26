@@ -8,6 +8,91 @@
 namespace Panthera
 {
 
+    static constexpr const char* SHADER_HASH_PATH = "./.cache/shader_hash.txt";
+
+    struct Cache
+    {
+        std::unordered_map<String, uint64_t> ShaderHashes;
+
+        Cache() { Load(); }
+
+        uint64_t GetHash(const String& path)
+        {
+            return ShaderHashes[path];
+        }
+
+        void SetHash(const String& path, uint64_t hash)
+        {
+            ShaderHashes[path] = hash;
+        }
+
+        void Clear()
+        {
+            ShaderHashes.clear();
+        }
+
+        bool HasHash(const String& path)
+        {
+            return ShaderHashes.find(path) != ShaderHashes.end();
+        }
+
+        void RemoveHash(const String& path)
+        {
+            ShaderHashes.erase(path);
+        }
+
+        void Load()
+        {
+            std::ifstream file(SHADER_HASH_PATH);
+            if (!file.is_open())
+                return;
+
+            std::stringstream ss;
+            ss << file.rdbuf();
+
+            String data = ss.str();
+
+            std::vector<String> lines = String::Split(data, '\n');
+            for (auto& line : lines)
+            {
+                std::vector<String> split = String::Split(line, ' ');
+                if (split.size() != 2)
+                    continue;
+                String path = split[0];
+                uint64_t hash = std::stoull(split[1]);
+
+                PT_LOG_INFO("Loaded shader hash: {0} -> {1}", path, hash);
+
+                ShaderHashes[path] = hash;
+            }
+
+            file.close();
+        }
+
+        void Save()
+        {
+            if (!std::filesystem::exists(SHADER_HASH_PATH))
+                std::filesystem::create_directories(std::filesystem::path(SHADER_HASH_PATH).parent_path());
+
+            std::ofstream file(SHADER_HASH_PATH);
+            if (!file.is_open())
+                return;
+
+            for (auto& [path, hash] : ShaderHashes)
+            {
+                file << path << " " << hash << std::endl;
+            }
+
+            file.flush();
+            file.close();
+        }
+
+        static uint64_t Hash(const String& src)
+        {
+            return std::hash<String>{}(src);
+        }
+    };
+
     static constexpr const char* GetCachePath()
     {
         return "./.cache/shaders/opengl/";
@@ -55,6 +140,7 @@ namespace Panthera
                 return shaderc_glsl_tess_evaluation_shader;
             case GL_NONE:
                 return shaderc_glsl_infer_from_source;
+
         }
 
         PT_ASSERT(false, "Unknown shader type");
@@ -118,9 +204,29 @@ namespace Panthera
         ss << file.rdbuf();
         file.close();
         String source = ss.str();
+
+        Cache cache;
+
+        uint64_t hash = Cache::Hash(source);
+
+        PT_LOG_INFO("Shader: {}", filepath);
+        PT_LOG_INFO("Hash: {}", hash);
+        PT_LOG_INFO("Has Hash: {}", cache.HasHash(filepath));
+        PT_LOG_INFO("Cached Hash: {}", cache.GetHash(filepath));
+
+        if (cache.HasHash(filepath) && cache.GetHash(filepath) == hash)
+        {
+            PT_LOG_INFO("Loading cached shader: {}", filepath);
+            if (LoadFromCache())
+                return;
+        }
+
         auto shaderSources = PreProcess(source);
 
         Handle(shaderSources);
+
+        cache.SetHash(filepath, hash);
+        cache.Save();
     }
 
     OpenGLShader::OpenGLShader(const String &filepath, const String& name)
@@ -128,9 +234,23 @@ namespace Panthera
         m_Name = name;
 
         String source = FileUtils::ReadFile(filepath);
+
+        Cache cache;
+
+        uint64_t hash = Cache::Hash(source);
+
+        if (cache.HasHash(filepath) && cache.GetHash(filepath) == hash)
+        {
+            if (LoadFromCache())
+                return;
+        }
+
         auto shaderSources = PreProcess(source);
 
         Handle(shaderSources);
+
+        cache.SetHash(filepath, hash);
+        cache.Save();
     }
 
     OpenGLShader::OpenGLShader(const String& name, const std::initializer_list<const String> &src)
@@ -382,6 +502,44 @@ namespace Panthera
         }
 
         m_RendererID = rendererId;
+    }
+
+    bool OpenGLShader::LoadFromCache()
+    {
+        static const uint8_t ShaderTypesCount = 6;
+        static const GLenum ShaderTypes[ShaderTypesCount] = { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, GL_GEOMETRY_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_COMPUTE_SHADER };
+
+        PT_LOG_INFO("Loading shader: {} from cache", m_Name);
+
+        const char* cachePath = GetCachePath();
+
+        for (uint32_t i = 0; i < ShaderTypesCount; i++)
+        {
+            GLenum type = ShaderTypes[i];
+            std::filesystem::path path = std::filesystem::path(cachePath) / (std::string(m_Name.Get()) + ".opgl" + GetCacheShaderExtension(type));
+
+            if (!std::filesystem::exists(path))
+                return false;
+
+            std::ifstream file(path, std::ios::binary);
+            if (!file.is_open())
+                return false;
+
+            file.seekg(0, std::ios::end);
+            auto length = file.tellg();
+            file.seekg(0, std::ios::beg);
+
+            Pair<uint32_t, std::vector<uint32_t>> spirv = { type, std::vector<uint32_t>(length / sizeof(uint32_t)) };
+            file.read(reinterpret_cast<char *>(spirv.second.data()), length);
+            m_OpenGLSpirV.push_back(spirv);
+            file.close();
+        }
+
+        Link();
+
+        PT_LOG_INFO("Loaded shader: {} from cache", m_Name);
+
+        return true;
     }
 
     void OpenGLShader::Bind() const

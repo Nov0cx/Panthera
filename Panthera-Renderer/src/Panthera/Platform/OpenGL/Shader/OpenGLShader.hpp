@@ -23,6 +23,7 @@ namespace Panthera
         std::vector<Pair<uint32_t, String>> PreProcess(const String& source);
         void Compile(const Pair<uint32_t, String>& shader);
         void Link();
+        bool LoadFromCache();
 
     private:
         RendererID m_RendererID;
