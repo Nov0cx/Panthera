@@ -89,7 +89,18 @@ namespace Panthera
 
         static uint64_t Hash(const String& src)
         {
-            return std::hash<String>{}(src);
+            uint64_t hash = 0;
+            uint64_t prime = 7883;
+            uint8_t andMask = 0xACDE;
+
+
+            for (auto& c : src)
+            {
+                hash &= andMask;
+                hash = hash * prime * prime + c * prime;
+            }
+
+            return hash;
         }
     };
 

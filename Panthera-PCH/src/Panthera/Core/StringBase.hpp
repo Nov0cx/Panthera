@@ -57,6 +57,41 @@ namespace Panthera
     class StringBase
     {
     public:
+        template<class B>
+        struct Iterator
+        {
+            B* m_Data;
+            uint32_t m_Index;
+            uint32_t m_Length;
+
+            Iterator(B *data, uint32_t length, uint32_t index)
+                    : m_Data(data), m_Length(length), m_Index(index)
+            {
+            }
+
+            inline bool operator==(const Iterator& other) const
+            {
+                return m_Index == other.m_Index && m_Length == other.m_Length;
+            }
+
+            inline bool operator!=(const Iterator &other) const
+            {
+                return m_Index != other.m_Index;
+            }
+
+            inline B& operator*()
+            {
+                return m_Data[m_Index];
+            }
+
+            inline Iterator<B>& operator++()
+            {
+                m_Index++;
+                return *this;
+            }
+        };
+
+    public:
         StringBase()
         {
             Set((const T*)"");
@@ -637,6 +672,26 @@ namespace Panthera
         inline bool IsEmpty() const
         {
             return m_Length == 0 || m_Data == nullptr || m_Data[0] == '\0';
+        }
+
+        inline Iterator<T> begin()
+        {
+            return Iterator<T>(m_Data, m_Length, 0);
+        }
+
+        inline Iterator<T> end()
+        {
+            return Iterator<T>(m_Data, m_Length, m_Length);
+        }
+
+        inline const Iterator<T> begin() const
+        {
+            return Iterator<T>(m_Data, m_Length, 0);
+        }
+
+        inline const Iterator<T> end() const
+        {
+            return Iterator<T>(m_Data, m_Length, m_Length);
         }
 
         inline static StringBase<T> Empty()
