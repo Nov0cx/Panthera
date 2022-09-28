@@ -6,9 +6,9 @@
 
 namespace Panthera
 {
-    uint32_t GetDataTypeSizeOpenGL(ShaderDataType type);
+    PT_API uint32_t GetDataTypeSizeOpenGL(ShaderDataType type);
 
-    class OpenGLIndexBuffer : public IndexBuffer
+    class PT_API OpenGLIndexBuffer : public IndexBuffer
     {
     public:
         using RendererID = uint32_t;
@@ -28,7 +28,7 @@ namespace Panthera
         uint32_t m_Count;
     };
 
-    class OpenGLVertexBuffer : public VertexBuffer
+    class PT_API OpenGLVertexBuffer : public VertexBuffer
     {
     public:
         using RendererID = uint32_t;

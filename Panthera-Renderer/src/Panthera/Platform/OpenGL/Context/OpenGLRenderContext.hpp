@@ -7,7 +7,7 @@
 
 namespace Panthera
 {
-    class OpenGLRenderContext : public RenderContext
+    class PT_API OpenGLRenderContext : public RenderContext
     {
     public:
         OpenGLRenderContext(void* nativeWindow);

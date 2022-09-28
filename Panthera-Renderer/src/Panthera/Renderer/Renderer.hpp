@@ -7,7 +7,7 @@
 
 namespace Panthera
 {
-    enum class RenderAPI
+    enum class PT_API RenderAPI
     {
         None = 0,
 #ifdef PANTHERA_OPENGL
@@ -21,7 +21,7 @@ namespace Panthera
 #endif
     };
 
-    class GlobalRenderer
+    class PT_API GlobalRenderer
     {
     public:
         static void Init(WindowInfo info);

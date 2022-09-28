@@ -5,17 +5,17 @@
 
 namespace Panthera
 {
-    enum class ShaderDataType
+    enum class PT_API ShaderDataType
     {
         None = 0, Float, Float2, Float3, Float4, Mat3, Mat4, Int, Int2, Int3, Int4, Bool
     };
 
-    uint32_t GetDataTypeSize(ShaderDataType type);
+    PT_API uint32_t GetDataTypeSize(ShaderDataType type);
 
-    class VertexBufferLayout
+    class PT_API  VertexBufferLayout
     {
     public:
-        struct Element
+        struct PT_API Element
         {
             ShaderDataType Type;
             String Name;
@@ -111,7 +111,7 @@ namespace Panthera
         uint32_t m_Stride = 0;
     };
 
-    class IndexBuffer
+    class PT_API IndexBuffer
     {
     public:
         static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
@@ -124,7 +124,7 @@ namespace Panthera
         virtual uint32_t GetCount() const = 0;
     };
 
-    class VertexBuffer
+    class PT_API VertexBuffer
     {
     public:
         static Ref<VertexBuffer> Create(float* vertices, uint32_t size);

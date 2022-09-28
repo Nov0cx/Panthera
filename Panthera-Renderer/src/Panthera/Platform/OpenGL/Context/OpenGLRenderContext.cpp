@@ -3,8 +3,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Panthera/Renderer/Renderer.hpp"
-
 namespace Panthera
 {
 

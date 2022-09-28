@@ -5,7 +5,7 @@
 namespace Panthera
 {
 
-    uint32_t GetDataTypeSizeOpenGL(ShaderDataType type)
+    PT_API uint32_t GetDataTypeSizeOpenGL(ShaderDataType type)
     {
         switch (type)
         {

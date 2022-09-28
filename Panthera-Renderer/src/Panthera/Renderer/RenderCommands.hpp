@@ -5,7 +5,7 @@
 
 namespace Panthera
 {
-    class RenderCommand
+    class PT_API RenderCommand
     {
     public:
         static void DrawIndexed(uint32_t count);

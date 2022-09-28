@@ -6,7 +6,7 @@
 
 namespace Panthera
 {
-    class OpenGLUniformBuffer : public UniformBuffer
+    class PT_API OpenGLUniformBuffer : public UniformBuffer
     {
     public:
         using RendererID = uint32_t;

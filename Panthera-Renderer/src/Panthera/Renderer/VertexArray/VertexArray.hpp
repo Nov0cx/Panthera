@@ -6,7 +6,7 @@
 
 namespace Panthera
 {
-    class VertexArray
+    class PT_API VertexArray
     {
     public:
         static Ref<VertexArray> Create();

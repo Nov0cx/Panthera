@@ -7,7 +7,7 @@
 namespace Panthera
 {
 
-    uint32_t GetDataTypeSize(ShaderDataType type)
+    PT_API uint32_t GetDataTypeSize(ShaderDataType type)
     {
 #ifdef PANTHERA_OPENGL
         return GetDataTypeSizeOpenGL(type);

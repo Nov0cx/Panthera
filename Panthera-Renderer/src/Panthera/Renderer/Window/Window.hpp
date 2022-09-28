@@ -6,7 +6,7 @@
 
 namespace Panthera
 {
-    struct WindowInfo
+    struct PT_API WindowInfo
     {
         String Title = "Panthera Window";
         uint32_t Width = 0, Height = 0;
@@ -19,7 +19,7 @@ namespace Panthera
 
     class RenderContext;
 
-    class Window
+    class PT_API Window
     {
     public:
         static Ref<Window> Create(const WindowInfo &info);

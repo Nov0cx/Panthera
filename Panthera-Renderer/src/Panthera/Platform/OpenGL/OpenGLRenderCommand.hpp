@@ -5,7 +5,7 @@
 
 namespace Panthera
 {
-    class OpenGLRenderCommand
+    class PT_API OpenGLRenderCommand
     {
     public:
         static void DrawIndexed(uint32_t count);
