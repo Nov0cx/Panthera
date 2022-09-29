@@ -42,10 +42,6 @@
 
 #include "Panthera/Utils/FileUtils.hpp"
 
-#ifdef PANTHERA_BUILD_DLL
-#define PT_API __declspec(dllexport)
-#else
-#define PT_API __declspec(dllimport)
-#endif
+#include "DLL.hpp"
 
 #endif //PANTHERA_PPCH_HPP

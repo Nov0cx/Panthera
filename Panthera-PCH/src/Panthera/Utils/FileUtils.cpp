@@ -3,7 +3,7 @@
 namespace Panthera::FileUtils
 {
 
-    const char* ReadFile(const String &filepath)
+    PT_API const char* ReadFile(const String &filepath)
     {
         std::ifstream file(filepath.Get(), std::ios::in);
         std::stringstream stream;
@@ -12,7 +12,7 @@ namespace Panthera::FileUtils
         return stream.str().c_str();
     }
 
-    const char* ReadFile(const std::filesystem::path &filepath)
+    PT_API const char* ReadFile(const std::filesystem::path &filepath)
     {
         std::ifstream file(filepath, std::ios::in);
         std::stringstream stream;

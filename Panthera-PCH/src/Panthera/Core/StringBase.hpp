@@ -1,6 +1,8 @@
 #ifndef PANTHERA_STRINGBASE_HPP
 #define PANTHERA_STRINGBASE_HPP
 
+#include "DLL.hpp"
+
 #include <memory>
 #include <cinttypes>
 #include <string>
@@ -12,7 +14,7 @@ namespace Panthera
     namespace StringUtils
     {
         template<typename T>
-        std::size_t GetLength(const T* str)
+        PT_API inline std::size_t GetLength(const T* str)
         {
             if (!str)
                 return 0;
@@ -20,7 +22,7 @@ namespace Panthera
         }
 
         template<typename T>
-        void Copy(T* dest, const T* src, std::size_t length)
+        PT_API inline void Copy(T* dest, const T* src, std::size_t length)
         {
             for (std::size_t i = 0; i < length; i++)
             {
@@ -31,13 +33,13 @@ namespace Panthera
         }
 
         template<typename T>
-        bool Equals(const T* str1, const T* str2)
+        PT_API inline bool Equals(const T* str1, const T* str2)
         {
             return std::char_traits<T>::compare(str1, str2, GetLength(str1)) == 0;
         }
 
         template<typename T>
-        T ToLower(T c)
+        PT_API inline T ToLower(T c)
         {
             if (c >= 'A' && c <= 'Z')
                 return c + 32;
@@ -45,7 +47,7 @@ namespace Panthera
         }
 
         template<typename T>
-        T ToUpper(T c)
+        PT_API inline T ToUpper(T c)
         {
             if (c >= 'a' && c <= 'z')
                 return c - 32;
@@ -54,7 +56,7 @@ namespace Panthera
     }
 
     template<typename T>
-    class StringBase
+    class PT_API StringBase
     {
     public:
         template<class B>
@@ -841,7 +843,7 @@ namespace Panthera
 namespace std
 {
     template<typename T>
-    struct hash<Panthera::StringBase<T>>
+    struct PT_API hash<Panthera::StringBase<T>>
     {
         std::size_t operator()(const Panthera::StringBase<T> &str) const
         {

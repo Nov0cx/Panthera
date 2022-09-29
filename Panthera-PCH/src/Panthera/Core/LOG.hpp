@@ -1,6 +1,6 @@
 #ifndef PANTHERA_LOG_HPP
 #define PANTHERA_LOG_HPP
-
+#include "DLL.hpp"
 #pragma warning(push, 0)
 
 #include <spdlog/spdlog.h>
@@ -14,14 +14,15 @@
 
 namespace Panthera
 {
-    class Log
+    extern PT_API std::shared_ptr<spdlog::logger> s_Logger;
+
+    class PT_API Log
     {
     public:
         static void Init();
 
         inline static std::shared_ptr<spdlog::logger>& GetLogger() { return s_Logger; }
     private:
-        static std::shared_ptr<spdlog::logger> s_Logger;
     };
 }
 

@@ -8,12 +8,12 @@ namespace Panthera::AssetLoader
 {
     static Runfiles* s_Runfiles;
 
-    String GetAssetPath(const String &path)
+    PT_API String GetAssetPath(const String &path)
     {
         return s_Runfiles->Rlocation(path);
     }
 
-    void Init(const String &arg0)
+    PT_API void Init(const String &arg0)
     {
         String error;
         s_Runfiles = Runfiles::Create(arg0, (std::string*)&error);

@@ -1,43 +1,6 @@
 load("//bazel:copts.bzl", "copts")
 load("@bazel_shared_library//:dynamic_lib.bzl", "dynamic_library")
 
-#cc_library(
-#    name = "Panthera-Renderer_",
-#    srcs = glob(["src/Panthera/Renderer/*.cpp", "src/Panthera/Renderer/**/*.cpp"]) + select({
-#        "@platforms//os:windows": glob(["src/Panthera/Platform/Windows/**/*.cpp"]),
-#        "@platforms//os:linux": glob(["src/Panthera/Platform/Linux/**/*.cpp"]),
-#        "@platforms//os:macos": glob(["src/Panthera/Platform/MacOS/**/*.cpp"]),
-#    }) + select({
-#        "//bazel:all_apis": glob(["src/Panthera/Platform/OpenGL/*.cpp", "src/Panthera/Platform/OpenGL/**/*.cpp"]),
-#        "//conditions:default": [],
-#    }),
-#    hdrs = glob(["src/Panthera/RenderCore.hpp", "src/Panthera/Renderer/*.hpp", "src/Panthera/Renderer/**/*.hpp"]) + select({
-#        "@platforms//os:windows": glob(["src/Panthera/Platform/Windows/**/*.hpp"]),
-#        "@platforms//os:linux": glob(["src/Panthera/Platform/Linux/**/*.hpp"]),
-#        "@platforms//os:macos": glob(["src/Panthera/Platform/MacOS/**/*.hpp"]),
-#    }) + select({
-#              "//bazel:all_apis": glob(["src/Panthera/Platform/OpenGL/*.hpp", "src/Panthera/Platform/OpenGL/**/*.hpp"]),
-#              "//conditions:default": [],
-#    }),
-#    deps = ["//Panthera-PCH:pch", "@com_github_Nov0cx_glfw//:glfw", "@com_github_Nov0cx_glm//:glm", "//Panthera-Event:Panthera-Event"]
-#        + select({
-#            "//bazel:all_apis": ["@com_github_Nov0cx_glad//:glad", "//extern/vulkan/rules:vulkan_cc_library"],
-#            "//conditions:default": [],
-#        }),
-#    visibility = ["//visibility:public"],
-#    strip_include_prefix = "src",
-#    defines = select({
-#                "//bazel:all_apis": ["PANTHERA_OPENGL", "PANTHERA_VULKAN", "PANTHERA_DIRECTX"],
-#                "//conditions:default": [],
-#    }) + select({
-#        "@platforms//os:windows": ["PANTHERA_PLATFORM_WINDOWS"],
-#        "@platforms//os:linux": ["PANTHERA_PLATFORM_LINUX"],
-#        "@platforms//os:macos": ["PANTHERA_PLATFORM_MACOS"],
-#        "//conditions:default": [],
-#    }),
-#    copts = copts,
-#)
-
 dynamic_library(
     name = "Panthera-Renderer",
     srcs = glob(["src/Panthera/Renderer/*.cpp", "src/Panthera/Renderer/**/*.cpp"])

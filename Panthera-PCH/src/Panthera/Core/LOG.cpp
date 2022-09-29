@@ -6,7 +6,7 @@
 namespace Panthera
 {
 
-    std::shared_ptr <spdlog::logger> Log::s_Logger;
+    PT_API std::shared_ptr <spdlog::logger> s_Logger;
 
     void Log::Init()
     {

@@ -20,6 +20,9 @@ namespace Panthera
         windowInfo.VSync = false;
         windowInfo.Fullscreen = false;
 
+        Panthera::Log::Init();
+        Panthera::AssetLoader::Init(info.Args[0]);
+
         EventManager::Init();
         GlobalRenderer::Init(windowInfo);
 
