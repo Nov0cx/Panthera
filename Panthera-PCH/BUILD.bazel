@@ -13,32 +13,10 @@ config_setting(
 )
 
 load("//bazel:copts.bzl", "copts")
-load("@bazel_shared_library//:dynamic_lib.bzl", "dynamic_library")
 
-dynamic_library(
-    name = "pch",
-    srcs = glob(["src/Panthera/*.cpp", "src/Panthera/**/*.cpp", "src/Panthera/**/**/*.cpp", "src/*.cpp", "src/Vendor/debugbreak/*.cpp"],),
-        hdrs = glob(["src/Panthera/*.hpp", "src/Panthera/**/*.hpp", "src/Panthera/**/**/*.hpp", "src/*.hpp", "src/Vendor/debugbreak/*.hpp"],),
-        visibility = ["//visibility:public"],
-        strip_include_prefix = "src",
-        deps = [
-            "@com_github_Nov0cx_spdlog//:spdlog",
-            "@com_github_Nov0cx_glm//:glm",
-            "@bazel_tools//tools/cpp/runfiles",
-        ],
-        defines = ["PANTHERA_BUILD_DLL"] + select({
-                            ":debug":
-                                ["PANTHERA_DEBUG"],
-                            ":release":
-                                ["PANTHERA_RELEASE"],
-                            "//conditions:default":
-                                ["PANTHERA_DEFAULT"],
-        }),
-        copts = copts,
-)
 
 cc_library(
-    name = "pch_",
+    name = "pch",
     srcs = glob(["src/Panthera/*.cpp", "src/Panthera/**/*.cpp", "src/Panthera/**/**/*.cpp", "src/*.cpp", "src/Vendor/debugbreak/*.cpp"],),
     hdrs = glob(["src/Panthera/*.hpp", "src/Panthera/**/*.hpp", "src/Panthera/**/**/*.hpp", "src/*.hpp", "src/Vendor/debugbreak/*.hpp"],),
     visibility = ["//visibility:public"],

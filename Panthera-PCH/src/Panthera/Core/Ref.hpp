@@ -1,12 +1,11 @@
 #ifndef PANTHERA_REF_HPP
 #define PANTHERA_REF_HPP
 
-#include "DLL.hpp"
 #include <atomic>
 
 namespace Panthera
 {
-    class PT_API RefData
+    class RefData
     {
     public:
         void IncreaseReferenceCount() { ++m_RefCount; }
@@ -18,7 +17,7 @@ namespace Panthera
     };
 
     template<typename T>
-    class PT_API Ref
+    class Ref
     {
     public:
         template<typename... Args>

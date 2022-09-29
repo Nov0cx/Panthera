@@ -1,10 +1,10 @@
 #ifndef PANTHERA_PAIR_HPP
 #define PANTHERA_PAIR_HPP
-#include "DLL.hpp"
+
 namespace Panthera
 {
     template<typename T, typename U>
-    struct PT_API Pair
+    struct Pair
     {
         T first;
         U second;
