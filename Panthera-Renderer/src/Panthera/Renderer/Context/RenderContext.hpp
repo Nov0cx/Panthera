@@ -6,7 +6,7 @@
 
 namespace Panthera
 {
-    class PT_API RenderContext
+    class RenderContext
     {
     public:
         static Ref<RenderContext> Create(void* nativeWindow);

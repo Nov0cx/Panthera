@@ -8,7 +8,7 @@ namespace Panthera
     // fwd
     struct Renderer2DStorage;
 
-    class PT_API Renderer2D
+    class Renderer2D
     {
     public:
         void Init();

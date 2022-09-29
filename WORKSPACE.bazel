@@ -79,13 +79,6 @@ http_archive(
     urls = ["https://github.com/samhocevar/portable-file-dialogs/archive/main.zip"],
 )
 
-http_archive(
-    name = "bazel_shared_library",
-    strip_prefix = "Bazel-Shared-Library-master",
-    sha256 = "9ad6d50abc26100e6134c75660b3286ce658e6b6b896afcb5c9ad883b16b2b81",
-    urls = ["https://github.com/Nov0cx/Bazel-Shared-Library/archive/master.zip"],
-)
-
 register_execution_platforms(
     "//bazel/Platforms:x64_windows-clang-cl"
 )

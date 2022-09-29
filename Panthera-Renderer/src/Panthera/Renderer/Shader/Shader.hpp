@@ -5,7 +5,7 @@
 
 namespace Panthera
 {
-    class PT_API Shader
+    class Shader
     {
     public:
         virtual void Bind() const = 0;
@@ -17,7 +17,7 @@ namespace Panthera
         friend class ShaderLibrary;
     };
 
-    class PT_API ShaderLibrary
+    class ShaderLibrary
     {
     public:
         static Ref<Shader> Load(const String& filepath);

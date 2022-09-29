@@ -1,12 +1,11 @@
 #ifndef PANTHERA_WINDOWSWINDOW_HPP
 #define PANTHERA_WINDOWSWINDOW_HPP
 
-#include "ppch.hpp"
 #include "Panthera/Renderer/Window/Window.hpp"
 
 namespace Panthera
 {
-    class PT_API WindowsWindow : public Window
+    class WindowsWindow : public Window
     {
     public:
         WindowsWindow(const WindowInfo &info);

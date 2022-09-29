@@ -26,7 +26,7 @@ namespace Panthera
 }
 
 
-//#ifdef PANTHERA_DEBUG
+#ifdef PANTHERA_DEBUG
 
 #define PT_LOG_DEBUG(...) ::Panthera::Log::GetLogger()->debug(__VA_ARGS__)
 #define PT_LOG_TRACE(...) ::Panthera::Log::GetLogger()->trace(__VA_ARGS__)
@@ -37,8 +37,7 @@ namespace Panthera
 
 #define PT_ASSERT(condition, ...) if (!(condition)) { PT_LOG_FATAL(__VA_ARGS__); debug_break(); }
 
-/*#else
-
+#else
 
 #define PT_LOG_DEBUG(...) ;
 #define PT_LOG_TRACE(...) ;
@@ -49,7 +48,7 @@ namespace Panthera
 
 #define PT_ASSERT(condition, ...) ;
 
-#endif*/
+#endif
 
 #define PT_ASSERT_HANDLE(condition, handle) if (!(condition)) { handle(); }
 

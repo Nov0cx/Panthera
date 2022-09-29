@@ -7,14 +7,14 @@
 namespace Panthera
 {
 
-    PT_API void RenderCommand::DrawIndexed(uint32_t count)
+    void RenderCommand::DrawIndexed(uint32_t count)
     {
 #ifdef PANTHERA_OPENGL
         OpenGLRenderCommand::DrawIndexed(count);
 #endif
     }
 
-    PT_API void RenderCommand::Clear(const glm::vec4 &color)
+    void RenderCommand::Clear(const glm::vec4 &color)
     {
 #ifdef PANTHERA_OPENGL
         OpenGLRenderCommand::Clear(color);

@@ -5,7 +5,7 @@
 
 namespace Panthera
 {
-    class PT_API UniformBuffer
+    class UniformBuffer
     {
     public:
         static Ref<UniformBuffer> Create(size_t size, uint32_t binding);

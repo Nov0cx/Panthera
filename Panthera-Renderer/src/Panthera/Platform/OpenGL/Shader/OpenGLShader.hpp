@@ -6,7 +6,7 @@
 
 namespace Panthera
 {
-    class PT_API OpenGLShader : public Shader
+    class OpenGLShader : public Shader
     {
     public:
         using RendererID = uint32_t;
