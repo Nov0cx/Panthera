@@ -253,6 +253,41 @@ namespace Panthera
         m_Storage->TriangleIndicesCount += 3;
     }
 
+    void Renderer2D::DrawTriangle(const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3, const glm::vec4 &color,
+                                  const Ref <Texture2D> &texture, float tilingFactor)
+    {
+        DrawTriangle(glm::vec3(p1, 0.0f), glm::vec3(p2, 0.0f), glm::vec3(p3, 0.0f), color, texture, tilingFactor);
+    }
+
+    void Renderer2D::DrawTriangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec4 &color,
+                                  const Ref <Texture2D> &texture, float tilingFactor)
+    {
+        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices || m_Storage->TriangleTextureIndex >= Renderer2DStorage::MaxTextures)
+        {
+            Flush();
+        }
+
+        static const glm::vec2 textureCoords[3] = {
+                {0.0f, 0.0f},
+                {1.0f, 0.0f},
+                {0.5f, 1.0f}
+        };
+
+        for (uint8_t i = 0; i < 3; i++)
+        {
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].Position = i == 0 ? p1 : i == 1 ? p2 : p3;
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].Color = color;
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TexCoord = textureCoords[i];
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TexIndex = m_Storage->TriangleTextureIndex;
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TilingFactor = tilingFactor;
+            m_Storage->TriangleVerticesCount++;
+        }
+
+        m_Storage->TriangleTextures[m_Storage->TriangleTextureIndex] = texture;
+        m_Storage->TriangleTextureIndex++;
+        m_Storage->TriangleIndicesCount += 3;
+    }
+
     void Renderer2D::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color)
     {
         if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices || m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
@@ -293,5 +328,49 @@ namespace Panthera
     void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color)
     {
         DrawQuad(glm::vec3(center, 0.0f), size, color);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, const Ref<Texture2D> &texture, float tilingFactor)
+    {
+        DrawQuad(glm::vec3(center, 0.0f), size, color, texture, tilingFactor);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, const Ref<Texture2D> &texture, float tilingFactor)
+    {
+        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices || m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
+        {
+            Flush();
+        }
+
+        static const glm::vec4 quadPositions[4] = {
+                {-0.5f, -0.5f, 0.0f, 1.0f},
+                {0.5f,  -0.5f, 0.0f, 1.0f},
+                {0.5f,  0.5f,  0.0f, 1.0f},
+                {-0.5f, 0.5f,  0.0f, 1.0f}
+        };
+
+        static const glm::vec2 textureCoords[4] = {
+                {0.0f, 0.0f},
+                {1.0f, 0.0f},
+                {1.0f, 1.0f},
+                {0.0f, 1.0f}
+        };
+
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+
+        for (uint8_t i = 0; i < 4; i++)
+        {
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].Position = transform * quadPositions[i];
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].Color = color;
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TexCoord = textureCoords[i];
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TexIndex = m_Storage->QuadTextureIndex;
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TilingFactor = tilingFactor;
+            m_Storage->QuadVerticesCount++;
+        }
+
+        m_Storage->QuadTextures[m_Storage->QuadTextureIndex] = texture;
+        m_Storage->QuadTextureIndex++;
+        m_Storage->QuadIndicesCount += 6;
     }
 }
