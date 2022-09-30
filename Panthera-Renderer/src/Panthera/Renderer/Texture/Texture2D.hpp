@@ -32,11 +32,11 @@ namespace Panthera
 
     struct Texture2DInfo
     {
-        uint32_t Width, Height;
-        uint32_t Channels;
-        Texture2DFormat Format;
-        Texture2DWrapping Wrapping;
-        Texture2DFiltering Filtering;
+        uint32_t Width = 0, Height = 0;
+        uint32_t Channels = 1;
+        Texture2DFormat Format = Texture2DFormat::Red;
+        Texture2DWrapping Wrapping = Texture2DWrapping::ClampToEdge;
+        Texture2DFiltering Filtering = Texture2DFiltering::Linear;
     };
 
     class Texture2D
@@ -60,6 +60,8 @@ namespace Panthera
         virtual void SetFiltering(Texture2DFiltering filtering) = 0;
 
         virtual bool operator==(const Texture2D& other) const = 0;
+
+        virtual void Bind(uint32_t slot = 0) const = 0;
     };
 }
 

@@ -1,0 +1,6 @@
+cc_library(
+    name = "Panthera-STB",
+    srcs = glob(["*.cpp"]),
+    deps = ["@com_github_nothings_stb//:stb"],
+    visibility = ["//visibility:public"],
+)

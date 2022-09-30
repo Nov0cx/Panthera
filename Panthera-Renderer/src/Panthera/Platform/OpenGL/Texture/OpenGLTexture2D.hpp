@@ -30,6 +30,7 @@ namespace Panthera
 
         virtual bool operator==(const Texture2D& other) const override;
 
+        virtual void Bind(uint32_t slot = 0) const override;
     private:
         void* LoadTexture(const String& path);
         void RecreateTexture();

@@ -115,7 +115,10 @@ namespace Panthera
 
     void OpenGLTexture2D::SetData(void *data, size_t size)
     {
-        PT_ASSERT(size == m_Info.Width * m_Info.Height * m_Info.Channels, "Data must be entire texture!");
+        if (size != m_Info.Width * m_Info.Height * m_Info.Channels)
+        {
+            PT_LOG_WARNING("Texture2D::SetData: Size of data does not match texture size, size = {0}, texture size = {1}", size, m_Info.Width * m_Info.Height * m_Info.Channels);
+        }
         glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Info.Width, m_Info.Height, GetDataFormat(m_Info.Format), GL_UNSIGNED_BYTE, data);
     }
 
@@ -217,5 +220,10 @@ namespace Panthera
     void OpenGLTexture2D::SetWrapping(Texture2DWrapping wrapping)
     {
         m_Info.Wrapping = wrapping;
+    }
+
+    void OpenGLTexture2D::Bind(uint32_t slot) const
+    {
+        glBindTextureUnit(slot, m_RendererID);
     }
 }

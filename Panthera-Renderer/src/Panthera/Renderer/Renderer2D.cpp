@@ -10,46 +10,68 @@ namespace Panthera
     {
         glm::vec3 Position;
         glm::vec4 Color;
+        glm::vec2 TexCoord;
+        float TexIndex;
+        float TilingFactor;
     };
 
     struct Renderer2DStorage
     {
-        // Triangle
-        static constexpr uint32_t MaxTriangleTriangles = 25037;
-        static constexpr uint32_t MaxTriangleVertices = MaxTriangleTriangles * 3;
-        static constexpr uint32_t MaxTriangleIndices = MaxTriangleVertices * 3;
+        static constexpr uint8_t
+        MaxTextures = 32;
 
-        Ref<Shader> TriangleShader = nullptr;
-        Ref<VertexArray> TriangleVertexArray = nullptr;
-        Ref<VertexBuffer> TriangleVertexBuffer = nullptr;
-        Ref<IndexBuffer> TriangleIndexBuffer = nullptr;
-        VertexData* TriangleVertices = nullptr;
+        // Triangle
+        static constexpr uint32_t
+        MaxTriangleTriangles = 25037;
+        static constexpr uint32_t
+        MaxTriangleVertices = MaxTriangleTriangles * 3;
+        static constexpr uint32_t
+        MaxTriangleIndices = MaxTriangleVertices * 3;
+
+        Ref <Shader> TriangleShader = nullptr;
+        Ref <VertexArray> TriangleVertexArray = nullptr;
+        Ref <VertexBuffer> TriangleVertexBuffer = nullptr;
+        Ref <IndexBuffer> TriangleIndexBuffer = nullptr;
+        VertexData *TriangleVertices = nullptr;
         uint32_t TriangleIndicesCount = 0;
         uint32_t TriangleVerticesCount = 0;
+        std::array <Ref<Texture2D>, MaxTextures> TriangleTextures;
+        uint32_t TriangleTextureIndex = 1;
 
         // Quad
-        static constexpr uint32_t MaxQuadTriangles = 25037;
-        static constexpr uint32_t MaxQuadVertices = MaxQuadTriangles * 4;
-        static constexpr uint32_t MaxQuadIndices = MaxQuadVertices * 6;
+        static constexpr uint32_t
+        MaxQuadTriangles = 25037;
+        static constexpr uint32_t
+        MaxQuadVertices = MaxQuadTriangles * 4;
+        static constexpr uint32_t
+        MaxQuadIndices = MaxQuadVertices * 6;
 
-        Ref<Shader> QuadShader = nullptr;
-        Ref<VertexArray> QuadVertexArray = nullptr;
-        Ref<VertexBuffer> QuadVertexBuffer = nullptr;
-        Ref<IndexBuffer> QuadIndexBuffer = nullptr;
-        VertexData* QuadVertices = nullptr;
+        Ref <Shader> QuadShader = nullptr;
+        Ref <VertexArray> QuadVertexArray = nullptr;
+        Ref <VertexBuffer> QuadVertexBuffer = nullptr;
+        Ref <IndexBuffer> QuadIndexBuffer = nullptr;
+        VertexData *QuadVertices = nullptr;
         uint32_t QuadIndicesCount = 0;
         uint32_t QuadVerticesCount = 0;
+        std::array <Ref<Texture2D>, MaxTextures> QuadTextures;
+        uint32_t QuadTextureIndex = 1;
     };
+
+    static Ref <Texture2D> s_WhiteTexture = nullptr;
 
     void Renderer2D::InitTriangle(Ref <Shader> &shader)
     {
         m_Storage->TriangleShader = shader;
 
         m_Storage->TriangleVertexArray = VertexArray::Create();
-        m_Storage->TriangleVertexBuffer = VertexBuffer::Create(Renderer2DStorage::MaxTriangleVertices * sizeof(VertexData));
+        m_Storage->TriangleVertexBuffer = VertexBuffer::Create(
+                Renderer2DStorage::MaxTriangleVertices * sizeof(VertexData));
         m_Storage->TriangleVertexBuffer->SetBufferLayout({
-                                                                 { ShaderDataType::Float3, "inPosition" },
-                                                                 { ShaderDataType::Float4, "inColor" }
+                                                                 {ShaderDataType::Float3, "inPosition"},
+                                                                 {ShaderDataType::Float4, "inColor"},
+                                                                 {ShaderDataType::Float2, "inTexCoord"},
+                                                                 {ShaderDataType::Float,  "inTexIndex"},
+                                                                 {ShaderDataType::Float,  "inTilingFactor"}
                                                          });
 
         m_Storage->TriangleVertexArray->AddVertexBuffer(m_Storage->TriangleVertexBuffer);
@@ -70,7 +92,15 @@ namespace Panthera
         m_Storage->TriangleVertexArray->SetIndexBuffer(m_Storage->TriangleIndexBuffer);
         m_Storage->TriangleVertices = new VertexData[Renderer2DStorage::MaxTriangleVertices];
 
-        delete [] indices;
+        delete[] indices;
+
+        Texture2DInfo info;
+        info.Width = 1;
+        info.Height = 1;
+        Ref <Texture2D> whiteTexture = Texture2D::Create(info);
+        uint32_t whiteTextureData = 0xffffffff;
+        whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+        m_Storage->TriangleTextures[0] = s_WhiteTexture;
     }
 
     void Renderer2D::InitQuad(Ref <Shader> &shader)
@@ -80,8 +110,11 @@ namespace Panthera
         m_Storage->QuadVertexArray = VertexArray::Create();
         m_Storage->QuadVertexBuffer = VertexBuffer::Create(Renderer2DStorage::MaxQuadVertices * sizeof(VertexData));
         m_Storage->QuadVertexBuffer->SetBufferLayout({
-                                                             { ShaderDataType::Float3, "inPosition" },
-                                                             { ShaderDataType::Float4, "inColor" }
+                                                             {ShaderDataType::Float3, "inPosition"},
+                                                             {ShaderDataType::Float4, "inColor"},
+                                                             {ShaderDataType::Float2, "inTexCoord"},
+                                                             {ShaderDataType::Float,  "inTexIndex"},
+                                                             {ShaderDataType::Float,  "inTilingFactor"}
                                                      });
         m_Storage->QuadVertexArray->AddVertexBuffer(m_Storage->QuadVertexBuffer);
 
@@ -104,22 +137,37 @@ namespace Panthera
         m_Storage->QuadVertexArray->SetIndexBuffer(m_Storage->QuadIndexBuffer);
         m_Storage->QuadVertices = new VertexData[Renderer2DStorage::MaxQuadVertices];
 
-        delete [] indices;
+        delete[] indices;
+
+        m_Storage->QuadTextures[0] = s_WhiteTexture;
     }
 
     void Renderer2D::Init()
     {
         m_Storage = new Renderer2DStorage();
 
-        Ref<Shader> defaultShader = nullptr;
+        Ref <Shader> defaultShader = nullptr;
 
         if (ShaderLibrary::Exists("PT_Renderer2D_default"))
         {
             defaultShader = ShaderLibrary::Get("PT_Renderer2D_default");
-        }
-        else
+        } else
         {
-            defaultShader = ShaderLibrary::Load(AssetLoader::GetAssetPath("Panthera/assets/shader/PT_Renderer2D_default.glsl"));
+            defaultShader = ShaderLibrary::Load(
+                    AssetLoader::GetAssetPath("Panthera/assets/shader/PT_Renderer2D_default.glsl")
+            );
+        }
+
+        if (!s_WhiteTexture)
+        {
+            Texture2DInfo info;
+            info.Width = 1;
+            info.Height = 1;
+            info.Format = Texture2DFormat::RGBA;
+            info.Channels = 4;
+            s_WhiteTexture = Texture2D::Create(info);
+            uint32_t whiteTextureData = 0xffffffff;
+            s_WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
         }
 
         InitTriangle(defaultShader);
@@ -142,7 +190,13 @@ namespace Panthera
 
         if (m_Storage->TriangleVerticesCount > 0)
         {
-            m_Storage->TriangleVertexBuffer->SetData(m_Storage->TriangleVertices, m_Storage->TriangleVerticesCount * sizeof(VertexData));
+            for (uint32_t i = 0; i < m_Storage->TriangleTextureIndex; i++)
+            {
+                m_Storage->TriangleTextures[i]->Bind(i);
+            }
+
+            m_Storage->TriangleVertexBuffer->SetData(m_Storage->TriangleVertices,
+                                                     m_Storage->TriangleVerticesCount * sizeof(VertexData));
             m_Storage->TriangleVertexArray->Bind();
             m_Storage->TriangleShader->Bind();
 
@@ -150,11 +204,18 @@ namespace Panthera
 
             m_Storage->TriangleIndicesCount = 0;
             m_Storage->TriangleVerticesCount = 0;
+            m_Storage->TriangleTextureIndex = 1;
         }
 
         if (m_Storage->QuadVerticesCount > 0)
         {
-            m_Storage->QuadVertexBuffer->SetData(m_Storage->QuadVertices, m_Storage->QuadVerticesCount * sizeof(VertexData));
+            for (uint32_t i = 0; i < m_Storage->QuadTextureIndex; i++)
+            {
+                m_Storage->QuadTextures[i]->Bind(i);
+            }
+
+            m_Storage->QuadVertexBuffer->SetData(m_Storage->QuadVertices,
+                                                 m_Storage->QuadVerticesCount * sizeof(VertexData));
             m_Storage->QuadVertexArray->Bind();
             m_Storage->QuadShader->Bind();
 
@@ -162,21 +223,32 @@ namespace Panthera
 
             m_Storage->QuadIndicesCount = 0;
             m_Storage->QuadVerticesCount = 0;
+            m_Storage->QuadTextureIndex = 1;
         }
 
     }
 
     void Renderer2D::DrawTriangle(const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3, const glm::vec4 &color)
     {
-        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices)
+        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices || m_Storage->TriangleTextureIndex >= Renderer2DStorage::MaxTextures)
         {
             Flush();
         }
 
+        static const glm::vec2 textureCoords[3] = {
+                {0.0f, 0.0f},
+                {1.0f, 0.0f},
+                {0.5f, 1.0f}
+        };
+
         for (uint8_t i = 0; i < 3; i++)
         {
-            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].Position = glm::vec3(i == 0 ? p1 : i == 1 ? p2 : p3, 0.0f);
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].Position = glm::vec3(
+                    i == 0 ? p1 : i == 1 ? p2 : p3, 0.0f);
             m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].Color = color;
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TexCoord = textureCoords[i];
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TexIndex = 0.0f;
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TilingFactor = 1.0f;
             m_Storage->TriangleVerticesCount++;
         }
 
@@ -185,15 +257,24 @@ namespace Panthera
 
     void Renderer2D::DrawTriangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec4 &color)
     {
-        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices)
+        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices || m_Storage->TriangleTextureIndex >= Renderer2DStorage::MaxTextures)
         {
             Flush();
         }
+
+        static const glm::vec2 textureCoords[3] = {
+                {0.0f, 0.0f},
+                {1.0f, 0.0f},
+                {0.5f, 1.0f}
+        };
 
         for (uint8_t i = 0; i < 3; i++)
         {
             m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].Position = i == 0 ? p1 : i == 1 ? p2 : p3;
             m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].Color = color;
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TexCoord = textureCoords[i];
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TexIndex = 0.0f;
+            m_Storage->TriangleVertices[m_Storage->TriangleVerticesCount].TilingFactor = 1.0f;
             m_Storage->TriangleVerticesCount++;
         }
 
@@ -202,16 +283,23 @@ namespace Panthera
 
     void Renderer2D::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color)
     {
-        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices)
+        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices || m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
         {
             Flush();
         }
 
         static const glm::vec4 quadPositions[4] = {
                 {-0.5f, -0.5f, 0.0f, 1.0f},
-                {0.5f, -0.5f, 0.0f, 1.0f},
-                {0.5f, 0.5f, 0.0f, 1.0f},
-                {-0.5f, 0.5f, 0.0f, 1.0f}
+                {0.5f,  -0.5f, 0.0f, 1.0f},
+                {0.5f,  0.5f,  0.0f, 1.0f},
+                {-0.5f, 0.5f,  0.0f, 1.0f}
+        };
+
+        static const glm::vec2 textureCoords[4] = {
+                {0.0f, 0.0f},
+                {1.0f, 0.0f},
+                {1.0f, 1.0f},
+                {0.0f, 1.0f}
         };
 
         glm::mat4 transform =
@@ -221,6 +309,9 @@ namespace Panthera
         {
             m_Storage->QuadVertices[m_Storage->QuadVerticesCount].Position = transform * quadPositions[i];
             m_Storage->QuadVertices[m_Storage->QuadVerticesCount].Color = color;
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TexCoord = textureCoords[i];
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TexIndex = 0.0f;
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TilingFactor = 1.0f;
             m_Storage->QuadVerticesCount++;
         }
 
@@ -229,25 +320,36 @@ namespace Panthera
 
     void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color)
     {
-        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices)
+        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices || m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
         {
             Flush();
         }
 
         glm::mat4 transform =
-                glm::translate(glm::mat4(1.0f), glm::vec3(center, 0.f)) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+                glm::translate(glm::mat4(1.0f), glm::vec3(center, 0.f)) *
+                glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 
         static const glm::vec4 quadPositions[4] = {
                 {-0.5f, -0.5f, 0.0f, 1.0f},
-                {0.5f, -0.5f, 0.0f, 1.0f},
-                {0.5f, 0.5f, 0.0f, 1.0f},
-                {-0.5f, 0.5f, 0.0f, 1.0f}
+                {0.5f,  -0.5f, 0.0f, 1.0f},
+                {0.5f,  0.5f,  0.0f, 1.0f},
+                {-0.5f, 0.5f,  0.0f, 1.0f}
+        };
+
+        static const glm::vec2 textureCoords[4] = {
+                {0.0f, 0.0f},
+                {1.0f, 0.0f},
+                {1.0f, 1.0f},
+                {0.0f, 1.0f}
         };
 
         for (uint8_t i = 0; i < 4; i++)
         {
             m_Storage->QuadVertices[m_Storage->QuadVerticesCount].Position = transform * quadPositions[i];
             m_Storage->QuadVertices[m_Storage->QuadVerticesCount].Color = color;
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TexCoord = textureCoords[i];
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TexIndex = 0.0f;
+            m_Storage->QuadVertices[m_Storage->QuadVerticesCount].TilingFactor = 1.0f;
             m_Storage->QuadVerticesCount++;
         }
 
