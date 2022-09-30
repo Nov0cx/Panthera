@@ -86,3 +86,11 @@ register_execution_platforms(
 register_toolchains(
       "@local_config_cc//:cc-toolchain-x64_windows-clang-cl",
 )
+
+http_archive(
+    name = "com_github_nothings_stb",
+    build_file = "//extern:stb.BUILD",
+    sha256 = "93a16ee3e866e719feec459f6f132cce932c5ec751eb38e3ec1975f911353d2e",
+    strip_prefix = "stb-8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55",
+    urls = ["https://github.com/nothings/stb/archive/8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55.zip"],
+)

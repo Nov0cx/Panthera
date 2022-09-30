@@ -18,7 +18,7 @@ cc_library(
               "//bazel:all_apis": glob(["src/Panthera/Platform/OpenGL/*.hpp", "src/Panthera/Platform/OpenGL/**/*.hpp"]),
               "//conditions:default": [],
     }),
-    deps = ["//Panthera-PCH:pch", "@com_github_Nov0cx_glfw//:glfw", "@com_github_Nov0cx_glm//:glm", "//Panthera-Event:Panthera-Event"]
+    deps = ["//Panthera-PCH:pch", "@com_github_Nov0cx_glfw//:glfw", "@com_github_Nov0cx_glm//:glm", "//Panthera-Event:Panthera-Event", "@com_github_nothings_stb//:stb"]
         + select({
             "//bazel:all_apis": ["@com_github_Nov0cx_glad//:glad", "//extern/vulkan/rules:vulkan_cc_library"],
             "//conditions:default": [],

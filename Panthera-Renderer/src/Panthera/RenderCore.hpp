@@ -11,6 +11,7 @@
 #include "Renderer/Buffer/UniformBuffer.hpp"
 #include "Renderer/Context/RenderContext.hpp"
 #include "Renderer/Shader/Shader.hpp"
+#include "Renderer/Texture/Texture2D.hpp"
 #include "Renderer/VertexArray/VertexArray.hpp"
 #include "Renderer/Window/Window.hpp"
 
