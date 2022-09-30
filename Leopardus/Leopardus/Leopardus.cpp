@@ -14,6 +14,7 @@ namespace Panthera
         void OnEnable() override
         {
             m_Renderer.Init();
+            m_Texture = Texture2D::LoadFromDisk(AssetLoader::GetAssetPath("Panthera/assets/demo_textures/ball.jpeg"));
         }
 
         void OnDisable() override
@@ -28,13 +29,14 @@ namespace Panthera
             });
             GlobalRenderer::SubmitFunc([this]() mutable {
                 //m_Renderer.DrawTriangle({-0.5f, -0.2f}, {0.f, 0.5f}, {0.5f, -0.2f}, {1.f, 0.f, 0.f, 1.f});
-                m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {0.f, 1.f, 0.f, 1.f});
+                m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 1.f}, m_Texture);
                 m_Renderer.Flush();
             });
         }
 
     private:
         Renderer2D m_Renderer;
+        Ref<Texture2D> m_Texture;
     };
 
     void ApplicationCreationCallback(ApplicationInfo *outInfo)
