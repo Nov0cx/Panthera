@@ -115,9 +115,10 @@ namespace Panthera
 
     void OpenGLTexture2D::SetData(void *data, size_t size)
     {
-        if (size != m_Info.Width * m_Info.Height * m_Info.Channels)
+        uint32_t infoSize = m_Info.Width * m_Info.Height * m_Info.Channels;
+        if (size != infoSize)
         {
-            PT_LOG_WARNING("Texture2D::SetData: Size of data does not match texture size, size = {0}, texture size = {1}", size, m_Info.Width * m_Info.Height * m_Info.Channels);
+            PT_LOG_WARNING("Texture2D::SetData: Size of data does not match texture size, size = {0}, texture size = {1}", size, infoSize);
         }
         glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Info.Width, m_Info.Height, GetDataFormat(m_Info.Format), GL_UNSIGNED_BYTE, data);
     }

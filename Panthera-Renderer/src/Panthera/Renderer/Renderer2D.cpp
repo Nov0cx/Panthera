@@ -94,12 +94,6 @@ namespace Panthera
 
         delete[] indices;
 
-        Texture2DInfo info;
-        info.Width = 1;
-        info.Height = 1;
-        Ref <Texture2D> whiteTexture = Texture2D::Create(info);
-        uint32_t whiteTextureData = 0xffffffff;
-        whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
         m_Storage->TriangleTextures[0] = s_WhiteTexture;
     }
 
