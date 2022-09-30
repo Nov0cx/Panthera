@@ -10,6 +10,7 @@ namespace Panthera
     public:
         static void DrawIndexed(uint32_t count);
         static void Clear(const glm::vec4 &color);
+        static void EnableBlending();
     };
 
 }

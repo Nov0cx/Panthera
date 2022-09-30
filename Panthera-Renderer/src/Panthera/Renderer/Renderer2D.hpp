@@ -2,6 +2,7 @@
 #define PANTHERA_RENDERER2D_HPP
 
 #include "ppch.hpp"
+#include "Shader/Shader.hpp"
 
 namespace Panthera
 {
@@ -14,10 +15,17 @@ namespace Panthera
         void Init();
         void Shutdown();
 
-        void DrawTriangle(const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3);
+        void DrawTriangle(const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3, const glm::vec4 &color);
+        void DrawTriangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec4 &color);
+        void DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color);
+        void DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color);
 
         void DrawIndexed(uint32_t count);
         void Flush();
+
+    private:
+        void InitTriangle(Ref<Shader> &shader);
+        void InitQuad(Ref<Shader> &shader);
     private:
         Renderer2DStorage* m_Storage;
     };

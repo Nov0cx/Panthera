@@ -27,7 +27,8 @@ namespace Panthera
                 RenderCommand::Clear({0.2f, 0.2f, 0.2f, 1.0f});
             });
             GlobalRenderer::SubmitFunc([this]() mutable {
-                m_Renderer.DrawTriangle({-0.5f, -0.2f}, {0.f, 0.5f}, {0.5f, -0.2f});
+                //m_Renderer.DrawTriangle({-0.5f, -0.2f}, {0.f, 0.5f}, {0.5f, -0.2f}, {1.f, 0.f, 0.f, 1.f});
+                m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {0.f, 1.f, 0.f, 1.f});
                 m_Renderer.Flush();
             });
         }

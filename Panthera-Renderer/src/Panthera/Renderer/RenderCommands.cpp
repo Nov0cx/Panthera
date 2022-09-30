@@ -20,4 +20,11 @@ namespace Panthera
         OpenGLRenderCommand::Clear(color);
 #endif
     }
+
+    void RenderCommand::EnableBlending()
+    {
+#ifdef PANTHERA_OPENGL
+        OpenGLRenderCommand::EnableBlending();
+#endif
+    }
 }
