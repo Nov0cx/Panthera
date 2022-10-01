@@ -26,7 +26,7 @@ namespace Panthera
     public:
         static void Init(WindowInfo info);
         static void Shutdown();
-        static bool RequestShutdown();
+        static bool RequestShutdownWindow(const Window* window);
         static bool ShutdownAllowed();
 
         static void BeginFrame();

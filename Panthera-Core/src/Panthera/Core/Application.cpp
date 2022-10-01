@@ -57,6 +57,8 @@ namespace Panthera
 
             GlobalRenderer::BeginFrame();
 
+            GlobalRenderer::GetMainWindow()->GetRenderContext()->MakeCurrent();
+
             if (!m_Minimized)
                 m_LayerStack->OnUpdate(ts);
 

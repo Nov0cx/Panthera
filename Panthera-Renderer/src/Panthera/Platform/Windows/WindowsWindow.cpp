@@ -147,7 +147,11 @@ namespace Panthera
             return;
 
         if (glfwWindowShouldClose((GLFWwindow *) m_Window))
-            GlobalRenderer::RequestShutdown();
+            if (GlobalRenderer::RequestShutdownWindow(this))
+            {
+                Shutdown();
+                return;
+            }
 
         m_Context->MakeCurrent();
 
@@ -234,5 +238,15 @@ namespace Panthera
     Ref <RenderContext> WindowsWindow::GetRenderContext() const
     {
         return m_Context;
+    }
+
+    bool WindowsWindow::operator==(const Window &other) const
+    {
+        return m_Window == ((const WindowsWindow&)other).m_Window;
+    }
+
+    bool WindowsWindow::operator!=(const Window &other) const
+    {
+        return !(*this == other);
     }
 }

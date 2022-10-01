@@ -8,7 +8,7 @@ namespace Panthera
         Ref<Window> MainWindow;
         std::vector<Ref<Window>> Windows;
         std::vector<std::function<void()>> RendererFunctions;
-        bool ShutdownAllowed = false;
+        bool shutdownAllowed = false;
     };
 
     static GlobalRendererData s_globalRenderData;
@@ -76,14 +76,34 @@ namespace Panthera
         s_globalRenderData.RendererFunctions.clear();
     }
 
-    bool GlobalRenderer::RequestShutdown()
-    {
-        s_globalRenderData.ShutdownAllowed = true;
-        return true;
-    }
-
     bool GlobalRenderer::ShutdownAllowed()
     {
-        return s_globalRenderData.ShutdownAllowed;
+        return s_globalRenderData.Windows.empty() || s_globalRenderData.shutdownAllowed;
+    }
+
+    bool GlobalRenderer::RequestShutdownWindow(const Window *window)
+    {
+        std::vector<Ref<Window>>::iterator toRemove = s_globalRenderData.Windows.end();
+        for (std::vector<Ref<Window>>::iterator it = s_globalRenderData.Windows.begin(); it != s_globalRenderData.Windows.end(); it++)
+        {
+            if ((*it).Get() == window)
+            {
+                toRemove = it;
+                break;
+            }
+            
+        }
+
+        if (toRemove != s_globalRenderData.Windows.end())
+        {
+            s_globalRenderData.Windows.erase(toRemove);
+        }
+
+        if (s_globalRenderData.MainWindow.Get() == window)
+        {
+            s_globalRenderData.shutdownAllowed = true;
+        }
+
+        return true;
     }
 }

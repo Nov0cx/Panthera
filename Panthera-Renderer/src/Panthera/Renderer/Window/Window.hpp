@@ -39,6 +39,9 @@ namespace Panthera
 
         virtual WindowInfo& GetInfo() = 0;
         virtual const WindowInfo& GetInfo() const = 0;
+
+        virtual bool operator ==(const Window& other) const = 0;
+        virtual bool operator !=(const Window& other) const = 0;
     private:
     };
 }

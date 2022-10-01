@@ -27,6 +27,8 @@ namespace Panthera
         WindowInfo& GetInfo() override;
         const WindowInfo& GetInfo() const override;
 
+        virtual bool operator ==(const Window& other) const override;
+        virtual bool operator !=(const Window& other) const override;
     private:
         void Shutdown();
     private:

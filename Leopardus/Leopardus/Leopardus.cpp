@@ -15,12 +15,20 @@ namespace Panthera
         {
             m_Renderer.Init();
             m_Texture = Texture2D::LoadFromDisk(AssetLoader::GetAssetPath("Panthera/assets/demo_textures/ball.jpeg"));
+
             FramebufferInfo info;
             info.Width = 1280;
             info.Height = 720;
             info.ColorAttachments = { { Texture2DFormat::RGBA, 1 } };
 
             m_Framebuffer = Framebuffer::Create(info);
+
+            WindowInfo wInfo;
+            wInfo.Width = 1280;
+            wInfo.Height = 720;
+            wInfo.Title = "Leopardus2";
+            m_Window = GlobalRenderer::CreateAndGetWindow(wInfo);
+            m_Window->Init();
         }
 
         void OnDisable() override
@@ -40,12 +48,18 @@ namespace Panthera
                 m_Renderer.Flush();
                 //m_Framebuffer->Unbind();
             });
+            GlobalRenderer::SubmitFunc([this]() mutable
+                                       {
+                                           m_Window->Update();
+                                       });
+
         }
 
     private:
         Renderer2D m_Renderer;
         Ref<Texture2D> m_Texture;
         Ref<Framebuffer> m_Framebuffer;
+        Ref<Window> m_Window;
     };
 
     void ApplicationCreationCallback(ApplicationInfo *outInfo)
