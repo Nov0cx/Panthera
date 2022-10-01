@@ -74,7 +74,6 @@ namespace Panthera
     {
         for (auto& listener : EventManagerData::Instance->Listeners)
         {
-            PT_LOG_INFO("Listener type {}", listener.Type.name());
             if (listener.Type == typeid(event))
             {
                 listener.Listener(event);
