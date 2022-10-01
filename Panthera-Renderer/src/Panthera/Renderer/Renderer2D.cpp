@@ -288,7 +288,36 @@ namespace Panthera
         m_Storage->TriangleIndicesCount += 3;
     }
 
+    void Renderer2D::DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color)
+    {
+
+    }
+
+    void Renderer2D::DrawTriangle(const glm::mat4 &transform, const glm::vec4 &color, const Ref <Texture2D> &texture,
+                                  float tilingFactor)
+    {
+
+    }
+
     void Renderer2D::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color)
+    {
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+
+        DrawQuad(transform, color);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color)
+    {
+        DrawQuad(glm::vec3(center, 0.0f), size, color);
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, const Ref<Texture2D> &texture, float tilingFactor)
+    {
+        DrawQuad(glm::vec3(center, 0.0f), size, color, texture, tilingFactor);
+    }
+
+    void Renderer2D::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color)
     {
         if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices || m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
         {
@@ -308,9 +337,6 @@ namespace Panthera
                 {1.0f, 1.0f},
                 {0.0f, 1.0f}
         };
-
-        glm::mat4 transform =
-                glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 
         for (uint8_t i = 0; i < 4; i++)
         {
@@ -325,17 +351,8 @@ namespace Panthera
         m_Storage->QuadIndicesCount += 6;
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color)
-    {
-        DrawQuad(glm::vec3(center, 0.0f), size, color);
-    }
-
-    void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, const Ref<Texture2D> &texture, float tilingFactor)
-    {
-        DrawQuad(glm::vec3(center, 0.0f), size, color, texture, tilingFactor);
-    }
-
-    void Renderer2D::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, const Ref<Texture2D> &texture, float tilingFactor)
+    void Renderer2D::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color, const Ref <Texture2D> &texture,
+                              float tilingFactor)
     {
         if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices || m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
         {
@@ -356,9 +373,6 @@ namespace Panthera
                 {0.0f, 1.0f}
         };
 
-        glm::mat4 transform =
-                glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
-
         for (uint8_t i = 0; i < 4; i++)
         {
             m_Storage->QuadVertices[m_Storage->QuadVerticesCount].Position = transform * quadPositions[i];
@@ -372,5 +386,14 @@ namespace Panthera
         m_Storage->QuadTextures[m_Storage->QuadTextureIndex] = texture;
         m_Storage->QuadTextureIndex++;
         m_Storage->QuadIndicesCount += 6;
+    }
+
+    void Renderer2D::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, const Ref<Texture2D> &texture, float tilingFactor)
+    {
+
+        glm::mat4 transform =
+                glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+
+        DrawQuad(transform, color, texture, tilingFactor);
     }
 }
