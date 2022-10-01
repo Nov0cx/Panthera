@@ -2,6 +2,7 @@
 
 #include "Panthera/Utils/Time.hpp"
 #include "Panthera/Event/EventSystem.hpp"
+#include "Panthera/Event/WindowEvents.hpp"
 
 namespace Panthera
 {
@@ -24,6 +25,14 @@ namespace Panthera
         GlobalRenderer::Init(windowInfo);
 
         m_LayerStack = new LayerStack();
+
+        EventManager::RegisterListener<WindowResizeEvent>([this](WindowResizeEvent &event) mutable
+                                       {
+                                           if (event.Width == 0 || event.Height == 0)
+                                               m_Minimized = true;
+                                           else
+                                               m_Minimized = false;
+                                       }, EventPriority::High);
     }
 
     Application::~Application()
@@ -48,11 +57,13 @@ namespace Panthera
 
             GlobalRenderer::BeginFrame();
 
-            m_LayerStack->OnUpdate(ts);
+            if (!m_Minimized)
+                m_LayerStack->OnUpdate(ts);
 
-            GlobalRenderer::SubmitFunc([]() {
-                GlobalRenderer::GetMainWindow()->Update();
-            });
+            GlobalRenderer::SubmitFunc([]()
+                                       {
+                                           GlobalRenderer::GetMainWindow()->Update();
+                                       });
 
             GlobalRenderer::EndFrame();
         }

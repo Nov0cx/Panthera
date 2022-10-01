@@ -82,6 +82,7 @@ namespace Panthera
         ApplicationInfo m_Info;
         LayerStack* m_LayerStack;
         float m_LastFrameTime = 0.0f;
+        bool m_Minimized = false;
 
         friend int ::pmain(int argc, char **argv);
     };

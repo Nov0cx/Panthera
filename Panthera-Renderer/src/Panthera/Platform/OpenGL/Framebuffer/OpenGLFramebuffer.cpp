@@ -34,6 +34,7 @@ namespace Panthera
         }
 
         PT_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     OpenGLFramebuffer::~OpenGLFramebuffer()
@@ -56,6 +57,8 @@ namespace Panthera
         m_Info.Width = width;
         m_Info.Height = height;
 
+        glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+
         for (uint32_t i = 0; i < m_ColorAttachments.size(); i++)
         {
             m_ColorAttachments[i]->Resize(width, height);
@@ -69,6 +72,7 @@ namespace Panthera
         }
 
         PT_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     void *OpenGLFramebuffer::GetColorAttachmentRenderObject(uint32_t index) const
