@@ -57,39 +57,7 @@ namespace Panthera
     class StringBase
     {
     public:
-        template<class B>
-        struct Iterator
-        {
-            B* m_Data;
-            uint32_t m_Index;
-            uint32_t m_Length;
-
-            Iterator(B *data, uint32_t length, uint32_t index)
-                    : m_Data(data), m_Length(length), m_Index(index)
-            {
-            }
-
-            inline bool operator==(const Iterator& other) const
-            {
-                return m_Index == other.m_Index && m_Length == other.m_Length;
-            }
-
-            inline bool operator!=(const Iterator &other) const
-            {
-                return m_Index != other.m_Index;
-            }
-
-            inline B& operator*()
-            {
-                return m_Data[m_Index];
-            }
-
-            inline Iterator<B>& operator++()
-            {
-                m_Index++;
-                return *this;
-            }
-        };
+        using Iterator = T*;
 
     public:
         StringBase()
@@ -228,17 +196,17 @@ namespace Panthera
             return newStr;
         }
 
-        inline int64_t Find(const T c)
+        inline Iterator Find(const T c)
         {
             for (int64_t i = 0; i < m_Length; i++)
             {
                 if (m_Data[i] == c)
-                    return i;
+                    return m_Data + i;
             }
-            return -1;
+            return end();
         }
 
-        inline int64_t Find(const T *str)
+        inline Iterator Find(const T *str)
         {
             const auto length = StringUtils::GetLength(str);
             for (uint32_t i = 0; i < m_Length; i++)
@@ -256,24 +224,24 @@ namespace Panthera
                     }
 
                     if (found)
-                        return i;
+                        return m_Data + i;
                 }
             }
 
-            return -1;
+            return end();
         }
 
-        inline int64_t Find(const StringBase<T> &str)
+        inline Iterator Find(const StringBase<T> &str)
         {
             return Find(str.m_Data);
         }
 
-        inline int64_t Find(const std::basic_string<T> &str)
+        inline Iterator Find(const std::basic_string<T> &str)
         {
             return Find(str.c_str());
         }
 
-        inline int64_t FindLast(const T *str)
+        inline Iterator FindLast(const T *str)
         {
             const auto length = StringUtils::GetLength(str);
             for (uint32_t i = m_Length - 1; i >= 0; i--)
@@ -296,19 +264,19 @@ namespace Panthera
                     }
 
                     if (found)
-                        return i;
+                        return m_Data + i;
                 }
             }
 
-            return -1;
+            return end();
         }
 
-        inline int64_t FindLast(const StringBase<T> &str)
+        inline Iterator FindLast(const StringBase<T> &str)
         {
             return FindLast(str.m_Data);
         }
 
-        inline int64_t FindLast(const std::basic_string<T> &str)
+        inline Iterator FindLast(const std::basic_string<T> &str)
         {
             return FindLast(str.c_str());
         }
@@ -334,6 +302,16 @@ namespace Panthera
         {
             return Substring(start, m_Length - start);
         }
+        
+        inline StringBase<T> Substring(Iterator start, Iterator end)
+        {
+            return Substring(start - m_Data, end - start);
+        }
+        
+        inline StringBase<T> Substring(Iterator start)
+        {
+            return Substring(start - m_Data, m_Length - (start - m_Data));
+        }
 
         inline StringBase<T> Substring(const T *str)
         {
@@ -357,10 +335,10 @@ namespace Panthera
         inline StringBase<T> SubstringLast(const T *str)
         {
             const auto index = FindLast(str);
-            if (index == -1)
+            if (index == end())
                 return StringBase<T>();
 
-            return Substring(0, index);
+            return Substring(begin(), index);
         }
 
         inline StringBase<T> SubstringLast(const StringBase<T> &str)
@@ -376,7 +354,7 @@ namespace Panthera
         inline StringBase<T> SubstringBefore(const T *str)
         {
             const auto index = Find(str);
-            if (index == -1)
+            if (index == end())
                 return StringBase<T>();
 
             return Substring(0, index);
@@ -395,7 +373,7 @@ namespace Panthera
         inline StringBase<T> SubstringBeforeLast(const T *str)
         {
             const auto index = FindLast(str);
-            if (index == -1)
+            if (index == end())
                 return StringBase<T>();
 
             return Substring(0, index);
@@ -424,6 +402,16 @@ namespace Panthera
 
             m_Length -= length;
             m_Data[m_Length] = '\0';
+        }
+        
+        inline void Remove(Iterator start, Iterator end)
+        {
+            Remove(start - m_Data, end - start);
+        }
+        
+        inline void Remove(Iterator start)
+        {
+            Remove(start - m_Data, m_Length - (start - m_Data));
         }
 
         inline void RemoveAll(const T *str)
@@ -505,17 +493,17 @@ namespace Panthera
 
         inline bool Contains(const T *str)
         {
-            return Find(str) != -1;
+            return Find(str) != end();
         }
 
         inline bool Contains(const StringBase<T> &str)
         {
-            return Find(str) != -1;
+            return Find(str) != end();
         }
 
         inline bool Contains(const std::basic_string<T> &str)
         {
-            return Find(str) != -1;
+            return Find(str) != end();
         }
 
         inline bool Equals(const T *str)
@@ -598,12 +586,12 @@ namespace Panthera
             return !Equals(str);
         }
 
-        inline T& operator[](std::size_t index)
+        inline T& operator[](uint32_t index)
         {
             return m_Data[index];
         }
 
-        inline const T& operator[](std::size_t index) const
+        inline const T& operator[](uint32_t index) const
         {
             return m_Data[index];
         }
@@ -674,24 +662,49 @@ namespace Panthera
             return m_Length == 0 || m_Data == nullptr || m_Data[0] == '\0';
         }
 
-        inline Iterator<T> begin()
+        inline Iterator begin()
         {
-            return Iterator<T>(m_Data, m_Length, 0);
+            return m_Data;
         }
 
-        inline Iterator<T> end()
+        inline Iterator end()
         {
-            return Iterator<T>(m_Data, m_Length, m_Length);
+            return m_Data + m_Length;
         }
 
-        inline const Iterator<T> begin() const
+        inline const Iterator cbegin() const
         {
-            return Iterator<T>(m_Data, m_Length, 0);
+            return m_Data;
         }
 
-        inline const Iterator<T> end() const
+        inline const Iterator cend() const
         {
-            return Iterator<T>(m_Data, m_Length, m_Length);
+            return m_Data + m_Length;
+        }
+
+        inline uint32_t IteratorToIndex(Iterator it)
+        {
+            return it - m_Data;
+        }
+
+        inline T operator [] (Iterator it)
+        {
+            return *it;
+        }
+
+        inline const T operator [] (const Iterator it) const
+        {
+            return *it;
+        }
+
+        inline Iterator IndexToIterator(uint32_t index)
+        {
+            return m_Data + index;
+        }
+
+        inline Iterator IndexToIterator(uint32_t index) const
+        {
+            return m_Data + index;
         }
 
         inline static StringBase<T> Empty()
@@ -799,11 +812,11 @@ namespace Panthera
             return StringBase<T>(std::to_string((uint64_t)value));
         }
 
-        inline static std::vector<StringBase<T>> Split(StringBase<T> str, T delimiter)
+        inline static std::vector<StringBase<T>> Split(StringBase<T> &str, T delimiter)
         {
             std::vector<StringBase<T>> result;
-            int pos = -1;
-            while ((pos = str.Find(delimiter)) != -1)
+            Iterator pos = str.end();
+            while ((pos = str.Find(delimiter)) != str.end())
             {
                 result.push_back(str.Substring(0, pos));
                 str = str.Substring(pos + 1);

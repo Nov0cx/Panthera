@@ -87,7 +87,7 @@ namespace Panthera
             file.close();
         }
 
-        static uint64_t Hash(const String& src)
+        static uint64_t Hash(String& src)
         {
             uint64_t hash = 0;
             uint64_t prime = 7883;

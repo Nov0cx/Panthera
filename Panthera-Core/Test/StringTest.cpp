@@ -58,37 +58,37 @@ TEST(StringWCharAppendTest, StringTest2)
 TEST(StringFindTest, StringTest)
 {
     String str = "Hello World!";
-    ASSERT_EQ(str.Find("World"), 6);
+    ASSERT_EQ(str.IteratorToIndex(str.Find("World")), 6);
 }
 
 TEST(StringFindTest, StringTest2)
 {
     String str = "Hello World!";
-    ASSERT_EQ(str.Find("World_"), -1);
+    ASSERT_EQ(str.Find("World_"), str.end());
 }
 
 TEST(StringFindTest, StringTest3)
 {
     String str = "Hello World!";
-    ASSERT_EQ(str.Find("Hello"), 0);
+    ASSERT_EQ(str.Find("Hello"), str.begin());
 }
 
 TEST(StringFindTest, StringTest4)
 {
     String str = "Hello World! World!";
-    ASSERT_EQ(str.FindLast("World!"), 13);
+    ASSERT_EQ(str.IteratorToIndex(str.FindLast("World!")), 13);
 }
 
 TEST(StringFindTest, StringTest6)
 {
     String str = "Hello World! World!";
-    ASSERT_EQ(str.FindLast("Hello"), 0);
+    ASSERT_EQ(str.IteratorToIndex(str.FindLast("Hello")), 0);
 }
 
 TEST(StringFindTest, StringTest7)
 {
     String str = "Hello World! World!";
-    ASSERT_EQ(str.Find("World"), 6);
+    ASSERT_EQ(str.IteratorToIndex(str.Find("World")), 6);
 }
 
 TEST(StringReplaceTest, StringTest)
