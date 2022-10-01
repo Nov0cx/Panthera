@@ -15,6 +15,12 @@ namespace Panthera
         {
             m_Renderer.Init();
             m_Texture = Texture2D::LoadFromDisk(AssetLoader::GetAssetPath("Panthera/assets/demo_textures/ball.jpeg"));
+            FramebufferInfo info;
+            info.Width = 1280;
+            info.Height = 720;
+            info.ColorAttachments = { { Texture2DFormat::RGBA, 1 } };
+
+            m_Framebuffer = Framebuffer::Create(info);
         }
 
         void OnDisable() override
@@ -29,14 +35,17 @@ namespace Panthera
             });
             GlobalRenderer::SubmitFunc([this]() mutable {
                 //m_Renderer.DrawTriangle({-0.5f, -0.2f}, {0.f, 0.5f}, {0.5f, -0.2f}, {1.f, 0.f, 0.f, 1.f});
+                //m_Framebuffer->Bind();
                 m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 1.f}, m_Texture);
                 m_Renderer.Flush();
+                //m_Framebuffer->Unbind();
             });
         }
 
     private:
         Renderer2D m_Renderer;
         Ref<Texture2D> m_Texture;
+        Ref<Framebuffer> m_Framebuffer;
     };
 
     void ApplicationCreationCallback(ApplicationInfo *outInfo)

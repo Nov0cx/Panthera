@@ -82,6 +82,28 @@ namespace Panthera
         return GL_NONE;
     }
 
+    uint32_t GetChannels(Texture2DFormat format)
+    {
+        switch (format)
+        {
+            case Texture2DFormat::Red:
+                return 1;
+            case Texture2DFormat::RG:
+                return 2;
+            case Texture2DFormat::RGB:
+                return 3;
+            case Texture2DFormat::RGBA:
+                return 4;
+            case Texture2DFormat::DepthStencil:
+                return 2;
+            case Texture2DFormat::Depth:
+                return 1;
+            default:
+                PT_ASSERT(false, "Unknown Texture2DFormat");
+        }
+        return 0;
+    }
+
     OpenGLTexture2D::OpenGLTexture2D(const String &path)
     {
         void* data = LoadTexture(path);
@@ -138,6 +160,7 @@ namespace Panthera
             return;
         }
 
+        m_Info.Channels = GetChannels(m_Info.Format);
         RecreateTexture();
     }
 

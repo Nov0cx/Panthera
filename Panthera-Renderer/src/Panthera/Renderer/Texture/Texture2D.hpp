@@ -21,6 +21,7 @@ namespace Panthera
 
     enum class Texture2DFormat
     {
+        None = -1,
         RGBA,
         RGB,
         RG,

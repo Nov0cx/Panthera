@@ -10,6 +10,7 @@
 #include "Renderer/Buffer/Buffer.hpp"
 #include "Renderer/Buffer/UniformBuffer.hpp"
 #include "Renderer/Context/RenderContext.hpp"
+#include "Renderer/Framebuffer/Framebuffer.hpp"
 #include "Renderer/Shader/Shader.hpp"
 #include "Renderer/Texture/Texture2D.hpp"
 #include "Renderer/VertexArray/VertexArray.hpp"
