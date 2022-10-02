@@ -17,8 +17,8 @@ namespace Panthera
             m_Texture = Texture2D::LoadFromDisk(AssetLoader::GetAssetPath("Panthera/assets/demo_textures/ball.jpeg"));
 
             FramebufferInfo info;
-            info.Width = 1280;
-            info.Height = 720;
+            info.Width = 700;
+            info.Height = 500;
             info.ColorAttachments = { { Texture2DFormat::RGBA, 1 } };
 
             m_Framebuffer = Framebuffer::Create(info);
@@ -27,8 +27,10 @@ namespace Panthera
             wInfo.Width = 1280;
             wInfo.Height = 720;
             wInfo.Title = "Leopardus2";
-            m_Window = GlobalRenderer::CreateAndGetWindow(wInfo);
-            m_Window->Init();
+            //m_Window = GlobalRenderer::CreateAndGetWindow(wInfo);
+            //m_Window->Init();
+            float apr = 700.f / 500.f;
+            m_Camera = OrthographicCamera(-apr, apr, -1, 1);
         }
 
         void OnDisable() override
@@ -42,15 +44,24 @@ namespace Panthera
                 RenderCommand::Clear({0.2f, 0.2f, 0.2f, 1.0f});
             });
             GlobalRenderer::SubmitFunc([this]() mutable {
+                m_Renderer.Begin(m_Camera);
                 //m_Renderer.DrawTriangle({-0.5f, -0.2f}, {0.f, 0.5f}, {0.5f, -0.2f}, {1.f, 0.f, 0.f, 1.f});
-                //m_Framebuffer->Bind();
+                m_Framebuffer->Bind();
                 m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 1.f}, m_Texture);
                 m_Renderer.Flush();
-                //m_Framebuffer->Unbind();
+                m_Renderer.End();
+                m_Framebuffer->Unbind();
+
+                m_Renderer.Begin(m_Camera);
+                m_Renderer.DrawQuad({0.f, 0.f}, {2, 2}, {1.f, 1.f, 1.f, 1.f}, m_Framebuffer->GetColorAttachment(0));
+                m_Renderer.Flush();
+                m_Renderer.End();
+                m_Framebuffer->GetColorAttachment(0)->Clear(0);
+
             });
             GlobalRenderer::SubmitFunc([this]() mutable
                                        {
-                                           m_Window->Update();
+                                           //m_Window->Update();
                                        });
 
         }
@@ -60,13 +71,14 @@ namespace Panthera
         Ref<Texture2D> m_Texture;
         Ref<Framebuffer> m_Framebuffer;
         Ref<Window> m_Window;
+        OrthographicCamera m_Camera;
     };
 
     void ApplicationCreationCallback(ApplicationInfo *outInfo)
     {
         outInfo->Name = "Leopardus";
         outInfo->Version = {0, 3, 0};
-        outInfo->Width = 500;
+        outInfo->Width = 700;
         outInfo->Height = 500;
     }
 

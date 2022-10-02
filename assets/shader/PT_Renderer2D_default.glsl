@@ -12,13 +12,19 @@ layout(location = 1) out vec2 outTexCoord;
 layout(location = 2) out flat float outTexIndex;
 layout(location = 3) out flat float outTilingFactor;
 
+layout(std140, binding = 0) uniform Camera
+{
+    mat4 u_ViewProjectionMatrix;
+};
+
 void main()
 {
     outColor = inColor;
     outTexCoord = inTexCoord;
     outTexIndex = inTexIndex;
     outTilingFactor = inTilingFactor;
-    gl_Position = vec4(inPosition, 1.0);
+
+    gl_Position = u_ViewProjectionMatrix * vec4(inPosition, 1.0);
 }
 
 #type fragment

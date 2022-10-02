@@ -80,7 +80,7 @@ namespace Panthera
         return m_ColorAttachments[index]->GetRenderObject();
     }
 
-    const std::vector <Ref<Texture2D>> &OpenGLFramebuffer::GetColorAttachments() const
+    std::vector <Ref<Texture2D>> &OpenGLFramebuffer::GetColorAttachments()
     {
         return m_ColorAttachments;
     }
@@ -103,5 +103,10 @@ namespace Panthera
     uint32_t OpenGLFramebuffer::GetHeight() const
     {
         return m_Info.Height;
+    }
+
+    Ref <Texture2D> &OpenGLFramebuffer::GetColorAttachment(uint32_t index)
+    {
+        return m_ColorAttachments[index];
     }
 }

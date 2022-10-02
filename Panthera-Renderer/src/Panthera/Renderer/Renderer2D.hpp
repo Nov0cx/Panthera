@@ -4,6 +4,7 @@
 #include "ppch.hpp"
 #include "Shader/Shader.hpp"
 #include "Texture/Texture2D.hpp"
+#include "Camera/OrthographicCamera.hpp"
 
 namespace Panthera
 {
@@ -15,6 +16,9 @@ namespace Panthera
     public:
         void Init();
         void Shutdown();
+
+        void Begin(OrthographicCamera& camera);
+        void End();
 
         void DrawTriangle(const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3, const glm::vec4 &color);
         void DrawTriangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec4 &color);

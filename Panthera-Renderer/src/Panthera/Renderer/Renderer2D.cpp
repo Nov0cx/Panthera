@@ -20,6 +20,8 @@ namespace Panthera
         static constexpr uint8_t
         MaxTextures = 32;
 
+        Ref<UniformBuffer> ProjectionViewUniformBuffer;
+
         // Triangle
         static constexpr uint32_t
         MaxTriangleTriangles = 25037;
@@ -56,6 +58,17 @@ namespace Panthera
         std::array <Ref<Texture2D>, MaxTextures> QuadTextures;
         uint32_t QuadTextureIndex = 1;
     };
+
+    void Renderer2D::Begin(OrthographicCamera &camera)
+    {
+        m_Storage->ProjectionViewUniformBuffer->SetData(&camera.GetViewProjectionMatrix(), sizeof(glm::mat4));
+        RenderCommand::EnableBlending();
+    }
+
+    void Renderer2D::End()
+    {
+
+    }
 
     static Ref <Texture2D> s_WhiteTexture = nullptr;
 
@@ -166,6 +179,8 @@ namespace Panthera
 
         InitTriangle(defaultShader);
         InitQuad(defaultShader);
+
+        m_Storage->ProjectionViewUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), 0);
     }
 
     void Renderer2D::Shutdown()
@@ -180,8 +195,6 @@ namespace Panthera
 
     void Renderer2D::Flush()
     {
-        RenderCommand::EnableBlending();
-
         if (m_Storage->TriangleVerticesCount > 0)
         {
             for (uint32_t i = 0; i < m_Storage->TriangleTextureIndex; i++)

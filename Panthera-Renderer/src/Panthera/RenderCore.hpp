@@ -9,6 +9,7 @@
 
 #include "Renderer/Buffer/Buffer.hpp"
 #include "Renderer/Buffer/UniformBuffer.hpp"
+#include "Renderer/Camera/OrthographicCamera.hpp"
 #include "Renderer/Context/RenderContext.hpp"
 #include "Renderer/Framebuffer/Framebuffer.hpp"
 #include "Renderer/Shader/Shader.hpp"

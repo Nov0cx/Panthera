@@ -20,7 +20,8 @@ namespace Panthera
         virtual void Resize(uint32_t width, uint32_t height) override;
 
         virtual void* GetColorAttachmentRenderObject(uint32_t index = 0) const override;
-        virtual const std::vector<Ref<Texture2D>> &GetColorAttachments() const override;
+        virtual std::vector<Ref<Texture2D>> &GetColorAttachments() override;
+        virtual Ref<Texture2D> &GetColorAttachment(uint32_t index = 0) override;
         virtual const Ref<Texture2D> &GetDepthAttachment() const override;
 
         virtual const FramebufferInfo &GetInfo() const override;
