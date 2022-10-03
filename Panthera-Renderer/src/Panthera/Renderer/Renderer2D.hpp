@@ -5,6 +5,8 @@
 #include "Shader/Shader.hpp"
 #include "Texture/Texture2D.hpp"
 #include "Camera/OrthographicCamera.hpp"
+#include "Framebuffer/Framebuffer.hpp"
+#include "Window/Window.hpp"
 
 namespace Panthera
 {
@@ -37,6 +39,7 @@ namespace Panthera
         void DrawIndexed(uint32_t count);
         void Flush();
 
+        void DrawFramebuffer(Ref<Framebuffer> &framebuffer, const Ref<Window> &window, uint32_t colorAttachmentIndex = 0);
     private:
         void InitTriangle(Ref<Shader> &shader);
         void InitQuad(Ref<Shader> &shader);

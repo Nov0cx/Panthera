@@ -20,7 +20,7 @@ namespace Panthera
         static constexpr uint8_t
         MaxTextures = 32;
 
-        Ref<UniformBuffer> ProjectionViewUniformBuffer;
+        Ref <UniformBuffer> ProjectionViewUniformBuffer;
 
         // Triangle
         static constexpr uint32_t
@@ -242,7 +242,8 @@ namespace Panthera
 
     void Renderer2D::DrawTriangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec4 &color)
     {
-        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices || m_Storage->TriangleTextureIndex >= Renderer2DStorage::MaxTextures)
+        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices ||
+            m_Storage->TriangleTextureIndex >= Renderer2DStorage::MaxTextures)
         {
             Flush();
         }
@@ -275,7 +276,8 @@ namespace Panthera
     void Renderer2D::DrawTriangle(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec4 &color,
                                   const Ref <Texture2D> &texture, float tilingFactor)
     {
-        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices || m_Storage->TriangleTextureIndex >= Renderer2DStorage::MaxTextures)
+        if (m_Storage->TriangleVerticesCount >= Renderer2DStorage::MaxTriangleVertices ||
+            m_Storage->TriangleTextureIndex >= Renderer2DStorage::MaxTextures)
         {
             Flush();
         }
@@ -325,14 +327,16 @@ namespace Panthera
         DrawQuad(glm::vec3(center, 0.0f), size, color);
     }
 
-    void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color, const Ref<Texture2D> &texture, float tilingFactor)
+    void Renderer2D::DrawQuad(const glm::vec2 &center, const glm::vec2 &size, const glm::vec4 &color,
+                              const Ref <Texture2D> &texture, float tilingFactor)
     {
         DrawQuad(glm::vec3(center, 0.0f), size, color, texture, tilingFactor);
     }
 
     void Renderer2D::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color)
     {
-        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices || m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
+        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices ||
+            m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
         {
             Flush();
         }
@@ -367,7 +371,8 @@ namespace Panthera
     void Renderer2D::DrawQuad(const glm::mat4 &transform, const glm::vec4 &color, const Ref <Texture2D> &texture,
                               float tilingFactor)
     {
-        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices || m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
+        if (m_Storage->QuadVerticesCount >= Renderer2DStorage::MaxQuadVertices ||
+            m_Storage->QuadTextureIndex >= Renderer2DStorage::MaxTextures)
         {
             Flush();
         }
@@ -401,12 +406,24 @@ namespace Panthera
         m_Storage->QuadIndicesCount += 6;
     }
 
-    void Renderer2D::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color, const Ref<Texture2D> &texture, float tilingFactor)
+    void Renderer2D::DrawQuad(const glm::vec3 &center, const glm::vec2 &size, const glm::vec4 &color,
+                              const Ref <Texture2D> &texture, float tilingFactor)
     {
 
         glm::mat4 transform =
                 glm::translate(glm::mat4(1.0f), center) * glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 
         DrawQuad(transform, color, texture, tilingFactor);
+    }
+
+    void Renderer2D::DrawFramebuffer(Ref <Framebuffer> &framebuffer, const Ref <Window> &window,
+                                     uint32_t colorAttachmentIndex)
+    {
+        window->GetRenderContext()->MakeCurrent();
+        // render framebuffer to screen
+        float aspectRatio = (float) window->GetInfo().Width / (float) window->GetInfo().Height;
+        DrawQuad({0.0f, 0.0f, 0.0f}, {2 * aspectRatio, 2 * 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f},
+                 framebuffer->GetColorAttachment(colorAttachmentIndex));
+        Flush();
     }
 }

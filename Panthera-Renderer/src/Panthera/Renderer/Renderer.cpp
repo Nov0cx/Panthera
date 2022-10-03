@@ -106,4 +106,12 @@ namespace Panthera
 
         return true;
     }
+
+    void GlobalRenderer::UpdateWindows()
+    {
+        for (auto &window : s_globalRenderData.Windows)
+        {
+            window->Update();
+        }
+    }
 }
