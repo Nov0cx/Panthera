@@ -67,7 +67,7 @@ namespace Panthera
 
     void Renderer2D::End()
     {
-
+        Flush();
     }
 
     static Ref <Texture2D> s_WhiteTexture = nullptr;

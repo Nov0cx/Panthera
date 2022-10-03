@@ -48,14 +48,16 @@ namespace Panthera
                 //m_Renderer.DrawTriangle({-0.5f, -0.2f}, {0.f, 0.5f}, {0.5f, -0.2f}, {1.f, 0.f, 0.f, 1.f});
                 m_Framebuffer->Bind();
                 m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 1.f}, m_Texture);
-                m_Renderer.Flush();
                 m_Renderer.End();
                 m_Framebuffer->Unbind();
 
+                float apr = 700.f / 500.f;
+
+                // Draw framebuffer
                 m_Renderer.Begin(m_Camera);
-                m_Renderer.DrawQuad({0.f, 0.f}, {2, 2}, {1.f, 1.f, 1.f, 1.f}, m_Framebuffer->GetColorAttachment(0));
-                m_Renderer.Flush();
+                m_Renderer.DrawQuad({0, 0}, {apr, 1}, {1.f, 1.f, 1.f, 1.f}, m_Framebuffer->GetColorAttachment(0));
                 m_Renderer.End();
+
                 m_Framebuffer->GetColorAttachment(0)->Clear(0);
 
             });
