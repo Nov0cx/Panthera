@@ -64,7 +64,7 @@ namespace Panthera
 
             GlobalRenderer::SubmitFunc([]()
                                        {
-                                          // GlobalRenderer::UpdateWindows();
+                                          GlobalRenderer::UpdateWindows();
                                        });
 
             GlobalRenderer::EndFrame();

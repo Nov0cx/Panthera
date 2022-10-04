@@ -20,6 +20,11 @@ namespace Panthera
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
+
+    void OpenGLRenderCommand::SetViewport(const glm::vec4 &viewport)
+    {
+        glViewport(viewport.x, viewport.y, viewport.z, viewport.w);
+    }
 }
 
 

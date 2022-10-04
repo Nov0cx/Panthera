@@ -43,20 +43,22 @@ namespace Panthera
             GlobalRenderer::SubmitFunc([this]() mutable {
                 m_Framebuffer->Bind();
 
-                RenderCommand::Clear({0.2f, 0.2f, 0.2f, 1.0f});
+                GlobalRenderer::GetMainWindow()->GetRenderContext()->Clear({0.2f, 0.2f, 0.2f, 1.0f});
                 m_Renderer.Begin(m_Camera);
                 m_Renderer.DrawTriangle({-0.5f, -0.2f}, {0.f, 0.5f}, {0.5f, -0.2f}, {1.f, 0.f, 0.f, 1.f});
-               // m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 1.f}, m_Texture);
+                m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 0.6f}, m_Texture);
                 m_Renderer.End();
                 m_Framebuffer->Unbind();
 
                 // Draw framebuffer
                 m_Renderer.Begin(m_Camera);
                 m_Renderer.DrawFramebuffer(m_Framebuffer, GlobalRenderer::GetMainWindow());
-                GlobalRenderer::GetMainWindow()->Update();
-                m_Renderer.DrawFramebuffer(m_Framebuffer, m_Window);
-                m_Window->Update();
+
+                m_Window->GetRenderContext()->MakeCurrent();
+                m_Renderer.Begin(m_Camera);
+                m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 0.6f}, m_Framebuffer->GetColorAttachment(0));
                 m_Renderer.End();
+
 
                 m_Framebuffer->GetColorAttachment(0)->Clear(0);
 

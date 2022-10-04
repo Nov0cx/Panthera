@@ -424,6 +424,7 @@ namespace Panthera
         float aspectRatio = (float) window->GetInfo().Width / (float) window->GetInfo().Height;
         DrawQuad({0.0f, 0.0f, 0.0f}, {2 * aspectRatio, 2 * 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f},
                  framebuffer->GetColorAttachment(colorAttachmentIndex));
+        RenderCommand::SetViewport({0, 0, window->GetInfo().Width, window->GetInfo().Height});
         Flush();
     }
 }

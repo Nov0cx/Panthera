@@ -27,4 +27,11 @@ namespace Panthera
         OpenGLRenderCommand::EnableBlending();
 #endif
     }
+
+    void RenderCommand::SetViewport(const glm::vec4 &viewport)
+    {
+#ifdef PANTHERA_OPENGL
+        OpenGLRenderCommand::SetViewport(viewport);
+#endif
+    }
 }
