@@ -1,6 +1,7 @@
 #include "Panthera/Panthera.hpp"
 
 #include "Panthera/Core/Entry.hpp"
+#include "Panthera/UI/UIWindow.hpp"
 
 namespace Panthera
 {
@@ -46,6 +47,9 @@ namespace Panthera
 
         void OnUpdate(Timestep ts) override
         {
+            UI::BeginContext("Hey");
+            UI::EndContext();
+
             GlobalRenderer::SubmitFunc([this]() mutable {
                 m_Framebuffer->Bind();
 

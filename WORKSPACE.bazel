@@ -94,3 +94,11 @@ http_archive(
     strip_prefix = "stb-8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55",
     urls = ["https://github.com/nothings/stb/archive/8b5f1f37b5b75829fc72d38e7b5d4bcbf8a26d55.zip"],
 )
+
+http_archive(
+    name = "com_github_tessil_map",
+    build_file = "//extern:sparse.BUILD",
+    sha256 = "5d554676b81bb80d6fb4121915352936b6a71e10546ffc57953b7aff631c8e60",
+    strip_prefix = "sparse-map-89d30537eb5326606b6a45bbf00b4f4ff04417fa",
+    urls = ["https://github.com/Tessil/sparse-map/archive/89d30537eb5326606b6a45bbf00b4f4ff04417fa.zip"],
+)

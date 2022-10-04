@@ -1,0 +1,16 @@
+load("//bazel:copts.bzl", "copts")
+
+cc_library(
+    name = "Panthera-UI",
+    srcs = glob(["src/Panthera/UI/*.cpp", "src/Panthera/UI/**/*.cpp"]),
+    hdrs = glob(["src/Panthera/UI/*.hpp", "src/Panthera/UI/**/*.hpp"]),
+    copts = copts,
+    strip_include_prefix = "src",
+    deps = [
+        "//Panthera-PCH:pch",
+        "//Panthera-Renderer:Panthera-Renderer",
+        "//Panthera-Event:Panthera-Event",
+        "@com_github_tessil_map//:sparse-map",
+    ],
+    visibility = ["//visibility:public"],
+)

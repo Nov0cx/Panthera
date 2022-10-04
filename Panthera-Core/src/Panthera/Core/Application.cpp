@@ -4,6 +4,8 @@
 #include "Panthera/Event/EventSystem.hpp"
 #include "Panthera/Event/WindowEvents.hpp"
 
+#include "Panthera/UI/UIWindow.hpp"
+
 namespace Panthera
 {
     Application::Application(ApplicationInfo &info)
@@ -57,6 +59,8 @@ namespace Panthera
 
             GlobalRenderer::BeginFrame();
 
+            UI::BeginIteration();
+
             GlobalRenderer::GetMainWindow()->GetRenderContext()->MakeCurrent();
 
             if (!m_Minimized)
@@ -66,6 +70,8 @@ namespace Panthera
                                        {
                                           GlobalRenderer::UpdateWindows();
                                        });
+
+            UI::EndIteration();
 
             GlobalRenderer::EndFrame();
         }
