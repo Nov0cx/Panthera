@@ -43,7 +43,13 @@ namespace Panthera
 
         PT_LOG_INFO("Creating window {} ({}, {})", m_Info.Title, m_Info.Width, m_Info.Height);
 
-        m_Window = glfwCreateWindow(m_Info.Width, m_Info.Height, m_Info.Title.Get(), nullptr, nullptr);
+        bool share = s_WindowCount > 1;
+
+        PT_LOG_DEBUG("Sharing context: {}", share);
+
+        GLFWwindow *shareWindow = share ? (GLFWwindow*)GlobalRenderer::GetMainWindow()->GetNativeWindow() : nullptr;
+
+        m_Window = glfwCreateWindow(m_Info.Width, m_Info.Height, m_Info.Title.Get(), nullptr, shareWindow);
         if (!m_Window)
         {
             PT_LOG_FATAL("Failed to create GLFW window!");

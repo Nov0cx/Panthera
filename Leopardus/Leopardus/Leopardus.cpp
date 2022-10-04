@@ -13,6 +13,15 @@ namespace Panthera
 
         void OnEnable() override
         {
+            WindowInfo wInfo;
+            wInfo.Width = 1280;
+            wInfo.Height = 720;
+            wInfo.Title = "Leopardus2";
+            m_Window = GlobalRenderer::CreateAndGetWindow(wInfo);
+            m_Window->Init();
+
+            GlobalRenderer::GetMainWindow()->GetRenderContext()->MakeCurrent();
+
             m_Renderer.Init();
             m_Texture = Texture2D::LoadFromDisk(AssetLoader::GetAssetPath("Panthera/assets/demo_textures/ball.jpeg"));
 
@@ -23,14 +32,11 @@ namespace Panthera
 
             m_Framebuffer = Framebuffer::Create(info);
 
-            WindowInfo wInfo;
-            wInfo.Width = 1280;
-            wInfo.Height = 720;
-            wInfo.Title = "Leopardus2";
-            m_Window = GlobalRenderer::CreateAndGetWindow(wInfo);
-            m_Window->Init();
             float apr = 700.f / 500.f;
             m_Camera = OrthographicCamera(-apr, apr, -1, 1);
+
+            m_Window->GetRenderContext()->MakeCurrent();
+            m_Renderer2.Init();
         }
 
         void OnDisable() override
@@ -55,9 +61,10 @@ namespace Panthera
                 m_Renderer.DrawFramebuffer(m_Framebuffer, GlobalRenderer::GetMainWindow());
 
                 m_Window->GetRenderContext()->MakeCurrent();
-                m_Renderer.Begin(m_Camera);
-                m_Renderer.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 0.6f}, m_Framebuffer->GetColorAttachment(0));
-                m_Renderer.End();
+                m_Renderer2.Begin(m_Camera);
+                m_Window->GetRenderContext()->Clear({0.2f, 0.2f, 0.2f, 1.0f});
+                m_Renderer2.DrawQuad({0.f, 0.f}, {1.f, 1.f}, {1.f, 1.f, 1.f, 0.6f});
+                m_Renderer2.End();
 
 
                 m_Framebuffer->GetColorAttachment(0)->Clear(0);
@@ -67,6 +74,7 @@ namespace Panthera
 
     private:
         Renderer2D m_Renderer;
+        Renderer2D m_Renderer2;
         Ref<Texture2D> m_Texture;
         Ref<Framebuffer> m_Framebuffer;
         Ref<Window> m_Window;
