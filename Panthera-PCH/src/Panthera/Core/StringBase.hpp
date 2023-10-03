@@ -858,7 +858,7 @@ namespace std
     {
         std::size_t operator()(const Panthera::StringBase<T> &str) const
         {
-            return std::hash<std::basic_string<T>>()(str);
+            return std::hash<const char*>()(str);
         }
     };
 }

@@ -1,7 +1,7 @@
 #include "Panthera/Panthera.hpp"
 
 #include "Panthera/Core/Entry.hpp"
-#include "Panthera/UI/UIWindow.hpp"
+#include "Panthera/UI/UI.hpp"
 
 namespace Panthera
 {

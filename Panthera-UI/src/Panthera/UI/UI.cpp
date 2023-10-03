@@ -1,4 +1,4 @@
-#include "UIWindow.hpp"
+#include "UI.hpp"
 
 #include "UIInternal.hpp"
 #include "Panthera/Renderer/Renderer.hpp"
@@ -8,31 +8,36 @@ namespace Panthera::UI
     std::stack<String> ContextStack = {};
     std::vector<String> UnusedWindows = {};
 
+    void Init()
+    {
+        Internal::Data::Init();
+    }
+
     void BeginIteration()
     {
         UnusedWindows.clear();
-        for (auto& window : Internal::Data::Instance.Windows)
+        for (auto& window : Internal::Data::Instance->Windows)
             UnusedWindows.push_back(window.first);
 
-        Internal::Data::Instance.Locked = false;
+        Internal::Data::Instance->Locked = false;
     }
 
     void EndIteration()
     {
-        Internal::Data::Instance.Locked = true;
+        Internal::Data::Instance->Locked = true;
 
         if (UnusedWindows.empty())
             return;
 
         for (auto& window : UnusedWindows)
         {
-            Internal::Data::Instance.Windows.erase(window);
+            Internal::Data::Instance->Windows.erase(window);
         }
     }
 
     bool BeginContext(const String &name)
     {
-        if (Internal::Data::Instance.Locked)
+        if (Internal::Data::Instance->Locked)
         {
             PT_LOG_ERROR("[UI] Cannot create a new window context while iteration is locked!");
             return false;
@@ -42,7 +47,7 @@ namespace Panthera::UI
 
         bool creation = false;
 
-        if (Internal::Data::Instance.Windows.find(name) == Internal::Data::Instance.Windows.end())
+        if (Internal::Data::Instance->Windows.find(name) == Internal::Data::Instance->Windows.end())
         {
             creation = true;
             WindowInfo info;
@@ -54,11 +59,11 @@ namespace Panthera::UI
 
             window = GlobalRenderer::CreateAndGetWindow(info);
             window->Init();
-            Internal::Data::Instance.Windows[name.Get()] = window;
+            Internal::Data::Instance->AddWindow(name, window);
         }
 
         if (!window)
-            window = Internal::Data::Instance.Windows[name.Get()];
+            window = Internal::Data::Instance->GetWindow(name);
 
         window->GetRenderContext()->MakeCurrent();
 
@@ -72,7 +77,7 @@ namespace Panthera::UI
 
     void EndContext()
     {
-        if (Internal::Data::Instance.Locked)
+        if (Internal::Data::Instance->Locked)
         {
             PT_LOG_ERROR("[UI] Cannot end a window context while iteration is locked!");
             return;
@@ -87,7 +92,7 @@ namespace Panthera::UI
         String name = ContextStack.top();
         ContextStack.pop();
 
-        Ref<Window> window = Internal::Data::Instance.Windows[name.Get()];
+        Ref<Window> window = Internal::Data::Instance->GetWindow(name);
 
         PT_ASSERT(window, "[UI] Cannot get window with name: '{}'", name)
 
@@ -99,7 +104,7 @@ namespace Panthera::UI
         }
         else
         {
-            Internal::Data::Instance.Windows[ContextStack.top()]->GetRenderContext()->MakeCurrent();
+            Internal::Data::Instance->Windows[ContextStack.top()]->GetRenderContext()->MakeCurrent();
         }
     }
 }

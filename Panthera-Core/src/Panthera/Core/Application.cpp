@@ -4,7 +4,7 @@
 #include "Panthera/Event/EventSystem.hpp"
 #include "Panthera/Event/WindowEvents.hpp"
 
-#include "Panthera/UI/UIWindow.hpp"
+#include "Panthera/UI/UI.hpp"
 
 namespace Panthera
 {
@@ -35,6 +35,8 @@ namespace Panthera
                                            else
                                                m_Minimized = false;
                                        }, EventPriority::High);
+
+        UI::Init();
     }
 
     Application::~Application()

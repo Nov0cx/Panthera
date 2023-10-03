@@ -9,10 +9,21 @@ namespace Panthera::UI::Internal
 {
     struct Data
     {
-        static Data Instance;
+        static Data *Instance;
+        static void Init();
 
         tsl::sparse_map<const char*, Ref<Window>> Windows = {};
         bool Locked = true;
+
+        void AddWindow(const char* name, Ref<Window> window)
+        {
+            Windows[name] = window;
+        }
+
+        Ref<Window> GetWindow(const char* name)
+        {
+            return Windows.at(name);
+        }
     };
 
 }

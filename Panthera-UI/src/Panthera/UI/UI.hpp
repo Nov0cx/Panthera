@@ -1,10 +1,12 @@
-#ifndef PANTHERA_UIWINDOW_HPP
-#define PANTHERA_UIWINDOW_HPP
+#ifndef PANTHERA_UI_HPP
+#define PANTHERA_UI_HPP
 
 #include "ppch.hpp"
 
 namespace Panthera::UI
 {
+    void Init();
+
     void BeginIteration();
     void EndIteration();
 
@@ -12,4 +14,4 @@ namespace Panthera::UI
     void EndContext();
 }
 
-#endif //PANTHERA_UIWINDOW_HPP
+#endif //PANTHERA_UI_HPP
