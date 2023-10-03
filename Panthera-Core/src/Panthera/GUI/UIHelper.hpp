@@ -1,6 +1,7 @@
 #ifndef PANTHERA_UIHELPER_HPP
 #define PANTHERA_UIHELPER_HPP
 
+#include <vector>
 #include <imgui.h>
 #include <string>
 #include <functional>

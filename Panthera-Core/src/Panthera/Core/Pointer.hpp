@@ -13,7 +13,7 @@ namespace Panthera
         uint32_t GetReferenceCount() const { return m_RefCount.load(); }
 
     private:
-        std::atomic<uint32_t> m_RefCount = 0;
+        std::atomic<uint32_t> m_RefCount = {0};
     };
 
     template<typename T>

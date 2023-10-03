@@ -2,6 +2,7 @@
 #define PANTHERA_IMGUILAYER_HPP
 
 #include "Panthera/Core/Layer.hpp"
+#include <string>
 #include <imgui.h>
 #include <imgui_internal.h>
 

@@ -12,7 +12,8 @@ cc_binary(
     srcs = ["src/Leopardus.cpp"],
     deps = [
         "//Panthera-Core:Panthera-Core",
-        ":LeopardusSrc"
+        ":LeopardusSrc",
+        "@bazel_tools//tools/cpp/runfiles",
     ],
     data = [
         "//Assets:Assets"

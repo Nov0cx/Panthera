@@ -2,6 +2,14 @@ workspace(name = "Panthera")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+register_execution_platforms(
+    "//Bazel/Platforms:x64_windows-clang-cl"
+)
+
+register_toolchains(
+      "@local_config_cc//:cc-toolchain-x64_windows-clang-cl",
+)
+
 http_archive(
     name = "com_github_Nov0cx_glfw",
     sha256 = "715ce2107146ff6786781b2afcc7447bd9495fcbc10068c957ca700a2fa187a3",

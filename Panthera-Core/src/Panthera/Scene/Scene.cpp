@@ -129,7 +129,7 @@ namespace Panthera
     SceneEntity Scene::CreateEntity(const char *name)
     {
         SceneEntity entity(m_Registry.create(), this);
-        entity.CreateComponent<IDComponent>(UUID::UUID());
+        entity.CreateComponent<IDComponent>(UUID());
         entity.CreateComponent<NameComponent>(name);
         return entity;
     }
